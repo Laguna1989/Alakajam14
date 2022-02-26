@@ -30,5 +30,5 @@ void SpellAttackSnipe::doTrigger()
     // TODO: Knockback.
 }
 
-int SpellAttackSnipe::getExperienceCost() const { return 10; }
+int SpellAttackSnipe::getExperienceCost() const { return GP::SpellSnipeExpCosts(); }
 std::string SpellAttackSnipe::getName() const { return "Snipe"; }

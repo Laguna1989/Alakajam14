@@ -42,6 +42,9 @@ public:
     static float PlayerAttackCooldown();
 
     static float SpellSnipeProjectileSpeed();
+    static int SpellSnipeExpCosts();
+    static float SpellBroadProjectileSpeed();
+    static int SpellBroadExpCosts();
 };
 
 #endif

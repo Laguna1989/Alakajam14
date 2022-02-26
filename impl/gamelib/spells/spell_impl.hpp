@@ -1,5 +1,6 @@
 #ifndef ALAKAJAM14_SPELL_IMPL_HPP
 #define ALAKAJAM14_SPELL_IMPL_HPP
+
 #include "character_sheet_imgui.hpp"
 #include "spell_interface.hpp"
 
