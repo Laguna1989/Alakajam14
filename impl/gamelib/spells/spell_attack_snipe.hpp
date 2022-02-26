@@ -6,6 +6,7 @@
 
 class SpellAttackSnipe : public SpellTriggerImpl {
 public:
+    // TODO make this class only depend on splitted interfaces, not on complete StateGame.
     explicit SpellAttackSnipe(StateGame&);
     void doTrigger() override;
     int getExperienceCost() const override;

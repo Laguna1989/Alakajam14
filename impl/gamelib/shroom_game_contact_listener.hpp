@@ -9,7 +9,7 @@ class StateGame;
 /// Put all collision handling here.
 class ShroomGameContactListener : public b2ContactListener {
 public:
-    ShroomGameContactListener(StateGame&);
+    ShroomGameContactListener(StateGame& state);
 
 private:
     StateGame& m_state;

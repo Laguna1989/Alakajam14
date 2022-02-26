@@ -6,6 +6,7 @@ EnemyCrystalMid::EnemyCrystalMid(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
     : EnemyBase(world, def, state)
 {
+    m_experience = 50;
 }
 
 void EnemyCrystalMid::doAI(float elapsed) { }

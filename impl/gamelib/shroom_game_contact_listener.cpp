@@ -2,8 +2,8 @@
 #include "state_game.hpp"
 #include "timer.hpp"
 
-ShroomGameContactListener::ShroomGameContactListener(StateGame& mState)
-    : m_state(mState)
+ShroomGameContactListener::ShroomGameContactListener(StateGame& state)
+    : m_state(state)
 {
 }
 void ShroomGameContactListener::BeginContact(b2Contact* contact)
