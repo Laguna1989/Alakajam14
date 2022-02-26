@@ -246,8 +246,12 @@ void PlayerCharacter::updateAnimation(float const elapsed)
                 setAnimationIfNotSet("left");
             }
         } else {
-            if (v.y > 0) {
+            if (v.y > 0 && abs(v.x) < 0.1f) {
                 setAnimationIfNotSet("down");
+            } else if (v.y > 0 && v.x > 0) {
+                setAnimationIfNotSet("down_right");
+            } else if (v.y > 0 && v.x < 0) {
+                setAnimationIfNotSet("down_left");
             } else {
                 setAnimationIfNotSet("up");
             }
