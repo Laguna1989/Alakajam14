@@ -80,6 +80,16 @@ void StateGame::doInternalCreate()
 
     createPlayer();
 
+    m_enemies = std::make_shared<jt::ObjectGroup<Enemy>>();
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(3 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
+    bodyDef.linearDamping = 16.0f;
+    auto e = std::make_shared<Enemy>(m_world, &bodyDef);
+    m_enemies->push_back(e);
+    add(e);
+
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
 }
@@ -89,7 +99,7 @@ void StateGame::createPlayer()
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(5 * 24, 7 * 24);
+    bodyDef.position.Set(5 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
     m_player = std::make_shared<PlayerCharacter>(m_world, &bodyDef, m_itemRepository);
     add(m_player);
 }
@@ -131,6 +141,7 @@ void StateGame::doInternalDraw() const
     m_tileLayerGround1->draw(getGame()->gfx().target());
     m_tileLayerOverlay->draw(getGame()->gfx().target());
     drawObjects();
+    m_enemies->draw();
     m_vignette->draw(getGame()->gfx().target());
     m_hud->draw();
 }

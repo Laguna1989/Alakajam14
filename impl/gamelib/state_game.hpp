@@ -2,12 +2,13 @@
 #define GAME_STATE_GAME_HPP_INCLUDEGUARD
 
 #include "box2dwrapper/box2d_world_interface.hpp"
-#include "game_state.hpp"
-#include "tilemap/tile_layer.hpp"
-#include "tilemap/object_layer.hpp"
 #include "character.hpp"
+#include "enemies/enemy.hpp"
+#include "game_state.hpp"
 #include "inventory/item_repository.hpp"
 #include "object_group.hpp"
+#include "tilemap/object_layer.hpp"
+#include "tilemap/tile_layer.hpp"
 #include <memory>
 #include <vector>
 
@@ -33,6 +34,7 @@ private:
 
     std::shared_ptr<ItemRepository> m_itemRepository;
     std::shared_ptr<jt::ObjectGroup<WorldItem>> m_worldItems;
+    std::shared_ptr<jt::ObjectGroup<Enemy>> m_enemies;
 
     std::shared_ptr<jt::Sprite> m_vignette;
     std::shared_ptr<Hud> m_hud;
