@@ -5,7 +5,7 @@
 #include "box2dwrapper/box2d_object.hpp"
 #include "character_sheet_imgui.hpp"
 #include "game_object.hpp"
-#include "inventory_list_imgui.hpp"
+#include "inventory/inventory_list_imgui.hpp"
 #include <memory>
 
 class CharacterInterface {

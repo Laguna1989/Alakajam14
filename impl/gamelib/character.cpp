@@ -1,5 +1,6 @@
 #include "character.hpp"
 #include "game_interface.hpp"
+#include "game_properties.hpp"
 
 PlayerCharacter::PlayerCharacter(std::shared_ptr<jt::Box2DWorldInterface> world,
     b2BodyDef const* def, std::weak_ptr<ItemRepository> repo)
@@ -13,13 +14,35 @@ void PlayerCharacter::doCreate()
 {
     b2FixtureDef fixtureDef;
     b2PolygonShape boxCollider {};
-    boxCollider.SetAsBox(12, 12);
+    boxCollider.SetAsBox(GP::PlayerSize().x / 2.0f, GP::PlayerSize().y / 2.0f);
     fixtureDef.shape = &boxCollider;
     getB2Body()->CreateFixture(&fixtureDef);
 
     m_animation = std::make_shared<jt::Animation>();
-    m_animation->add("assets/demos/inventory/chars.png", "idle", jt::Vector2u { 24, 24 }, { 0, 1 },
-        0.2f, getGame()->gfx().textureManager());
+    m_animation->add("assets/player.png", "idle",
+        jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
+            static_cast<unsigned int>(GP::PlayerSize().y) },
+        { 0 }, 0.2f, getGame()->gfx().textureManager());
+
+    m_animation->add("assets/player.png", "right",
+        jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
+            static_cast<unsigned int>(GP::PlayerSize().y) },
+        { 1 }, 0.2f, getGame()->gfx().textureManager());
+
+    m_animation->add("assets/player.png", "left",
+        jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
+            static_cast<unsigned int>(GP::PlayerSize().y) },
+        { 2 }, 0.2f, getGame()->gfx().textureManager());
+
+    m_animation->add("assets/player.png", "up",
+        jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
+            static_cast<unsigned int>(GP::PlayerSize().y) },
+        { 3 }, 0.2f, getGame()->gfx().textureManager());
+
+    m_animation->add("assets/player.png", "down",
+        jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
+            static_cast<unsigned int>(GP::PlayerSize().y) },
+        { 4 }, 0.2f, getGame()->gfx().textureManager());
 
     m_animation->play("idle");
     m_animation->setPosition(jt::Vector2f { 5 * 24, 7 * 24 });

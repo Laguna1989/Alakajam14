@@ -3,6 +3,11 @@
 
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "game_state.hpp"
+#include "tilemap/tile_layer.hpp"
+#include "tilemap/object_layer.hpp"
+#include "character.hpp"
+#include "inventory/item_repository.hpp"
+#include "object_group.hpp"
 #include <memory>
 #include <vector>
 
@@ -19,12 +24,23 @@ public:
     std::string getName() const override;
 
 private:
-    std::shared_ptr<jt::Shape> m_background;
+    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
+    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround2;
+    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerOverlay;
+    std::shared_ptr<jt::tilemap::ObjectLayer> m_objectsLayer;
+
+    std::shared_ptr<PlayerCharacter> m_player;
+
+    std::shared_ptr<ItemRepository> m_itemRepository;
+    std::shared_ptr<jt::ObjectGroup<WorldItem>> m_worldItems;
+
     std::shared_ptr<jt::Sprite> m_vignette;
     std::shared_ptr<Hud> m_hud;
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
 
-    bool m_running { false };
+    std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders {};
+
+    bool m_running { true };
     bool m_hasEnded { false };
 
     int m_scoreP1 { 0 };
@@ -35,6 +51,14 @@ private:
     void doInternalDraw() const override;
 
     void endGame();
+
+    void createItemRepository();
+    void loadTilemap();
+    void createWorldItems();
+    void pickupItems();
+    void spawnWorldItem(std::string const& itemReferenceId, jt::Vector2f const& pos);
+    void createPlayer();
+    void handleItemSpawns();
 };
 
 #endif

@@ -2,7 +2,7 @@
 #define GUARD_JAMTEMPLATE_CHARACTER_SHEET_IMGUI_HPP
 
 #include "game_object.hpp"
-#include "item_repository.hpp"
+#include "inventory/item_repository.hpp"
 #include <memory>
 
 class CharacterSheetImgui : public jt::GameObject {
