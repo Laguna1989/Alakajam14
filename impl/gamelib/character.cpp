@@ -2,10 +2,12 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
+#include "state_game.hpp"
 
 PlayerCharacter::PlayerCharacter(std::shared_ptr<jt::Box2DWorldInterface> world,
-    b2BodyDef const* def, std::weak_ptr<ItemRepository> repo)
+    b2BodyDef const* def, std::weak_ptr<ItemRepository> repo, StateGame& state)
     : jt::Box2DObject { world, def }
+    , m_state { state }
 {
     m_inventory = std::make_shared<InventoryListImgui>(repo);
     m_charsheet = std::make_shared<CharacterSheetImgui>(repo);
@@ -91,6 +93,9 @@ void PlayerCharacter::handleInputAttack()
     if (m_attackCooldown > 0.0f) {
         return;
     }
+    if (m_dashTimer > 0.0f) {
+        return;
+    }
     if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Space)) {
         m_attackCooldown = 1.0f; // TODO: GP and/or equipment dependent
     }
@@ -99,7 +104,7 @@ void PlayerCharacter::handleInputAttack()
 void PlayerCharacter::updateAnimation(float const elapsed)
 {
     auto const v = getVelocity();
-    if (m_dashTimer > 0) {
+    if (m_dashTimer > 0.0f) {
         if (setAnimationIfNotSet("dash")) {
             m_animation->flash(0.3f);
             auto p = getPosition();
@@ -115,6 +120,47 @@ void PlayerCharacter::updateAnimation(float const elapsed)
             setVelocity(jt::Vector2f { 0.0f, 0.0f });
         }
 
+    } else if (m_attackCooldown > 0.0f) {
+        if (setAnimationIfNotSet("attack")) {
+            m_animation->flash(0.4f, jt::colors::Red);
+            // TODO: Spore particle effects or whatev
+
+            for (auto enemyWk : *m_state.getEnemies()) {
+                auto enemy = enemyWk.lock();
+                if (enemy == nullptr) {
+                    continue;
+                }
+                auto nmePos = enemy->getPosition();
+                auto myPos = getPosition();
+                jt::Vector2f delta = nmePos - myPos;
+                auto dist = jt::MathHelper::length(delta);
+                // TODO: Maybe derive this from gear
+                float circularHurtboxRange = 20.0f;
+                float directedHurtboxRange = 45.0f;
+
+                if (dist < circularHurtboxRange) {
+                    // Circular hurtbox with short range
+                    // TODO: Derive Damage from stats & gear
+                    enemy->receiveDamage(Damage { 50.0f });
+                } else {
+                    if (dist < directedHurtboxRange) {
+                        // Forward-facing hurtbox with medium range
+                        jt::Vector2f look = getVelocity();
+                        if (jt::MathHelper::length(look) < 0.1f) {
+                            // Look down if not moving
+                            look = { 0.0f, 1.0f };
+                        }
+                        jt::MathHelper::normalizeMe(look);
+                        jt::MathHelper::normalizeMe(delta);
+                        float sc = jt::MathHelper::dot(look, delta);
+                        if (sc > 0.5f) {
+                            // TODO: Derive Damage from stats & gear
+                            enemy->receiveDamage(Damage { 50.0f });
+                        }
+                    }
+                }
+            }
+        }
     } else {
         // no dash
         if (jt::MathHelper::lengthSquared(v) < 2) {

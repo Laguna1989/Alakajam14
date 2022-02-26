@@ -13,11 +13,11 @@ public:
     virtual std::shared_ptr<InventoryInterface> getInventory() = 0;
     virtual std::shared_ptr<CharacterSheetImgui> getCharSheet() = 0;
 };
-
+class StateGame;
 class PlayerCharacter : public CharacterInterface, public jt::Box2DObject {
 public:
     PlayerCharacter(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
-        std::weak_ptr<ItemRepository> repository);
+        std::weak_ptr<ItemRepository> repository, StateGame& state);
 
     std::shared_ptr<InventoryInterface> getInventory() override;
     std::shared_ptr<CharacterSheetImgui> getCharSheet() override;
@@ -29,6 +29,7 @@ private:
     std::shared_ptr<jt::Animation> m_animation;
     std::shared_ptr<InventoryListImgui> m_inventory;
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
+    StateGame& m_state;
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
