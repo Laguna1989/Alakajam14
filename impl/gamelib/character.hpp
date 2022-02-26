@@ -20,24 +20,23 @@ public:
     std::shared_ptr<CharacterSheetImgui> getCharSheet();
     void handleInputMovement();
     void updateAnimation(float const elapsed);
-    bool setAnimationIfNotSet(std::string const& newAnimationName);
 
     void gainExperience(int value);
 
 private:
+    StateGame& m_state;
+
     std::shared_ptr<jt::Animation> m_animation;
     std::shared_ptr<jt::Animation> m_attackUnderlay;
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
-    StateGame& m_state;
 
     std::shared_ptr<SpellBook> m_spellBook;
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
     jt::Vector2f m_dashVelocity { 0.0f, 0.0f };
-    float m_attackCooldown { -1.0f };
 
-    int m_experience { 0 };
+    float m_attackCooldown { -1.0f };
 
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
@@ -46,9 +45,12 @@ private:
     void createAnimation();
     void handleInputAttack();
     std::string selectDashAnimation(jt::Vector2f const& velocity) const;
+
     void updateSpells(const float elapsed);
     void updateOneSpell(
         float const elapsed, std::shared_ptr<SpellInterface> spell, jt::KeyCode key);
+
+    bool setAnimationIfNotSet(std::string const& newAnimationName);
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP

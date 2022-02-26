@@ -2,12 +2,13 @@
 #define GUARD_JAMTEMPLATE_CHARACTER_SHEET_IMGUI_HPP
 
 #include "game_object.hpp"
+#include "hud/observer_interface.hpp"
 #include <map>
 #include <memory>
 
 class CharacterSheetImgui : public jt::GameObject {
 public:
-    CharacterSheetImgui();
+    CharacterSheetImgui(std::shared_ptr<ObserverInterface<int>> experienceObserver);
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
 
@@ -29,7 +30,7 @@ public:
     void setDashFactor(std::string const& identifier, float value);
 
 private:
-    std::vector<std::string> m_equippedItems;
+    std::shared_ptr<ObserverInterface<int>> m_experienceObserver { nullptr };
 
     std::map<std::string, float> m_movementSpeedFactorsAdditive;
     std::map<std::string, float> m_attackSpeedFactorsAdditive;

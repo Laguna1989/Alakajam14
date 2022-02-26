@@ -12,7 +12,7 @@ PlayerCharacter::PlayerCharacter(
     : jt::Box2DObject { world, def }
     , m_state { state }
 {
-    m_charsheet = std::make_shared<CharacterSheetImgui>();
+    m_charsheet = std::make_shared<CharacterSheetImgui>(m_state.m_hud->getObserverExperience());
 }
 
 void PlayerCharacter::doCreate()
@@ -186,7 +186,6 @@ void PlayerCharacter::updateOneSpell(
         if (spell->canTrigger() && m_charsheet->getExperiencePoints() >= cost) {
             getGame()->getLogger().debug("Spell triggered: " + spell->getName());
             m_charsheet->changeExperiencePoints(-cost);
-            m_state.m_hud->getObserverExperience()->notify(m_charsheet->getExperiencePoints());
             spell->trigger();
         }
     }
@@ -300,7 +299,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
 
 std::string PlayerCharacter::selectDashAnimation(jt::Vector2f const& velocity) const
 {
-    auto dashAnimationName { "dash_down" };
+    std::string dashAnimationName { "dash_down" };
     if (velocity.x > 0 && abs(velocity.y) >= 0 && abs(velocity.y) < 0.1f) {
         dashAnimationName = "dash_right";
     } else if (velocity.x < 0 && abs(velocity.y) >= 0 && abs(velocity.y) < 0.1f) {
@@ -358,7 +357,6 @@ void PlayerCharacter::handleDashInput()
         return;
     }
     if (jt::MathHelper::lengthSquared(getVelocity()) > 0) {
-        // TODO Make this variables affect by stats, equipment, skills
         m_dashTimer = GP::PlayerDashTotalTime();
         m_dashCooldown = GP::PlayerBaseDashCooldown();
     }
@@ -374,8 +372,4 @@ void PlayerCharacter::doDraw() const
 
 std::shared_ptr<CharacterSheetImgui> PlayerCharacter::getCharSheet() { return m_charsheet; }
 
-void PlayerCharacter::gainExperience(int value)
-{
-    m_charsheet->changeExperiencePoints(value);
-    m_state.m_hud->getObserverExperience()->notify(m_charsheet->getExperiencePoints());
-}
+void PlayerCharacter::gainExperience(int value) { m_charsheet->changeExperiencePoints(value); }
