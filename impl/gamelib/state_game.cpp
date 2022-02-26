@@ -172,7 +172,13 @@ void StateGame::loadTilemap()
         = std::make_shared<jt::tilemap::ObjectLayer>(loader.loadObjectsFromLayer("items"));
 
     auto tileCollisions = loader.loadCollisionsFromLayer("ground1");
+    auto const levelColliderCountInitial = tileCollisions.getRects().size();
     tileCollisions.refineColliders();
+    auto const levelColliderCountOptimized = tileCollisions.getRects().size();
+    getGame()->getLogger().debug(
+        "Level colliders initial: " + std::to_string(levelColliderCountInitial)
+            + " and optimized: " + std::to_string(levelColliderCountOptimized),
+        { "level" });
     for (auto const& r : tileCollisions.getRects()) {
         b2BodyDef bodyDef;
         bodyDef.fixedRotation = true;

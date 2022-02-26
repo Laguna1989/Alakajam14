@@ -32,7 +32,7 @@ private:
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
-    //    jt::Vector2f m_dashVelocity {0.0f, 0.0f};
+    jt::Vector2f m_dashVelocity { 0.0f, 0.0f };
 
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;

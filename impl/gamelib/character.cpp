@@ -83,8 +83,14 @@ void PlayerCharacter::updateAnimation(float const elapsed)
             auto p = getPosition();
             auto vn = v;
             jt::MathHelper::normalizeMe(vn);
-            setPosition(p + jt::Vector2f { vn * GP::PlayerBaseDashDistance() });
+            m_dashVelocity = vn * GP::PlayerBaseDashVelocity();
+
             // TODO trigger eye candy
+        }
+        if (m_dashTimer >= GP::PlayerDashTotalTime() - GP::PlayerDashActiveTime()) {
+            setVelocity(m_dashVelocity);
+        } else {
+            setVelocity(jt::Vector2f { 0.0f, 0.0f });
         }
 
     } else {
@@ -123,9 +129,9 @@ bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
 void PlayerCharacter::handleInputMovement()
 {
     auto keyboard = getGame()->input().keyboard();
-    setVelocity(jt::Vector2f { 0.0f, 0.0f });
 
-    if (m_dashTimer <= 0.2f) {
+    if (m_dashTimer < 0.0f) {
+        setVelocity(jt::Vector2f { 0.0f, 0.0f });
         float const speed = GP::PlayerBaseMovementSpeed();
 
         if (keyboard->pressed(jt::KeyCode::D)) {
@@ -154,7 +160,7 @@ void PlayerCharacter::handleDashInput()
     }
     if (jt::MathHelper::lengthSquared(getVelocity()) > 0) {
         // TODO Make this variables affect by stats, equipment, skills
-        m_dashTimer = GP::PlayerDashTime();
+        m_dashTimer = GP::PlayerDashTotalTime();
         m_dashCooldown = GP::PlayerBaseDashCooldown();
     }
 }
