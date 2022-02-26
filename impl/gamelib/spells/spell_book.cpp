@@ -7,6 +7,7 @@
 #include "spell_passive_dash.hpp"
 #include "spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
+#include "strutils.hpp"
 
 SpellBook::SpellBook(StateGame& state)
 {
@@ -76,49 +77,55 @@ void SpellBook::doDraw() const
     drawEquippedSpells();
     ImGui::End();
 }
+
 void SpellBook::drawEquippedSpells() const
 {
     ImGui::Text("Equipped Spells");
 
     for (auto i = 0U; i != m_equippedSpells.size(); ++i) {
-        ImGui::Text("Spell %i", i);
+        std::string slotName = std::to_string(i);
+        ImGui::Text("Spell %s", slotName.c_str());
         ImGui::SameLine();
 
-        std::string displayName = m_equippedSpells.at(i)->getName();
+        std::string displayName = m_equippedSpells.at(i)->getName() + "##" + slotName;
         if (ImGui::Button(displayName.c_str())) {
-            ImGui::OpenPopup(displayName.c_str());
+            ImGui::OpenPopup(slotName.c_str());
         }
 
-        if (ImGui::BeginPopup(displayName.c_str())) {
-            if (displayName == "None") {
+        if (ImGui::BeginPopup(slotName.c_str())) {
+            if (strutil::starts_with(displayName, "None")) {
                 ImGui::Text("Nothing Equipped");
-            } else {
-                std::string unequipButtonText = "Unequip##" + displayName;
-                // TODO unequip spell
-                //                if (ImGui::Selectable(unequipButtonText.c_str())) {
-                //                    m_itemToUnequip = kvp.second;
-                //                }
             }
-
-            //            auto const possibleItems = getItemReferenceIdsForEquipmentSlot(kvp.first);
-            //            for (auto const& itemReferenceId : possibleItems) {
-            //                if (kvp.second == itemReferenceId) {
-            //                    continue;
-            //                }
-            //                auto itemReference
-            //                    =
-            //                    m_repository.lock()->getItemReferenceFromString(itemReferenceId);
-            //                std::string const itemName = itemReference->listName;
-            //                if (ImGui::Selectable(itemName.c_str())) {
-            //                    if (!kvp.second.empty()) {
-            //                        m_itemToUnequip = kvp.second;
-            //                    }
-            //                    m_itemToEquip = itemReferenceId;
-            //                }
-            //            }
-
             ImGui::EndPopup();
         }
+        //            if (displayName == "None") {
+        //                ImGui::Text("Nothing Equipped");
+        //            } else {
+        //                std::string unequipButtonText = "Unequip##" + slotName;
+        //                // TODO unequip spell
+        //                //                if (ImGui::Selectable(unequipButtonText.c_str())) {
+        //                //                    m_itemToUnequip = kvp.second;
+        //                //                }
+        //            }
+
+        //            auto const possibleItems = getItemReferenceIdsForEquipmentSlot(kvp.first);
+        //            for (auto const& itemReferenceId : possibleItems) {
+        //                if (kvp.second == itemReferenceId) {
+        //                    continue;
+        //                }
+        //                auto itemReference
+        //                    =
+        //                    m_repository.lock()->getItemReferenceFromString(itemReferenceId);
+        //                std::string const itemName = itemReference->listName;
+        //                if (ImGui::Selectable(itemName.c_str())) {
+        //                    if (!kvp.second.empty()) {
+        //                        m_itemToUnequip = kvp.second;
+        //                    }
+        //                    m_itemToEquip = itemReferenceId;
+        //                }
+        //            }
+        //        ImGui::EndPopup();
+        //    }
     }
 }
 std::vector<std::shared_ptr<SpellInterface>> SpellBook::getEquippedSpells()
