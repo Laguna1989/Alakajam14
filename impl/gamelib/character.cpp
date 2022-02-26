@@ -24,6 +24,8 @@ void PlayerCharacter::doCreate()
 
     createAnimation();
 
+    m_spell1 = std::make_shared<SpellAttackSnipe>(m_state);
+
     m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
 }
@@ -137,6 +139,9 @@ void PlayerCharacter::doUpdate(float const elapsed)
 {
     handleInputMovement();
     handleInputAttack();
+    if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Tab)) {
+        m_spell1->trigger();
+    }
     updateAnimation(elapsed);
 
     m_dashTimer -= elapsed;
