@@ -6,6 +6,7 @@ ShroomGameContactListener::ShroomGameContactListener(StateGame& state)
     : m_state(state)
 {
 }
+
 void ShroomGameContactListener::BeginContact(b2Contact* contact)
 {
     auto bodyA = contact->GetFixtureA()->GetBody();
@@ -27,6 +28,7 @@ void ShroomGameContactListener::handleSnipeProjectiles(const b2Body* bodyA, cons
         }
         auto snipeBody = snipeProj->getB2Body();
         if (bodyA == snipeBody || bodyB == snipeBody) {
+            snipeProj->kill();
             for (auto nme : *m_state.getEnemies()) {
                 auto enemy = nme.lock();
                 if (enemy == nullptr) {
@@ -38,7 +40,6 @@ void ShroomGameContactListener::handleSnipeProjectiles(const b2Body* bodyA, cons
                         0.0f,
                         [enemy, snipeProj]() {
                             enemy->receiveDamage(snipeProj->getDamage());
-                            snipeProj->kill();
                         },
                         1);
                     m_state.add(deferredAction);
