@@ -38,10 +38,6 @@ private:
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
     StateGame& m_state;
 
-    std::shared_ptr<SpellInterface> m_equippedSpell1;
-    std::shared_ptr<SpellInterface> m_equippedSpell2;
-    std::shared_ptr<SpellInterface> m_equippedSpell3;
-
     std::shared_ptr<SpellBook> m_spellBook;
 
     float m_dashTimer { -1.0f };
