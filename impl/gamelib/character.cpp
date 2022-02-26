@@ -86,6 +86,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
             setPosition(p + jt::Vector2f { vn * GP::PlayerBaseDashDistance() });
             // TODO trigger eye candy
         }
+
     } else {
         // no dash
         if (jt::MathHelper::lengthSquared(v) < 2) {
@@ -152,10 +153,7 @@ void PlayerCharacter::handleDashInput()
         return;
     }
     if (jt::MathHelper::lengthSquared(getVelocity()) > 0) {
-        // dash in direction:
-
-        // TODO move those variables to GameProperties
-        // // Make them affect by stats
+        // TODO Make this variables affect by stats, equipment, skills
         m_dashTimer = GP::PlayerDashTime();
         m_dashCooldown = GP::PlayerBaseDashCooldown();
     }
