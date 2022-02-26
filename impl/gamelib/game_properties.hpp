@@ -30,6 +30,9 @@ public:
 
     static jt::Vector2f PlayerSize();
     static float PlayerBaseMovementSpeed();
+    static float PlayerBaseDashDistance();
+    static float PlayerDashTime();
+    static float PlayerBaseDashCooldown();
 };
 
 #endif

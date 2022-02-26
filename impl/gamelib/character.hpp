@@ -19,21 +19,25 @@ public:
     PlayerCharacter(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
         std::weak_ptr<ItemRepository> repository);
 
+    std::shared_ptr<InventoryInterface> getInventory() override;
+    std::shared_ptr<CharacterSheetImgui> getCharSheet() override;
+    void handleInputMovement();
+    void updateAnimation(float const elapsed);
+    bool setAnimationIfNotSet(std::string const& newAnimationName);
+
 private:
     std::shared_ptr<jt::Animation> m_animation;
     std::shared_ptr<InventoryListImgui> m_inventory;
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
 
+    float m_dashTimer { -1.0f };
+    float m_dashCooldown { -1.0f };
+
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
-
-public:
-    std::shared_ptr<InventoryInterface> getInventory() override;
-    std::shared_ptr<CharacterSheetImgui> getCharSheet() override;
-    void handleInputMovement();
-    void updateAnimation(float const elapsed);
-    void setAnimationIfNotSet(std::string const& newAnimationName);
+    void handleDashInput();
+    void createAnimation();
 };
 
 #endif // GUATD_JAMTEMPLATE_CHARACTER_HPP

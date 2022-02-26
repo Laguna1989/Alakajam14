@@ -12,3 +12,6 @@ int GP::PhysicPositionIterations() { return 20; }
 
 jt::Vector2f GP::PlayerSize() { return jt::Vector2f { 16.0f, 16.0f }; }
 float GP::PlayerBaseMovementSpeed() { return 85.0f; }
+float GP::PlayerBaseDashDistance() { return 20.0f; }
+float GP::PlayerBaseDashCooldown() { return 1.4f; }
+float GP::PlayerDashTime() { return 0.7f; }
