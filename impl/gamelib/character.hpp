@@ -6,6 +6,7 @@
 #include "character_sheet_imgui.hpp"
 #include "game_object.hpp"
 #include "inventory/inventory_list_imgui.hpp"
+#include "spells/spell_attack_snipe.hpp"
 #include <memory>
 
 class CharacterInterface {
@@ -33,6 +34,8 @@ private:
     std::shared_ptr<InventoryListImgui> m_inventory;
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
     StateGame& m_state;
+
+    std::shared_ptr<SpellInterface> m_spell1;
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
