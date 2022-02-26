@@ -3,7 +3,10 @@
 #include "imgui.h"
 #include "math_helper.hpp"
 
-CharacterSheetImgui::CharacterSheetImgui() { }
+CharacterSheetImgui::CharacterSheetImgui(std::shared_ptr<ObserverInterface<int>> observer)
+    : m_experienceObserver { observer }
+{
+}
 
 void CharacterSheetImgui::doUpdate(float const)
 {
@@ -37,7 +40,11 @@ float CharacterSheetImgui::getHitpointsMax() const { return m_hitpointsMax; }
 void CharacterSheetImgui::changeHitpoints(float delta) { m_hitpoints -= delta; }
 
 int CharacterSheetImgui::getExperiencePoints() const { return m_experiencePoints; }
-void CharacterSheetImgui::changeExperiencePoints(int delta) { m_experiencePoints += delta; }
+void CharacterSheetImgui::changeExperiencePoints(int delta)
+{
+    m_experiencePoints += delta;
+    m_experienceObserver->notify(m_experiencePoints);
+}
 
 float CharacterSheetImgui::getMovementSpeedFactor() const
 {
