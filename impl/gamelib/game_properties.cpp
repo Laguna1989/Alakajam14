@@ -14,5 +14,5 @@ jt::Vector2f GP::PlayerSize() { return jt::Vector2f { 16.0f, 16.0f }; }
 float GP::PlayerBaseMovementSpeed() { return 85.0f; }
 float GP::PlayerBaseDashVelocity() { return 500.0f; }
 float GP::PlayerBaseDashCooldown() { return 1.4f; }
-float GP::PlayerDashTotalTime() { return 0.6f; }
-float GP::PlayerDashActiveTime() { return 0.05f; }
+float GP::PlayerDashTotalTime() { return 0.3f; }
+float GP::PlayerDashActiveTime() { return 0.065f; }
