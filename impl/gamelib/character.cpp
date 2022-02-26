@@ -58,6 +58,11 @@ void PlayerCharacter::createAnimation()
             static_cast<unsigned int>(GP::PlayerSize().y) },
         { 4 }, 0.2f, getGame()->gfx().textureManager());
 
+    m_animation->add("assets/player.png", "attack",
+        jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
+            static_cast<unsigned int>(GP::PlayerSize().y) },
+        { 3 }, 0.2f, getGame()->gfx().textureManager());
+
     m_animation->play("idle");
     m_animation->setPosition(jt::Vector2f { 5 * 24, 7 * 24 });
 }
@@ -65,14 +70,25 @@ void PlayerCharacter::createAnimation()
 void PlayerCharacter::doUpdate(float const elapsed)
 {
     handleInputMovement();
+    handleInputAttack();
     updateAnimation(elapsed);
 
     m_dashTimer -= elapsed;
     m_dashCooldown -= elapsed;
+    m_attackCooldown -= elapsed;
 
     m_inventory->update(elapsed);
     m_charsheet->update(elapsed);
     m_charsheet->setEquippedItems(m_inventory->getEquippedItems());
+}
+void PlayerCharacter::handleInputAttack()
+{
+    if (m_attackCooldown > 0.0f) {
+        return;
+    }
+    if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Space)) {
+        m_attackCooldown = 1.0f; // TODO: GP and/or equipment dependent
+    }
 }
 
 void PlayerCharacter::updateAnimation(float const elapsed)
