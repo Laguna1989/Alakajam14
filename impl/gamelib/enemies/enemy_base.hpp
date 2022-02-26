@@ -2,7 +2,7 @@
 #define GUARD_JAMTEMPLATE_ENEMY_GUARD_HPP
 #include "animation.hpp"
 #include "box2dwrapper/box2d_object.hpp"
-#include "damage.h"
+#include "damage.hpp"
 
 class StateGame;
 
