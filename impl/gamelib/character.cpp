@@ -29,12 +29,17 @@ void PlayerCharacter::doCreate()
     m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
 
-    m_equippedSpell1 = std::make_shared<SpellAttackSnipe>(m_state);
-    m_equippedSpell1->onEquip();
-    m_equippedSpell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
-    m_equippedSpell2->onEquip();
-    m_equippedSpell3 = std::make_shared<SpellNone>();
-    m_equippedSpell3->onEquip();
+    m_spellBook = std::make_shared<SpellBook>(m_state);
+
+    m_equippedSpell1 = m_spellBook->getSpellByName("None");
+    m_equippedSpell2 = m_spellBook->getSpellByName("None");
+    m_equippedSpell3 = m_spellBook->getSpellByName("None");
+    //    m_equippedSpell1 = std::make_shared<SpellAttackSnipe>(m_state);
+    //    m_equippedSpell1->onEquip();
+    //    m_equippedSpell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
+    //    m_equippedSpell2->onEquip();
+    //    m_equippedSpell3 = std::make_shared<SpellNone>();
+    //    m_equippedSpell3->onEquip();
 }
 
 void PlayerCharacter::createAnimation()

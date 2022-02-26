@@ -6,7 +6,7 @@
 
 class SpellPassiveMovementSpeed : public SpellPassiveImpl {
 public:
-    explicit SpellPassiveMovementSpeed(StateGame& state);
+    explicit SpellPassiveMovementSpeed(CharacterSheetImgui& sheet);
 
     void onEquip() override;
     void onUnEquip() override;

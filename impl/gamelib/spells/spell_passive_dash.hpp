@@ -4,7 +4,7 @@
 #include "spell_impl.hpp"
 class SpellPassiveDash : public SpellPassiveImpl {
 public:
-    explicit SpellPassiveDash(StateGame& state);
+    explicit SpellPassiveDash(CharacterSheetImgui& sheet);
 
     void onEquip() override;
     void onUnEquip() override;

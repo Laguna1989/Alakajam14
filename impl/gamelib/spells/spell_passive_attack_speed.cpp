@@ -1,19 +1,13 @@
 #include "spell_passive_attack_speed.hpp"
 #include "state_game.hpp"
 
-SpellPassiveAttackSpeed::SpellPassiveAttackSpeed(StateGame& state)
-    : SpellPassiveImpl(state)
+SpellPassiveAttackSpeed::SpellPassiveAttackSpeed(CharacterSheetImgui& sheet)
+    : SpellPassiveImpl(sheet)
 {
 }
 
-void SpellPassiveAttackSpeed::onEquip()
-{
-    m_state.getPlayer()->getCharSheet()->setAttackSpeedFactor("Spell", 0.15f);
-}
+void SpellPassiveAttackSpeed::onEquip() { m_charSheet.setAttackSpeedFactor("Spell", 0.15f); }
 
-void SpellPassiveAttackSpeed::onUnEquip()
-{
-    m_state.getPlayer()->getCharSheet()->setAttackSpeedFactor("Spell", 0.0f);
-}
+void SpellPassiveAttackSpeed::onUnEquip() { m_charSheet.setAttackSpeedFactor("Spell", 0.0f); }
 
 std::string SpellPassiveAttackSpeed::getName() const { return "Increased Attack Speed"; }

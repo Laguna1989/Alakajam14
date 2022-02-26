@@ -4,7 +4,7 @@
 #include "spell_impl.hpp"
 class SpellPassiveAttackSpeed : public SpellPassiveImpl {
 public:
-    explicit SpellPassiveAttackSpeed(StateGame& state);
+    explicit SpellPassiveAttackSpeed(CharacterSheetImgui& sheet);
 
     void onEquip() override;
     void onUnEquip() override;
