@@ -8,7 +8,6 @@ public:
     virtual ~SpellInterface() = default;
     virtual void trigger() = 0;
     virtual void update(float elapsed) = 0;
-
     virtual int getExperienceCost() const = 0;
 };
 
@@ -19,10 +18,11 @@ public:
     void update(float elapsed) override;
     void trigger() override;
 
-private:
+protected:
     StateGame& m_state;
     float m_cooldown { -1.0f };
 
+private:
     virtual void doTrigger() = 0;
 };
 

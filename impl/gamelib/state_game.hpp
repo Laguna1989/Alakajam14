@@ -8,6 +8,7 @@
 #include "game_state.hpp"
 #include "inventory/item_repository.hpp"
 #include "object_group.hpp"
+#include "snipe_projectile.hpp"
 #include "tilemap/node_layer.hpp"
 #include "tilemap/object_layer.hpp"
 #include "tilemap/tile_layer.hpp"
@@ -37,6 +38,10 @@ public:
 
     std::shared_ptr<Hud> m_hud;
 
+    void spawnSnipeProjectile(std::shared_ptr<SnipeProjectile> projectile);
+
+    std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
+
 private:
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround2;
@@ -52,9 +57,9 @@ private:
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> m_enemies;
     std::shared_ptr<jt::ObjectGroup<ExperienceOrb>> m_experienceOrbs;
 
-    std::shared_ptr<jt::Sprite> m_vignette;
+    std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> m_snipeProjectiles;
 
-    std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
+    std::shared_ptr<jt::Sprite> m_vignette;
 
     std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders {};
 
@@ -83,6 +88,7 @@ private:
     void spawnOneExperienceOrb(jt::Vector2f const& pos, int value);
     void updateTileNodes(float const elapsed);
     void updateExperience() const;
+    void createSnipeProjectilesGroup();
 };
 
 #endif

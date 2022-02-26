@@ -149,10 +149,15 @@ void PlayerCharacter::doUpdate(float const elapsed)
 {
     handleInputMovement();
     handleInputAttack();
+
+    m_spell1->update(elapsed);
     if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Tab)) {
         auto const cost = m_spell1->getExperienceCost();
+        // TODO warmup for spells?
         if (m_charsheet->getExperiencePoints() >= cost) {
+            std::cout << "trigger spell 1\n";
             m_charsheet->changeExperiencePoints(-cost);
+            m_state.m_hud->getObserverExperience()->notify(m_charsheet->getExperiencePoints());
             m_spell1->trigger();
         }
     }
