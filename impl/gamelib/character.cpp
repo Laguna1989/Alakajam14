@@ -29,12 +29,10 @@ void PlayerCharacter::doCreate()
     m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
 
-    m_equippedSpell1 = std::make_shared<SpellAttackSnipe>(m_state);
-    m_equippedSpell1->onEquip();
-    m_equippedSpell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
-    m_equippedSpell2->onEquip();
-    m_equippedSpell3 = std::make_shared<SpellNone>();
-    m_equippedSpell3->onEquip();
+    m_spellBook = std::make_shared<SpellBook>(m_state);
+    m_spellBook->setGameInstance(getGame());
+    m_spellBook->makeSpellAvailable("Improve Dash");
+    m_spellBook->makeSpellAvailable("Snipe");
 }
 
 void PlayerCharacter::createAnimation()
@@ -169,14 +167,17 @@ void PlayerCharacter::doUpdate(float const elapsed)
 
     m_inventory->update(elapsed);
     m_charsheet->update(elapsed);
+    m_spellBook->update(elapsed);
     m_charsheet->setEquippedItems(m_inventory->getEquippedItems());
 }
 
 void PlayerCharacter::updateSpells(const float elapsed)
 {
-    updateOneSpell(elapsed, m_equippedSpell1, jt::KeyCode::Q);
-    updateOneSpell(elapsed, m_equippedSpell2, jt::KeyCode::E);
-    updateOneSpell(elapsed, m_equippedSpell3, jt::KeyCode::Tab);
+    auto const& equippedSpells = m_spellBook->getEquippedSpells();
+
+    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Q);
+    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::E);
+    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Tab);
 }
 
 void PlayerCharacter::updateOneSpell(
@@ -372,6 +373,7 @@ void PlayerCharacter::doDraw() const
     m_animation->draw(getGame()->gfx().target());
     m_inventory->draw();
     m_charsheet->draw();
+    m_spellBook->draw();
 }
 
 std::shared_ptr<InventoryInterface> PlayerCharacter::getInventory() { return m_inventory; }

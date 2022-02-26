@@ -18,8 +18,8 @@ void SpellTriggerImpl::trigger()
 void SpellTriggerImpl::onEquip() { }
 void SpellTriggerImpl::onUnEquip() { }
 
-SpellPassiveImpl::SpellPassiveImpl(StateGame& state)
-    : m_state { state }
+SpellPassiveImpl::SpellPassiveImpl(CharacterSheetImgui& charSheet)
+    : m_charSheet { charSheet }
 {
 }
 

@@ -8,6 +8,7 @@
 #include "input/key_codes.hpp"
 #include "inventory/inventory_list_imgui.hpp"
 #include "spells/spell_attack_snipe.hpp"
+#include "spells/spell_book.hpp"
 #include <memory>
 #include <string>
 
@@ -37,9 +38,7 @@ private:
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
     StateGame& m_state;
 
-    std::shared_ptr<SpellInterface> m_equippedSpell1;
-    std::shared_ptr<SpellInterface> m_equippedSpell2;
-    std::shared_ptr<SpellInterface> m_equippedSpell3;
+    std::shared_ptr<SpellBook> m_spellBook;
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
