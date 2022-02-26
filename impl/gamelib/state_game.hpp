@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_STATE_GAME_HPP_INCLUDEGUARD
 #define GAME_STATE_GAME_HPP_INCLUDEGUARD
 
+#include "shroom_game_contact_listener.hpp"
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "character.hpp"
 #include "enemies/enemy_base.hpp"
@@ -63,18 +64,20 @@ private:
 
     std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders {};
 
+    std::shared_ptr<b2ContactListener> m_contactListener;
+
     bool m_running { true };
+
     bool m_hasEnded { false };
-
     int m_scoreP1 { 0 };
-    int m_scoreP2 { 0 };
 
+    int m_scoreP2 { 0 };
     void doInternalCreate() override;
     void doInternalUpdate(float const elapsed) override;
+
     void doInternalDraw() const override;
 
     void endGame();
-
     void createItemRepository();
     void loadTilemap();
     void createWorldItems();

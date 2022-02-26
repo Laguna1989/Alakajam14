@@ -57,6 +57,9 @@ void StateGame::doInternalCreate()
 {
     m_world = std::make_shared<jt::Box2DWorldImpl>(jt::Vector2f { 0.0f, 0.0f });
 
+    m_contactListener = std::make_shared<ShroomGameContactListener>(*this);
+    m_world->setContactListener(m_contactListener);
+
     float const w = static_cast<float>(GP::GetWindowSize().x);
     float const h = static_cast<float>(GP::GetWindowSize().y);
 
