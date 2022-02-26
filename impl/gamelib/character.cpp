@@ -31,7 +31,7 @@ void PlayerCharacter::createAnimation()
     m_animation->add("assets/player.png", "idle",
         jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
             static_cast<unsigned int>(GP::PlayerSize().y) },
-        { 0 }, 0.2f, getGame()->gfx().textureManager());
+        { 25, 26, 27, 28, 29, 30, 31 }, 0.25f, getGame()->gfx().textureManager());
 
     m_animation->add("assets/player.png", "right",
         jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
@@ -41,17 +41,17 @@ void PlayerCharacter::createAnimation()
     m_animation->add("assets/player.png", "left",
         jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
             static_cast<unsigned int>(GP::PlayerSize().y) },
-        { 2 }, 0.2f, getGame()->gfx().textureManager());
+        { 20, 21, 22, 23, 24 }, 0.08f, getGame()->gfx().textureManager());
 
     m_animation->add("assets/player.png", "up",
         jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
             static_cast<unsigned int>(GP::PlayerSize().y) },
-        { 3 }, 0.2f, getGame()->gfx().textureManager());
+        { 15, 16, 17, 18, 19 }, 0.08f, getGame()->gfx().textureManager());
 
     m_animation->add("assets/player.png", "down",
         jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
             static_cast<unsigned int>(GP::PlayerSize().y) },
-        { 4 }, 0.2f, getGame()->gfx().textureManager());
+        { 0, 1, 2, 3, 4 }, 0.08f, getGame()->gfx().textureManager());
 
     m_animation->add("assets/player.png", "dash",
         jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
@@ -62,6 +62,11 @@ void PlayerCharacter::createAnimation()
         jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
             static_cast<unsigned int>(GP::PlayerSize().y) },
         { 3 }, 0.2f, getGame()->gfx().textureManager());
+
+    m_animation->add("assets/player.png", "hurt",
+        jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
+            static_cast<unsigned int>(GP::PlayerSize().y) },
+        { 32, 33, 34, 35 }, 0.15f, getGame()->gfx().textureManager());
 
     m_animation->play("idle");
     m_animation->setPosition(jt::Vector2f { 5 * 24, 7 * 24 });
