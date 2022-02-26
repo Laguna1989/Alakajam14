@@ -129,7 +129,7 @@ void StateGame::createPlayer()
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(5 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
+    bodyDef.position.Set(104 * GP::PlayerSize().x, 64 * GP::PlayerSize().y);
     m_player = std::make_shared<PlayerCharacter>(m_world, &bodyDef, *this);
     add(m_player);
 }
@@ -226,23 +226,26 @@ std::string StateGame::getName() const { return "Game"; }
 
 void StateGame::loadTilemap()
 {
-    jt::tilemap::TilesonLoader loader { "assets/test_level.json" };
-
+    jt::tilemap::TilesonLoader loader { "assets/cakeworld.json" };
+    std::cout << "wat" << std::endl;
     m_tileLayerGround1 = std::make_shared<jt::tilemap::TileLayer>(
         loader.loadTilesFromLayer("ground1", getGame()->gfx().textureManager()));
-
+    std::cout << "bat" << std::endl;
     m_tileLayerGround1->setScreenSizeHint(jt::Vector2f { 400, 300 });
-
     m_tileLayerOverlay = std::make_shared<jt::tilemap::TileLayer>(
         loader.loadTilesFromLayer("overlay", getGame()->gfx().textureManager()));
+    std::cout << "vat" << std::endl;
     m_tileLayerOverlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
-
+    std::cout << "hat" << std::endl;
     m_nodeLayer = std::make_shared<jt::tilemap::NodeLayer>(
         loader.loadNodesFromLayer("ground1", getGame()->gfx().textureManager()));
-
+    std::cout << "what" << std::endl;
     auto tileCollisions = loader.loadCollisionsFromLayer("ground1");
+    std::cout << "bwat" << std::endl;
     auto const levelColliderCountInitial = tileCollisions.getRects().size();
+    std::cout << "mwat" << std::endl;
     tileCollisions.refineColliders();
+    std::cout << "wwat" << std::endl;
     auto const levelColliderCountOptimized = tileCollisions.getRects().size();
     getGame()->getLogger().debug(
         "Level colliders initial: " + std::to_string(levelColliderCountInitial)
