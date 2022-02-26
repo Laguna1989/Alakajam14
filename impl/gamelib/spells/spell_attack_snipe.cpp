@@ -19,3 +19,4 @@ SpellAttackSnipe::SpellAttackSnipe(StateGame& state)
 }
 
 void SpellAttackSnipe::doTrigger() { }
+int SpellAttackSnipe::getExperienceCost() const { return 10.0f; }

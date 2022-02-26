@@ -140,7 +140,11 @@ void PlayerCharacter::doUpdate(float const elapsed)
     handleInputMovement();
     handleInputAttack();
     if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Tab)) {
-        m_spell1->trigger();
+        auto const cost = m_spell1->getExperienceCost();
+        if (m_charsheet->getExperiencePoints() >= cost) {
+            m_charsheet->changeExperiencePoints(-cost);
+            m_spell1->trigger();
+        }
     }
     updateAnimation(elapsed);
 
@@ -308,6 +312,6 @@ std::shared_ptr<CharacterSheetImgui> PlayerCharacter::getCharSheet() { return m_
 
 void PlayerCharacter::gainExperience(int value)
 {
-    m_experience += value;
-    m_state.m_hud->getObserverExperience()->notify(m_experience);
+    m_charsheet->changeExperiencePoints(value);
+    m_state.m_hud->getObserverExperience()->notify(m_charsheet->getExperiencePoints());
 }

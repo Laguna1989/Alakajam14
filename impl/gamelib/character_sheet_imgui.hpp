@@ -15,10 +15,22 @@ public:
 
     void setEquippedItems(std::vector<std::string> const& items);
 
+    float getHitpoints() const;
+    float getHitpointsMax() const;
+    void changeHitpoints(float delta);
+
+    int getExperiencePoints() const;
+    void changeExperiencePoints(int delta);
+
 private:
     std::weak_ptr<ItemRepository> m_repository;
 
     std::vector<std::string> m_equippedItems;
+
+    float m_hitpoints { 100.0f };
+    float m_hitpointsMax { 100.0f };
+
+    int m_experiencePoints { 0 };
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_SHEET_IMGUI_HPP

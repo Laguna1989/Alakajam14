@@ -47,3 +47,10 @@ void CharacterSheetImgui::setEquippedItems(std::vector<std::string> const& items
 {
     m_equippedItems = items;
 }
+
+float CharacterSheetImgui::getHitpoints() const { return m_hitpoints; }
+float CharacterSheetImgui::getHitpointsMax() const { return m_hitpointsMax; }
+void CharacterSheetImgui::changeHitpoints(float delta) { m_hitpoints -= delta; }
+
+int CharacterSheetImgui::getExperiencePoints() const { return m_experiencePoints; }
+void CharacterSheetImgui::changeExperiencePoints(int delta) { m_experiencePoints += delta; }

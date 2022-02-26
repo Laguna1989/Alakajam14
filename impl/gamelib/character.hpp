@@ -47,7 +47,6 @@ private:
     void handleDashInput();
     void createAnimation();
     void handleInputAttack();
-    int m_experience { 0 };
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP

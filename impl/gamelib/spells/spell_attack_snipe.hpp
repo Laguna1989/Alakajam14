@@ -8,6 +8,8 @@ public:
     virtual ~SpellInterface() = default;
     virtual void trigger() = 0;
     virtual void update(float elapsed) = 0;
+
+    virtual int getExperienceCost() const = 0;
 };
 
 class SpellImpl : public SpellInterface {
@@ -28,6 +30,7 @@ class SpellAttackSnipe : public SpellImpl {
 public:
     explicit SpellAttackSnipe(StateGame&);
     void doTrigger() override;
+    int getExperienceCost() const override;
 };
 
 #endif // ALAKAJAM14_SPELL_ATTACK_SNIPE_HPP
