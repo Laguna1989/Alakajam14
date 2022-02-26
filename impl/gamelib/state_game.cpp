@@ -4,12 +4,12 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
+#include "random/random.hpp"
 #include "shape.hpp"
 #include "sprite.hpp"
 #include "state_menu.hpp"
-#include "tweens/tween_alpha.hpp"
 #include "tilemap/tileson_loader.hpp"
-#include "random/random.hpp"
+#include "tweens/tween_alpha.hpp"
 
 namespace {
 void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
@@ -51,7 +51,6 @@ void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
     }
 }
 } // namespace
-
 
 void StateGame::doInternalCreate()
 {
@@ -149,17 +148,19 @@ void StateGame::endGame()
 }
 std::string StateGame::getName() const { return "Game"; }
 
-void StateGame::createItemRepository() {
+void StateGame::createItemRepository()
+{
     m_itemRepository = std::make_shared<ItemRepository>();
 
     m_itemRepository->loadFromJson("assets/demos/inventory/test_items.json");
 }
-void StateGame::loadTilemap() {
 
-    jt::tilemap::TilesonLoader loader { "assets/demos/inventory/spaceship_items.json" };
+void StateGame::loadTilemap()
+{
+    jt::tilemap::TilesonLoader loader { "assets/test_level.json" };
 
     m_tileLayerGround1 = std::make_shared<jt::tilemap::TileLayer>(
-        loader.loadTilesFromLayer("ground", getGame()->gfx().textureManager()));
+        loader.loadTilesFromLayer("ground1", getGame()->gfx().textureManager()));
 
     m_tileLayerGround1->setScreenSizeHint(jt::Vector2f { 400, 300 });
 
@@ -170,7 +171,7 @@ void StateGame::loadTilemap() {
     m_objectsLayer
         = std::make_shared<jt::tilemap::ObjectLayer>(loader.loadObjectsFromLayer("items"));
 
-    auto tileCollisions = loader.loadCollisionsFromLayer("ground");
+    auto tileCollisions = loader.loadCollisionsFromLayer("ground1");
     tileCollisions.refineColliders();
     for (auto const& r : tileCollisions.getRects()) {
         b2BodyDef bodyDef;
@@ -190,7 +191,8 @@ void StateGame::loadTilemap() {
     }
 }
 
-void StateGame::createWorldItems() {
+void StateGame::createWorldItems()
+{
     m_worldItems = std::make_shared<jt::ObjectGroup<WorldItem>>();
 
     for (auto it : m_objectsLayer->getObjects()) {
@@ -202,7 +204,8 @@ void StateGame::createWorldItems() {
     add(m_worldItems);
 }
 
-void StateGame::pickupItems() {
+void StateGame::pickupItems()
+{
     // TODO player should be near the item to pick it up
     // TODO keyboard press instead of mouse
     if (getGame()->input().mouse()->justPressed(jt::MouseButtonCode::MBLeft)) {
@@ -219,7 +222,8 @@ void StateGame::pickupItems() {
         }
     }
 }
-void StateGame::spawnWorldItem(std::string const& itemReferenceId, jt::Vector2f const& pos) {
+void StateGame::spawnWorldItem(std::string const& itemReferenceId, jt::Vector2f const& pos)
+{
     auto item = m_itemRepository->createWorldItem(
         m_itemRepository->getItemReferenceFromString(itemReferenceId),
         getGame()->gfx().textureManager());
