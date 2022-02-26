@@ -30,6 +30,8 @@ void PlayerCharacter::doCreate()
 
 void PlayerCharacter::createAnimation()
 {
+    auto const frameTimeAttack = 0.05f;
+
     m_animation = std::make_shared<jt::Animation>();
 
     // General
@@ -42,12 +44,14 @@ void PlayerCharacter::createAnimation()
         m_animation->add("assets/player.png", "attack_down",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
                 static_cast<unsigned int>(GP::PlayerSize().y) },
-            { 78, 79, 80, 81, 82, 83, 84, 85, 86, 87 }, 0.05f, getGame()->gfx().textureManager());
+            { 78, 79, 80, 81, 82, 83, 84, 85, 86, 87 }, frameTimeAttack,
+            getGame()->gfx().textureManager());
 
         m_animation->add("assets/player.png", "attack_up",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
                 static_cast<unsigned int>(GP::PlayerSize().y) },
-            { 88, 89, 90, 91, 92, 93, 94, 95, 96 }, 0.05f, getGame()->gfx().textureManager());
+            { 88, 89, 90, 91, 92, 93, 94, 95, 96 }, frameTimeAttack,
+            getGame()->gfx().textureManager());
 
         m_animation->add("assets/player.png", "hurt",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
@@ -129,6 +133,12 @@ void PlayerCharacter::createAnimation()
             { 51, 52, 53, 54, 55 }, 0.1f, getGame()->gfx().textureManager());
     }
 
+    m_attackUnderlay = std::make_shared<jt::Animation>();
+    m_attackUnderlay->setLooping(false);
+    m_attackUnderlay->add("assets/attack_underlay.png", "attack", jt::Vector2u { 32u, 32u },
+        jt::MathHelper::numbersBetween(0u, 9u), frameTimeAttack * 2.0f,
+        getGame()->gfx().textureManager());
+
     m_animation->play("idle");
     m_animation->setPosition(jt::Vector2f { 5 * 24, 7 * 24 });
 }
@@ -181,6 +191,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
 
     } else if (m_attackCooldown > 0.0f) {
         if (setAnimationIfNotSet("attack_down")) {
+            m_attackUnderlay->play("attack", 0, true);
             // TODO: Spore particle effects or whatev
 
             for (auto enemyWk : *m_state.getEnemies()) {
@@ -239,7 +250,11 @@ void PlayerCharacter::updateAnimation(float const elapsed)
     }
 
     m_animation->setPosition(getPosition() - GP::PlayerSize() * 0.5f);
+    m_attackUnderlay->setPosition(
+        getPosition() - GP::PlayerSize() * 0.5f - jt::Vector2f { 8.0f, 8.0f });
+
     m_animation->update(elapsed);
+    m_attackUnderlay->update(elapsed);
 }
 
 bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
@@ -293,6 +308,7 @@ void PlayerCharacter::handleDashInput()
 
 void PlayerCharacter::doDraw() const
 {
+    m_attackUnderlay->draw(getGame()->gfx().target());
     m_animation->draw(getGame()->gfx().target());
     m_inventory->draw();
     m_charsheet->draw();
