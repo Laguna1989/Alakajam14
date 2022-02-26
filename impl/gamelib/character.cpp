@@ -25,11 +25,13 @@ void PlayerCharacter::doCreate()
 
     createAnimation();
 
-    m_spell1 = std::make_shared<SpellAttackSnipe>(m_state);
-    m_spell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
-
     m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
+
+    m_spell1 = std::make_shared<SpellAttackSnipe>(m_state);
+    m_spell1->onEquip();
+    m_spell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
+    m_spell2->onEquip();
 }
 
 void PlayerCharacter::createAnimation()
@@ -166,20 +168,29 @@ void PlayerCharacter::doUpdate(float const elapsed)
     m_charsheet->update(elapsed);
     m_charsheet->setEquippedItems(m_inventory->getEquippedItems());
 }
+
 void PlayerCharacter::updateSpells(const float elapsed)
 {
-    m_spell1->update(elapsed);
-    if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Tab)) {
-        auto const cost = m_spell1->getExperienceCost();
+    updateOneSpell(elapsed, m_spell1, jt::KeyCode::Q);
+    updateOneSpell(elapsed, m_spell2, jt::KeyCode::E);
+}
+
+void PlayerCharacter::updateOneSpell(
+    float const elapsed, std::shared_ptr<SpellInterface> spell, jt::KeyCode key)
+{
+    spell->update(elapsed);
+    if (getGame()->input().keyboard()->justPressed(key)) {
+        auto const cost = spell->getExperienceCost();
         // TODO warmup for spells?
-        if (m_spell1->canTrigger() && m_charsheet->getExperiencePoints() >= cost) {
-            std::cout << "trigger spell 1\n";
+        if (spell->canTrigger() && m_charsheet->getExperiencePoints() >= cost) {
+            getGame()->getLogger().debug("Spell triggered: " + spell->getName());
             m_charsheet->changeExperiencePoints(-cost);
             m_state.m_hud->getObserverExperience()->notify(m_charsheet->getExperiencePoints());
-            m_spell1->trigger();
+            spell->trigger();
         }
     }
 }
+
 void PlayerCharacter::handleInputAttack()
 {
     if (m_attackCooldown > 0.0f) {
@@ -318,7 +329,7 @@ void PlayerCharacter::handleInputMovement()
 
     if (m_dashTimer < 0.0f) {
         setVelocity(jt::Vector2f { 0.0f, 0.0f });
-        float const speed = GP::PlayerBaseMovementSpeed();
+        float const speed = GP::PlayerBaseMovementSpeed() * m_charsheet->getMovementSpeedFactor();
 
         if (keyboard->pressed(jt::KeyCode::D)) {
             addVelocity(jt::Vector2f { speed, 0.0f });

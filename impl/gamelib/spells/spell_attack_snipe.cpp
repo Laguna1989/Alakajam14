@@ -41,3 +41,4 @@ void SpellAttackSnipe::doTrigger()
 }
 
 int SpellAttackSnipe::getExperienceCost() const { return 10; }
+std::string SpellAttackSnipe::getName() const { return "Snipe"; }

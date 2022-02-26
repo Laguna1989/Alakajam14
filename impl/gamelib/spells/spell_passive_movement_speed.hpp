@@ -2,6 +2,7 @@
 #define ALAKAJAM14_SPELL_PASSIVE_MOVEMENT_SPEED_HPP
 
 #include "spell_impl.hpp"
+#include <string>
 
 class SpellPassiveMovementSpeed : public SpellPassiveImpl {
 public:
@@ -11,6 +12,8 @@ public:
 
     void onEquip() override;
     void onUnEquip() override;
+
+    std::string getName() const override;
 
 private:
     void doTrigger() override;
