@@ -1,6 +1,6 @@
 file(GLOB_RECURSE GAMELIBFILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*)
 
-add_library(GameLib STATIC ${GAMELIBFILES} damage.cpp damage.h)
+add_library(GameLib STATIC ${GAMELIBFILES} damage.cpp damage.hpp shroom_game_contact_listener.cpp shroom_game_contact_listener.hpp)
 if (JT_ENABLE_WEB)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif ()

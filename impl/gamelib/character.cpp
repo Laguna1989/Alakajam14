@@ -3,6 +3,8 @@
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
 #include "math_helper.hpp"
+#include "spells/spell_none.hpp"
+#include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
 
 PlayerCharacter::PlayerCharacter(std::shared_ptr<jt::Box2DWorldInterface> world,
@@ -24,10 +26,15 @@ void PlayerCharacter::doCreate()
 
     createAnimation();
 
-    m_spell1 = std::make_shared<SpellAttackSnipe>(m_state);
-
     m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
+
+    m_equippedSpell1 = std::make_shared<SpellAttackSnipe>(m_state);
+    m_equippedSpell1->onEquip();
+    m_equippedSpell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
+    m_equippedSpell2->onEquip();
+    m_equippedSpell3 = std::make_shared<SpellNone>();
+    m_equippedSpell3->onEquip();
 }
 
 void PlayerCharacter::createAnimation()
@@ -152,19 +159,42 @@ void PlayerCharacter::doUpdate(float const elapsed)
 {
     handleInputMovement();
     handleInputAttack();
-    if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Tab)) {
-        m_spell1->trigger();
-    }
+
+    updateSpells(elapsed);
     updateAnimation(elapsed);
 
     m_dashTimer -= elapsed;
-    m_dashCooldown -= elapsed;
-    m_attackCooldown -= elapsed;
+    m_dashCooldown -= elapsed * m_charsheet->getDashFactor();
+    m_attackCooldown -= elapsed * m_charsheet->getAttackSpeedFactor();
 
     m_inventory->update(elapsed);
     m_charsheet->update(elapsed);
     m_charsheet->setEquippedItems(m_inventory->getEquippedItems());
 }
+
+void PlayerCharacter::updateSpells(const float elapsed)
+{
+    updateOneSpell(elapsed, m_equippedSpell1, jt::KeyCode::Q);
+    updateOneSpell(elapsed, m_equippedSpell2, jt::KeyCode::E);
+    updateOneSpell(elapsed, m_equippedSpell3, jt::KeyCode::Tab);
+}
+
+void PlayerCharacter::updateOneSpell(
+    float const elapsed, std::shared_ptr<SpellInterface> spell, jt::KeyCode key)
+{
+    spell->update(elapsed);
+    if (getGame()->input().keyboard()->justPressed(key)) {
+        auto const cost = spell->getExperienceCost();
+        // TODO warmup for spells?
+        if (spell->canTrigger() && m_charsheet->getExperiencePoints() >= cost) {
+            getGame()->getLogger().debug("Spell triggered: " + spell->getName());
+            m_charsheet->changeExperiencePoints(-cost);
+            m_state.m_hud->getObserverExperience()->notify(m_charsheet->getExperiencePoints());
+            spell->trigger();
+        }
+    }
+}
+
 void PlayerCharacter::handleInputAttack()
 {
     if (m_attackCooldown > 0.0f) {
@@ -188,7 +218,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
             auto p = getPosition();
             auto vn = v;
             jt::MathHelper::normalizeMe(vn);
-            m_dashVelocity = vn * GP::PlayerBaseDashVelocity();
+            m_dashVelocity = vn * GP::PlayerBaseDashVelocity() * m_charsheet->getDashFactor();
 
             // TODO trigger eye candy
         }
@@ -284,7 +314,7 @@ std::string PlayerCharacter::selectDashAnimation(jt::Vector2f const& velocity) c
     } else if (abs(velocity.x) >= 0 && abs(velocity.x) < 0.1f && velocity.y < 0) {
         dashAnimationName = "dash_up";
     }
-        return dashAnimationName;
+    return dashAnimationName;
 }
 
 bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
@@ -303,7 +333,7 @@ void PlayerCharacter::handleInputMovement()
 
     if (m_dashTimer < 0.0f) {
         setVelocity(jt::Vector2f { 0.0f, 0.0f });
-        float const speed = GP::PlayerBaseMovementSpeed();
+        float const speed = GP::PlayerBaseMovementSpeed() * m_charsheet->getMovementSpeedFactor();
 
         if (keyboard->pressed(jt::KeyCode::D)) {
             addVelocity(jt::Vector2f { speed, 0.0f });
@@ -349,6 +379,6 @@ std::shared_ptr<CharacterSheetImgui> PlayerCharacter::getCharSheet() { return m_
 
 void PlayerCharacter::gainExperience(int value)
 {
-    m_experience += value;
-    m_state.m_hud->getObserverExperience()->notify(m_experience);
+    m_charsheet->changeExperiencePoints(value);
+    m_state.m_hud->getObserverExperience()->notify(m_charsheet->getExperiencePoints());
 }

@@ -57,6 +57,9 @@ void StateGame::doInternalCreate()
 {
     m_world = std::make_shared<jt::Box2DWorldImpl>(jt::Vector2f { 0.0f, 0.0f });
 
+    m_contactListener = std::make_shared<ShroomGameContactListener>(*this);
+    m_world->setContactListener(m_contactListener);
+
     float const w = static_cast<float>(GP::GetWindowSize().x);
     float const h = static_cast<float>(GP::GetWindowSize().y);
 
@@ -84,8 +87,15 @@ void StateGame::doInternalCreate()
 
     createExperienceOrbs();
 
+    createSnipeProjectilesGroup();
+
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
+}
+void StateGame::createSnipeProjectilesGroup()
+{
+    m_snipeProjectiles = std::make_shared<jt::ObjectGroup<SnipeProjectile>>();
+    add(m_snipeProjectiles);
 }
 void StateGame::createExperienceOrbs()
 {
@@ -193,6 +203,7 @@ void StateGame::doInternalDraw() const
     m_experienceOrbs->draw();
     m_enemies->draw();
     //    drawTileNodeOverlay();
+    m_snipeProjectiles->draw();
     m_vignette->draw(getGame()->gfx().target());
     m_hud->draw();
 }
@@ -353,4 +364,11 @@ void StateGame::spawnOneExperienceOrb(jt::Vector2f const& pos, int value)
     e->setVelocity(direction);
     add(e);
     m_experienceOrbs->push_back(e);
+}
+
+void StateGame::spawnSnipeProjectile(std::shared_ptr<SnipeProjectile> projectile)
+{
+    m_snipeProjectiles->push_back(projectile);
+    add(projectile);
+    std::cout << m_snipeProjectiles->size() << std::endl;
 }

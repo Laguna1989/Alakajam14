@@ -5,6 +5,7 @@
 #include "box2dwrapper/box2d_object.hpp"
 #include "character_sheet_imgui.hpp"
 #include "game_object.hpp"
+#include "input/key_codes.hpp"
 #include "inventory/inventory_list_imgui.hpp"
 #include "spells/spell_attack_snipe.hpp"
 #include <memory>
@@ -36,7 +37,9 @@ private:
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
     StateGame& m_state;
 
-    std::shared_ptr<SpellInterface> m_spell1;
+    std::shared_ptr<SpellInterface> m_equippedSpell1;
+    std::shared_ptr<SpellInterface> m_equippedSpell2;
+    std::shared_ptr<SpellInterface> m_equippedSpell3;
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
@@ -52,6 +55,9 @@ private:
     void createAnimation();
     void handleInputAttack();
     std::string selectDashAnimation(jt::Vector2f const& velocity) const;
+    void updateSpells(const float elapsed);
+    void updateOneSpell(
+        float const elapsed, std::shared_ptr<SpellInterface> spell, jt::KeyCode key);
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP
