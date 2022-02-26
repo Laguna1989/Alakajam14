@@ -38,7 +38,7 @@ public:
 
     std::shared_ptr<Hud> m_hud;
 
-    void spawnSnipeProjectile(std::shared_ptr<SnipeProjectile> projectile);
+    void spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
 
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
 

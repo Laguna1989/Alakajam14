@@ -308,11 +308,19 @@ void StateGame::spawnOneExperienceOrb(jt::Vector2f const& pos, int value)
     m_experienceOrbs->push_back(e);
 }
 
-void StateGame::spawnSnipeProjectile(std::shared_ptr<SnipeProjectile> projectile)
+void StateGame::spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity)
 {
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+
+    bodyDef.position.Set(position.x, position.y);
+
+    auto projectile = std::make_shared<SnipeProjectile>(m_world, &bodyDef);
+    projectile->setVelocity(velocity * GP::SpellSnipeProjectileSpeed());
+
     m_snipeProjectiles->push_back(projectile);
     add(projectile);
-    std::cout << m_snipeProjectiles->size() << std::endl;
 }
 
 std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> StateGame::getSnipeProjectiles() const

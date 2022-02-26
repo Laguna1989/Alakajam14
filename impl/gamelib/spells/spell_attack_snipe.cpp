@@ -22,22 +22,13 @@ void SpellAttackSnipe::doTrigger()
         playerVelocity = { 0.0f, 1.0f };
     }
 
-    auto projectileVelocity = playerVelocity;
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(playerPosition.x + projectileVelocity.x * 16.0f,
-        playerPosition.y + projectileVelocity.y * 16.0f);
+    auto const projectileVelocity = playerVelocity;
 
-    projectileVelocity = projectileVelocity * GP::SpellSnipeProjectileSpeed();
+    jt::Vector2f const projectilePosition { playerPosition.x + projectileVelocity.x * 16.0f,
+        playerPosition.y + projectileVelocity.y * 16.0f };
+    m_state.spawnSnipeProjectile(projectilePosition, projectileVelocity);
 
-    auto projectile = std::make_shared<SnipeProjectile>(m_state.m_world, &bodyDef);
-    projectile->setVelocity(projectileVelocity);
-    m_state.spawnSnipeProjectile(projectile);
-
-    // TODO: Knockback. This implementation is reverted automatically since we reset the player's
-    // velocity each frame.
-    // m_state.getPlayer()->addVelocity(projectileVelocity * -0.5f);
+    // TODO: Knockback.
 }
 
 int SpellAttackSnipe::getExperienceCost() const { return 10; }
