@@ -28,11 +28,10 @@ public:
 
     void trigger() override;
     bool canTrigger() const override;
+    int getExperienceCost() const override;
+    void update(float elapsed) override;
 
 protected:
     StateGame& m_state;
-
-private:
-    virtual void doTrigger() = 0;
 };
 #endif // ALAKAJAM14_SPELL_IMPL_HPP

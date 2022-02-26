@@ -6,11 +6,6 @@ SpellPassiveMovementSpeed::SpellPassiveMovementSpeed(StateGame& state)
 {
 }
 
-int SpellPassiveMovementSpeed::getExperienceCost() const { return 0; }
-void SpellPassiveMovementSpeed::doTrigger() { }
-
-void SpellPassiveMovementSpeed::update(float elapsed) { }
-
 void SpellPassiveMovementSpeed::onEquip()
 {
     m_state.getPlayer()->getCharSheet()->setMovementSpeedFactor("Spell", 0.1f);

@@ -73,7 +73,40 @@ float CharacterSheetImgui::getMovementSpeedFactor() const
     // TODO incorporate items
     return 1.0f + v;
 }
+
+float CharacterSheetImgui::getAttackSpeedFactor() const
+{
+    float v = 0.0f;
+
+    for (auto const& kvp : m_attackSpeedFactorsAdditive) {
+        v += kvp.second;
+    }
+
+    // TODO incorporate items
+    return 1.0f + v;
+}
+
+float CharacterSheetImgui::getDashFactor() const
+{
+    float v = 0.0f;
+
+    for (auto const& kvp : m_dashFactorsAdditive) {
+        v += kvp.second;
+    }
+
+    // TODO incorporate items
+    return 1.0f + v;
+}
+
 void CharacterSheetImgui::setMovementSpeedFactor(std::string const& identifier, float value)
 {
     m_movementSpeedFactorsAdditive[identifier] = value;
+}
+void CharacterSheetImgui::setAttackSpeedFactor(std::string const& identifier, float value)
+{
+    m_attackSpeedFactorsAdditive[identifier] = value;
+}
+void CharacterSheetImgui::setDashFactor(std::string const& identifier, float value)
+{
+    m_dashFactorsAdditive[identifier] = value;
 }

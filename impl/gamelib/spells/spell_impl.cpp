@@ -25,3 +25,5 @@ SpellPassiveImpl::SpellPassiveImpl(StateGame& state)
 
 void SpellPassiveImpl::trigger() { }
 bool SpellPassiveImpl::canTrigger() const { return false; }
+int SpellPassiveImpl::getExperienceCost() const { return 0; }
+void SpellPassiveImpl::update(float elapsed) { }

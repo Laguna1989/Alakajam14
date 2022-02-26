@@ -28,10 +28,10 @@ void PlayerCharacter::doCreate()
     m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
 
-    m_spell1 = std::make_shared<SpellAttackSnipe>(m_state);
-    m_spell1->onEquip();
-    m_spell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
-    m_spell2->onEquip();
+    m_equipeedSpell1 = std::make_shared<SpellAttackSnipe>(m_state);
+    m_equipeedSpell1->onEquip();
+    m_equipeedSpell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
+    m_equipeedSpell2->onEquip();
 }
 
 void PlayerCharacter::createAnimation()
@@ -161,8 +161,8 @@ void PlayerCharacter::doUpdate(float const elapsed)
     updateAnimation(elapsed);
 
     m_dashTimer -= elapsed;
-    m_dashCooldown -= elapsed;
-    m_attackCooldown -= elapsed;
+    m_dashCooldown -= elapsed * m_charsheet->getDashFactor();
+    m_attackCooldown -= elapsed * m_charsheet->getAttackSpeedFactor();
 
     m_inventory->update(elapsed);
     m_charsheet->update(elapsed);
@@ -171,8 +171,9 @@ void PlayerCharacter::doUpdate(float const elapsed)
 
 void PlayerCharacter::updateSpells(const float elapsed)
 {
-    updateOneSpell(elapsed, m_spell1, jt::KeyCode::Q);
-    updateOneSpell(elapsed, m_spell2, jt::KeyCode::E);
+    updateOneSpell(elapsed, m_equipeedSpell1, jt::KeyCode::Q);
+    updateOneSpell(elapsed, m_equipeedSpell2, jt::KeyCode::E);
+    updateOneSpell(elapsed, m_equipeedSpell3, jt::KeyCode::Tab);
 }
 
 void PlayerCharacter::updateOneSpell(
@@ -214,7 +215,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
             auto p = getPosition();
             auto vn = v;
             jt::MathHelper::normalizeMe(vn);
-            m_dashVelocity = vn * GP::PlayerBaseDashVelocity();
+            m_dashVelocity = vn * GP::PlayerBaseDashVelocity() * m_charsheet->getDashFactor();
 
             // TODO trigger eye candy
         }
