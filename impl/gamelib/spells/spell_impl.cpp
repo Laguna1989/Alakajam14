@@ -1,16 +1,27 @@
 #include "spell_impl.hpp"
 
-SpellImpl::SpellImpl(StateGame& state)
+SpellTriggerImpl::SpellTriggerImpl(StateGame& state)
     : m_state { state }
 {
 }
-void SpellImpl::update(float elapsed) { m_cooldown -= elapsed; }
+void SpellTriggerImpl::update(float elapsed) { m_cooldown -= elapsed; }
 
-bool SpellImpl::canTrigger() const { return m_cooldown <= 0.0f; }
+bool SpellTriggerImpl::canTrigger() const { return m_cooldown <= 0.0f; }
 
-void SpellImpl::trigger()
+void SpellTriggerImpl::trigger()
 {
     if (canTrigger()) {
         doTrigger();
     }
 }
+
+void SpellTriggerImpl::onEquip() { }
+void SpellTriggerImpl::onUnEquip() { }
+
+SpellPassiveImpl::SpellPassiveImpl(StateGame& state)
+    : m_state { state }
+{
+}
+
+void SpellPassiveImpl::trigger() { }
+bool SpellPassiveImpl::canTrigger() const { return false; }

@@ -3,7 +3,7 @@
 
 #include "spell_impl.hpp"
 
-class SpellAttackSnipe : public SpellImpl {
+class SpellAttackSnipe : public SpellTriggerImpl {
 public:
     explicit SpellAttackSnipe(StateGame&);
     void doTrigger() override;

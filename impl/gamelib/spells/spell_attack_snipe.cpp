@@ -5,7 +5,7 @@
 #include "state_game.hpp"
 
 SpellAttackSnipe::SpellAttackSnipe(StateGame& state)
-    : SpellImpl { state }
+    : SpellTriggerImpl { state }
 {
 }
 

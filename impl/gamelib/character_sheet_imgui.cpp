@@ -1,6 +1,7 @@
 #include "character_sheet_imgui.hpp"
 #include "game_interface.hpp"
 #include "imgui.h"
+#include "math_helper.hpp"
 
 CharacterSheetImgui::CharacterSheetImgui(std::weak_ptr<ItemRepository> repo)
     : m_repository { repo }
@@ -41,6 +42,12 @@ void CharacterSheetImgui::doDraw() const
     ImGui::Text("TotalArmor: %s", std::to_string(totalarmor).c_str());
     ImGui::Text("Fire: %s", std::to_string(totalResistanceFire).c_str());
     ImGui::Text("Electric: %s", std::to_string(totalResistanceElectric).c_str());
+
+    ImGui::Separator();
+
+    ImGui::Text("Movement speed factor: %s",
+        jt::MathHelper::floatToStringWithXDigits(getMovementSpeedFactor(), 2).c_str());
+
     ImGui::End();
 }
 void CharacterSheetImgui::setEquippedItems(std::vector<std::string> const& items)
@@ -54,3 +61,19 @@ void CharacterSheetImgui::changeHitpoints(float delta) { m_hitpoints -= delta; }
 
 int CharacterSheetImgui::getExperiencePoints() const { return m_experiencePoints; }
 void CharacterSheetImgui::changeExperiencePoints(int delta) { m_experiencePoints += delta; }
+
+float CharacterSheetImgui::getMovementSpeedFactor() const
+{
+    float v = 0.0f;
+
+    for (auto const& kvp : m_movementSpeedFactorsAdditive) {
+        v += kvp.second;
+    }
+
+    // TODO incorporate items
+    return 1.0f + v;
+}
+void CharacterSheetImgui::setMovementSpeedFactor(std::string const& identifier, float value)
+{
+    m_movementSpeedFactorsAdditive[identifier] = value;
+}

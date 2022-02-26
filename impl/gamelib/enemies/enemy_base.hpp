@@ -14,7 +14,7 @@ public:
 
 protected:
     float m_hitpoints;
-    float m_experience;
+    int m_experience;
     std::shared_ptr<jt::Animation> m_animation;
     StateGame& m_state;
 

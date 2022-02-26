@@ -37,6 +37,7 @@ private:
     StateGame& m_state;
 
     std::shared_ptr<SpellInterface> m_spell1;
+    std::shared_ptr<SpellInterface> m_spell2;
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };

@@ -22,10 +22,16 @@ public:
     int getExperiencePoints() const;
     void changeExperiencePoints(int delta);
 
+    float getMovementSpeedFactor() const;
+
+    void setMovementSpeedFactor(std::string const& identifier, float value);
+
 private:
     std::weak_ptr<ItemRepository> m_repository;
 
     std::vector<std::string> m_equippedItems;
+
+    std::map<std::string, float> m_movementSpeedFactorsAdditive;
 
     float m_hitpoints { 100.0f };
     float m_hitpointsMax { 100.0f };

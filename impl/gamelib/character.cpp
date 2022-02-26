@@ -3,6 +3,7 @@
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
 #include "math_helper.hpp"
+#include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
 
 PlayerCharacter::PlayerCharacter(std::shared_ptr<jt::Box2DWorldInterface> world,
@@ -25,6 +26,7 @@ void PlayerCharacter::doCreate()
     createAnimation();
 
     m_spell1 = std::make_shared<SpellAttackSnipe>(m_state);
+    m_spell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
 
     m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
