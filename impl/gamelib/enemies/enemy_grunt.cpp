@@ -1,5 +1,4 @@
 #include "enemy_grunt.hpp"
-#include "game_properties.hpp"
 #include "math_helper.hpp"
 #include "pathfinder/pathfinder.hpp"
 #include "state_game.hpp"
@@ -8,6 +7,7 @@ EnemyGrunt::EnemyGrunt(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
     : EnemyBase { world, def, state }
 {
+    m_hitpoints = 100.0f;
 }
 
 void EnemyGrunt::doAI(float elapsed)

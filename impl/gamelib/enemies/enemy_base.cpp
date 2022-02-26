@@ -38,3 +38,17 @@ void EnemyBase::doUpdate(const float elapsed)
 }
 
 void EnemyBase::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
+void EnemyBase::receiveDamage(const Damage& dmg)
+{
+    m_hitpoints -= dmg.value;
+    m_animation->flash(0.1f);
+    if (m_hitpoints <= 0.0f) {
+        die();
+    }
+}
+void EnemyBase::die()
+{
+    // Graphical stuff; override in subclass
+    // Don't forget to call kill() in subclass
+    kill();
+}

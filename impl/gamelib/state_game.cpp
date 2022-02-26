@@ -101,7 +101,7 @@ void StateGame::createPlayer()
     bodyDef.fixedRotation = true;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(5 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
-    m_player = std::make_shared<PlayerCharacter>(m_world, &bodyDef, m_itemRepository);
+    m_player = std::make_shared<PlayerCharacter>(m_world, &bodyDef, m_itemRepository, *this);
     add(m_player);
 }
 
@@ -282,3 +282,4 @@ std::shared_ptr<jt::pathfinder::NodeInterface> StateGame::getTileAtPosition(
 
     return m_nodeLayer->getTileAt(actorPosInInt.x, actorPosInInt.y)->getNode();
 }
+std::shared_ptr<jt::ObjectGroup<EnemyBase>> StateGame::getEnemies() { return m_enemies; }

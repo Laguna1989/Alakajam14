@@ -30,17 +30,20 @@ public:
     std::shared_ptr<jt::pathfinder::NodeInterface> getTileAtPosition(
         jt::Vector2f const& actorPosInFloat);
 
+    std::shared_ptr<jt::ObjectGroup<EnemyBase>> getEnemies();
+
 private:
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround2;
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerOverlay;
     std::shared_ptr<jt::tilemap::ObjectLayer> m_objectsLayer;
+
     std::shared_ptr<jt::tilemap::NodeLayer> m_nodeLayer;
 
     std::shared_ptr<PlayerCharacter> m_player;
-
     std::shared_ptr<ItemRepository> m_itemRepository;
     std::shared_ptr<jt::ObjectGroup<WorldItem>> m_worldItems;
+
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> m_enemies;
 
     std::shared_ptr<jt::Sprite> m_vignette;
