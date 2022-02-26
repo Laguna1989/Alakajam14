@@ -26,4 +26,8 @@ float GP::ExperienceOrbIdleTime() { return 0.6f; }
 float GP::ExperienceOrbPickupDistance() { return 8.0f; }
 float GP::ExperienceOrbAttractDistance() { return 28.0f; }
 float GP::PlayerAttackCooldown() { return 0.6f; }
+
 float GP::SpellSnipeProjectileSpeed() { return 250.0f; }
+int GP::SpellSnipeExpCosts() { return 10; }
+float GP::SpellBroadProjectileSpeed() { return 150.0f; }
+int GP::SpellBroadExpCosts() { return 10; }

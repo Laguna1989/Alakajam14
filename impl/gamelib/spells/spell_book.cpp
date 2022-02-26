@@ -1,6 +1,7 @@
 #include "spell_book.hpp"
 #include "game_interface.hpp"
 #include "imgui.h"
+#include "spell_attack_broad.hpp"
 #include "spell_attack_snipe.hpp"
 #include "spell_none.hpp"
 #include "spell_passive_attack_speed.hpp"
@@ -18,9 +19,10 @@ SpellBook::SpellBook(StateGame& state)
         std::make_shared<SpellPassiveAttackSpeed>(*state.getPlayer()->getCharSheet()));
     m_spells.push_back(std::make_shared<SpellPassiveDash>(*state.getPlayer()->getCharSheet()));
     m_spells.push_back(std::make_shared<SpellAttackSnipe>(state));
+    m_spells.push_back(std::make_shared<SpellAttackBroad>(state));
 
     m_equippedSpells.push_back(getSpellByName("Snipe"));
-    m_equippedSpells.push_back(getSpellByName("None"));
+    m_equippedSpells.push_back(getSpellByName("Broad Stroke"));
     m_equippedSpells.push_back(getSpellByName("None"));
 }
 

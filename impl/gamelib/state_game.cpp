@@ -327,3 +327,18 @@ std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> StateGame::getSnipeProjectiles
 {
     return m_snipeProjectiles;
 }
+
+void StateGame::spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+
+    bodyDef.position.Set(position.x, position.y);
+
+    auto projectile = std::make_shared<SnipeProjectile>(m_world, &bodyDef);
+    projectile->setVelocity(velocity * GP::SpellBroadProjectileSpeed());
+
+    m_snipeProjectiles->push_back(projectile);
+    add(projectile);
+}

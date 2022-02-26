@@ -267,7 +267,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
             }
         }
     } else {
-        // no dash
+        // no dash, no attack
         if (jt::MathHelper::lengthSquared(v) < 2) {
             setAnimationIfNotSet("idle");
         } else if (abs(v.x) > abs(v.y)) {

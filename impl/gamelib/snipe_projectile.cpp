@@ -31,3 +31,5 @@ void SnipeProjectile::doUpdate(float const elapsed)
 
 void SnipeProjectile::doDraw() const { m_shape->draw(getGame()->gfx().target()); }
 Damage SnipeProjectile::getDamage() const { return m_damage; }
+
+void SnipeProjectile::setDamage(Damage const& d) { m_damage = d; }

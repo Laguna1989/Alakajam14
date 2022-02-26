@@ -23,12 +23,12 @@ void SpellAttackSnipe::doTrigger()
 
     auto const projectileVelocity = playerVelocity;
 
-    jt::Vector2f const projectilePosition { playerPosition.x + projectileVelocity.x * 16.0f,
-        playerPosition.y + projectileVelocity.y * 16.0f };
+    jt::Vector2f const projectilePosition { playerPosition.x + projectileVelocity.x * 23.0f,
+        playerPosition.y + projectileVelocity.y * 23.0f };
     m_state.spawnSnipeProjectile(projectilePosition, projectileVelocity);
 
     // TODO: Knockback.
 }
 
-int SpellAttackSnipe::getExperienceCost() const { return 10; }
+int SpellAttackSnipe::getExperienceCost() const { return GP::SpellSnipeExpCosts(); }
 std::string SpellAttackSnipe::getName() const { return "Snipe"; }
