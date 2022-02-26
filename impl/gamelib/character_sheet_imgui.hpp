@@ -2,18 +2,16 @@
 #define GUARD_JAMTEMPLATE_CHARACTER_SHEET_IMGUI_HPP
 
 #include "game_object.hpp"
-#include "inventory/item_repository.hpp"
+#include <map>
 #include <memory>
 
 class CharacterSheetImgui : public jt::GameObject {
 public:
-    CharacterSheetImgui(std::weak_ptr<ItemRepository> repo);
+    CharacterSheetImgui();
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
 
     mutable bool m_drawCharacterSheet { false };
-
-    void setEquippedItems(std::vector<std::string> const& items);
 
     float getHitpoints() const;
     float getHitpointsMax() const;
@@ -31,8 +29,6 @@ public:
     void setDashFactor(std::string const& identifier, float value);
 
 private:
-    std::weak_ptr<ItemRepository> m_repository;
-
     std::vector<std::string> m_equippedItems;
 
     std::map<std::string, float> m_movementSpeedFactorsAdditive;

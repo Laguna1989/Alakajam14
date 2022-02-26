@@ -1,6 +1,7 @@
 ﻿#include "state_game.hpp"
 #include "box2dwrapper/box2d_world_impl.hpp"
 #include "color.hpp"
+#include "enemies/enemy_crystal_mid.hpp"
 #include "enemies/enemy_crystal_small.hpp"
 #include "enemies/enemy_grunt.hpp"
 #include "game_interface.hpp"
@@ -12,7 +13,6 @@
 #include "sprite.hpp"
 #include "state_menu.hpp"
 #include "tilemap/tileson_loader.hpp"
-#include "enemies/enemy_crystal_mid.hpp"
 
 namespace {
 void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
@@ -77,11 +77,7 @@ void StateGame::doInternalCreate()
     m_hud = std::make_shared<Hud>();
     add(m_hud);
 
-    createItemRepository();
-
     loadTilemap();
-
-    createWorldItems();
 
     createPlayer();
 
@@ -134,7 +130,7 @@ void StateGame::createPlayer()
     bodyDef.fixedRotation = true;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(5 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
-    m_player = std::make_shared<PlayerCharacter>(m_world, &bodyDef, m_itemRepository, *this);
+    m_player = std::make_shared<PlayerCharacter>(m_world, &bodyDef, *this);
     add(m_player);
 }
 
@@ -153,9 +149,6 @@ void StateGame::doInternalUpdate(float const elapsed)
             getGame()->gfx().camera(), getGame()->gfx().window().getSize(), m_player, elapsed);
 
         updateExperience();
-
-        pickupItems();
-        handleItemSpawns();
     }
 
     m_vignette->update(elapsed);
@@ -195,18 +188,6 @@ void StateGame::updateTileNodes(float const elapsed)
     }
 }
 
-void StateGame::handleItemSpawns()
-{
-    std::string const& itemToSpawn = m_player->getInventory()->getAndResetItemToSpawn();
-    if (itemToSpawn != "") {
-        // TODO make items drop near player
-        auto const px = jt::Random::getInt(2, 8);
-        auto const py = jt::Random::getInt(2, 8);
-        jt::Vector2f const pos { px * 24.0f, py * 24.0f };
-        spawnWorldItem(itemToSpawn, pos);
-    }
-}
-
 void StateGame::doInternalDraw() const
 {
     m_tileLayerGround1->draw(getGame()->gfx().target());
@@ -243,13 +224,6 @@ void StateGame::endGame()
 }
 std::string StateGame::getName() const { return "Game"; }
 
-void StateGame::createItemRepository()
-{
-    m_itemRepository = std::make_shared<ItemRepository>();
-
-    m_itemRepository->loadFromJson("assets/test_items.json");
-}
-
 void StateGame::loadTilemap()
 {
     jt::tilemap::TilesonLoader loader { "assets/test_level.json" };
@@ -262,9 +236,6 @@ void StateGame::loadTilemap()
     m_tileLayerOverlay = std::make_shared<jt::tilemap::TileLayer>(
         loader.loadTilesFromLayer("overlay", getGame()->gfx().textureManager()));
     m_tileLayerOverlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
-
-    m_objectsLayer
-        = std::make_shared<jt::tilemap::ObjectLayer>(loader.loadObjectsFromLayer("items"));
 
     m_nodeLayer = std::make_shared<jt::tilemap::NodeLayer>(
         loader.loadNodesFromLayer("ground1", getGame()->gfx().textureManager()));
@@ -293,47 +264,6 @@ void StateGame::loadTilemap()
 
         m_colliders.push_back(collider);
     }
-}
-
-void StateGame::createWorldItems()
-{
-    m_worldItems = std::make_shared<jt::ObjectGroup<WorldItem>>();
-
-    for (auto it : m_objectsLayer->getObjects()) {
-        if (it.type == "item") {
-            auto const refId = it.properties.strings.at("referenceid");
-            spawnWorldItem(refId, it.position);
-        }
-    }
-    add(m_worldItems);
-}
-
-void StateGame::pickupItems()
-{
-    // TODO player should be near the item to pick it up
-    // TODO keyboard press instead of mouse
-    if (getGame()->input().mouse()->justPressed(jt::MouseButtonCode::MBLeft)) {
-        auto const mp = getGame()->input().mouse()->getMousePositionWorld();
-        for (auto& item : *m_worldItems) {
-            auto const bounds = item.lock()->getDrawable()->getGlobalBounds();
-            bool const overlapsX = mp.x > bounds.left && mp.x < bounds.left + bounds.width;
-            bool const overlapsY = mp.y > bounds.top && mp.y < bounds.top + bounds.height;
-            if (overlapsX && overlapsY) {
-                m_player->getInventory()->addItem(item.lock()->getRefId());
-
-                item.lock()->kill();
-            }
-        }
-    }
-}
-void StateGame::spawnWorldItem(std::string const& itemReferenceId, jt::Vector2f const& pos)
-{
-    auto item = m_itemRepository->createWorldItem(
-        m_itemRepository->getItemReferenceFromString(itemReferenceId),
-        getGame()->gfx().textureManager());
-    item->getDrawable()->setPosition(pos);
-    add(item);
-    m_worldItems->push_back(item);
 }
 
 std::shared_ptr<PlayerCharacter> StateGame::getPlayer() { return m_player; }

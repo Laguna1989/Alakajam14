@@ -7,13 +7,12 @@
 #include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
 
-PlayerCharacter::PlayerCharacter(std::shared_ptr<jt::Box2DWorldInterface> world,
-    b2BodyDef const* def, std::weak_ptr<ItemRepository> repo, StateGame& state)
+PlayerCharacter::PlayerCharacter(
+    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
     : jt::Box2DObject { world, def }
     , m_state { state }
 {
-    m_inventory = std::make_shared<InventoryListImgui>(repo);
-    m_charsheet = std::make_shared<CharacterSheetImgui>(repo);
+    m_charsheet = std::make_shared<CharacterSheetImgui>();
 }
 
 void PlayerCharacter::doCreate()
@@ -26,7 +25,6 @@ void PlayerCharacter::doCreate()
 
     createAnimation();
 
-    m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
 
     m_spellBook = std::make_shared<SpellBook>(m_state);
@@ -165,10 +163,8 @@ void PlayerCharacter::doUpdate(float const elapsed)
     m_dashCooldown -= elapsed * m_charsheet->getDashFactor();
     m_attackCooldown -= elapsed * m_charsheet->getAttackSpeedFactor();
 
-    m_inventory->update(elapsed);
     m_charsheet->update(elapsed);
     m_spellBook->update(elapsed);
-    m_charsheet->setEquippedItems(m_inventory->getEquippedItems());
 }
 
 void PlayerCharacter::updateSpells(const float elapsed)
@@ -372,12 +368,10 @@ void PlayerCharacter::doDraw() const
 {
     m_attackUnderlay->draw(getGame()->gfx().target());
     m_animation->draw(getGame()->gfx().target());
-    m_inventory->draw();
     m_charsheet->draw();
     m_spellBook->draw();
 }
 
-std::shared_ptr<InventoryInterface> PlayerCharacter::getInventory() { return m_inventory; }
 std::shared_ptr<CharacterSheetImgui> PlayerCharacter::getCharSheet() { return m_charsheet; }
 
 void PlayerCharacter::gainExperience(int value)

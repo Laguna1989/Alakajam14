@@ -6,7 +6,6 @@
 #include "enemies/enemy_base.hpp"
 #include "experience_orb.hpp"
 #include "game_state.hpp"
-#include "inventory/item_repository.hpp"
 #include "object_group.hpp"
 #include "shroom_game_contact_listener.hpp"
 #include "snipe_projectile.hpp"
@@ -18,7 +17,6 @@
 
 // fwd decls
 namespace jt {
-class Shape;
 class Sprite;
 } // namespace jt
 
@@ -52,8 +50,6 @@ private:
     std::shared_ptr<jt::tilemap::NodeLayer> m_nodeLayer;
 
     std::shared_ptr<PlayerCharacter> m_player;
-    std::shared_ptr<ItemRepository> m_itemRepository;
-    std::shared_ptr<jt::ObjectGroup<WorldItem>> m_worldItems;
 
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> m_enemies;
     std::shared_ptr<jt::ObjectGroup<ExperienceOrb>> m_experienceOrbs;
@@ -73,22 +69,16 @@ private:
     bool m_running { true };
 
     bool m_hasEnded { false };
-    int m_scoreP1 { 0 };
 
-    int m_scoreP2 { 0 };
     void doInternalCreate() override;
     void doInternalUpdate(float const elapsed) override;
 
     void doInternalDraw() const override;
 
     void endGame();
-    void createItemRepository();
     void loadTilemap();
-    void createWorldItems();
-    void pickupItems();
-    void spawnWorldItem(std::string const& itemReferenceId, jt::Vector2f const& pos);
+
     void createPlayer();
-    void handleItemSpawns();
     void drawTileNodeOverlay();
     void createEnemies();
     void createExperienceOrbs();

@@ -6,25 +6,18 @@
 #include "character_sheet_imgui.hpp"
 #include "game_object.hpp"
 #include "input/key_codes.hpp"
-#include "inventory/inventory_list_imgui.hpp"
 #include "spells/spell_attack_snipe.hpp"
 #include "spells/spell_book.hpp"
 #include <memory>
 #include <string>
 
-class CharacterInterface {
-public:
-    virtual std::shared_ptr<InventoryInterface> getInventory() = 0;
-    virtual std::shared_ptr<CharacterSheetImgui> getCharSheet() = 0;
-};
 class StateGame;
-class PlayerCharacter : public CharacterInterface, public jt::Box2DObject {
+class PlayerCharacter : public jt::Box2DObject {
 public:
-    PlayerCharacter(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
-        std::weak_ptr<ItemRepository> repository, StateGame& state);
+    PlayerCharacter(
+        std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
 
-    std::shared_ptr<InventoryInterface> getInventory() override;
-    std::shared_ptr<CharacterSheetImgui> getCharSheet() override;
+    std::shared_ptr<CharacterSheetImgui> getCharSheet();
     void handleInputMovement();
     void updateAnimation(float const elapsed);
     bool setAnimationIfNotSet(std::string const& newAnimationName);
@@ -34,7 +27,6 @@ public:
 private:
     std::shared_ptr<jt::Animation> m_animation;
     std::shared_ptr<jt::Animation> m_attackUnderlay;
-    std::shared_ptr<InventoryListImgui> m_inventory;
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
     StateGame& m_state;
 

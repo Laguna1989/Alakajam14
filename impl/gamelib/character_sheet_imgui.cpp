@@ -3,10 +3,7 @@
 #include "imgui.h"
 #include "math_helper.hpp"
 
-CharacterSheetImgui::CharacterSheetImgui(std::weak_ptr<ItemRepository> repo)
-    : m_repository { repo }
-{
-}
+CharacterSheetImgui::CharacterSheetImgui() { }
 
 void CharacterSheetImgui::doUpdate(float const)
 {
@@ -24,27 +21,6 @@ void CharacterSheetImgui::doDraw() const
     ImGui::SetNextWindowSize(ImVec2 { 400, 600 });
     ImGui::Begin("PlayerCharacter", &m_drawCharacterSheet);
 
-    int totalarmor = 0;
-    int totalResistanceElectric = 0;
-    int totalResistanceFire = 0;
-    auto itemRepository = m_repository.lock();
-    for (auto const& itemRef : m_equippedItems) {
-        auto const armor_optional = itemRepository->getItemReferenceFromString(itemRef)->armor;
-        if (!armor_optional.has_value()) {
-            continue;
-        }
-        auto const armor = armor_optional.value();
-        totalarmor += armor.armor;
-        totalResistanceFire += armor.resistanceFire;
-        totalResistanceElectric += armor.resistanceElectric;
-    }
-
-    ImGui::Text("TotalArmor: %s", std::to_string(totalarmor).c_str());
-    ImGui::Text("Fire: %s", std::to_string(totalResistanceFire).c_str());
-    ImGui::Text("Electric: %s", std::to_string(totalResistanceElectric).c_str());
-
-    ImGui::Separator();
-
     ImGui::Text("Movement speed factor: %s",
         jt::MathHelper::floatToStringWithXDigits(getMovementSpeedFactor(), 2).c_str());
     ImGui::Text("Dash speed factor: %s",
@@ -54,10 +30,6 @@ void CharacterSheetImgui::doDraw() const
         jt::MathHelper::floatToStringWithXDigits(getAttackSpeedFactor(), 2).c_str());
 
     ImGui::End();
-}
-void CharacterSheetImgui::setEquippedItems(std::vector<std::string> const& items)
-{
-    m_equippedItems = items;
 }
 
 float CharacterSheetImgui::getHitpoints() const { return m_hitpoints; }
