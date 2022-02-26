@@ -180,7 +180,7 @@ void StateGame::createItemRepository()
 {
     m_itemRepository = std::make_shared<ItemRepository>();
 
-    m_itemRepository->loadFromJson("assets/demos/inventory/test_items.json");
+    m_itemRepository->loadFromJson("assets/test_items.json");
 }
 
 void StateGame::loadTilemap()
