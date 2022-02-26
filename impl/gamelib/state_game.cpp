@@ -314,7 +314,8 @@ void StateGame::spawnSnipeProjectile(std::shared_ptr<SnipeProjectile> projectile
     add(projectile);
     std::cout << m_snipeProjectiles->size() << std::endl;
 }
-const std::shared_ptr<jt::ObjectGroup<SnipeProjectile>>& StateGame::getSnipeProjectiles() const
+
+std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> StateGame::getSnipeProjectiles() const
 {
     return m_snipeProjectiles;
 }

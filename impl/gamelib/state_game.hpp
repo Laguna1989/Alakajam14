@@ -13,6 +13,7 @@
 #include "tilemap/object_layer.hpp"
 #include "tilemap/tile_layer.hpp"
 #include <memory>
+#include <string>
 #include <vector>
 
 // fwd decls
@@ -41,11 +42,11 @@ public:
 
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
 
+    std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> getSnipeProjectiles() const;
+
 private:
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
-    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround2;
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerOverlay;
-    std::shared_ptr<jt::tilemap::ObjectLayer> m_objectsLayer;
 
     std::shared_ptr<jt::tilemap::NodeLayer> m_nodeLayer;
 
@@ -56,10 +57,6 @@ private:
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> m_snipeProjectiles;
 
-public:
-    const std::shared_ptr<jt::ObjectGroup<SnipeProjectile>>& getSnipeProjectiles() const;
-
-private:
     std::shared_ptr<jt::Sprite> m_vignette;
 
     std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders {};
