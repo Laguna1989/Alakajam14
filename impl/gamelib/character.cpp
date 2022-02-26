@@ -153,17 +153,7 @@ void PlayerCharacter::doUpdate(float const elapsed)
     handleInputMovement();
     handleInputAttack();
 
-    m_spell1->update(elapsed);
-    if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Tab)) {
-        auto const cost = m_spell1->getExperienceCost();
-        // TODO warmup for spells?
-        if (m_charsheet->getExperiencePoints() >= cost) {
-            std::cout << "trigger spell 1\n";
-            m_charsheet->changeExperiencePoints(-cost);
-            m_state.m_hud->getObserverExperience()->notify(m_charsheet->getExperiencePoints());
-            m_spell1->trigger();
-        }
-    }
+    updateSpells(elapsed);
     updateAnimation(elapsed);
 
     m_dashTimer -= elapsed;
@@ -173,6 +163,20 @@ void PlayerCharacter::doUpdate(float const elapsed)
     m_inventory->update(elapsed);
     m_charsheet->update(elapsed);
     m_charsheet->setEquippedItems(m_inventory->getEquippedItems());
+}
+void PlayerCharacter::updateSpells(const float elapsed)
+{
+    m_spell1->update(elapsed);
+    if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Tab)) {
+        auto const cost = m_spell1->getExperienceCost();
+        // TODO warmup for spells?
+        if (m_spell1->canTrigger() && m_charsheet->getExperiencePoints() >= cost) {
+            std::cout << "trigger spell 1\n";
+            m_charsheet->changeExperiencePoints(-cost);
+            m_state.m_hud->getObserverExperience()->notify(m_charsheet->getExperiencePoints());
+            m_spell1->trigger();
+        }
+    }
 }
 void PlayerCharacter::handleInputAttack()
 {
@@ -293,7 +297,7 @@ std::string PlayerCharacter::selectDashAnimation(jt::Vector2f const& velocity) c
     } else if (abs(velocity.x) >= 0 && abs(velocity.x) < 0.1f && velocity.y < 0) {
         dashAnimationName = "dash_up";
     }
-        return dashAnimationName;
+    return dashAnimationName;
 }
 
 bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)

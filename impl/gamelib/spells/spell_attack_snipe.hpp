@@ -9,6 +9,7 @@ public:
     virtual void trigger() = 0;
     virtual void update(float elapsed) = 0;
     virtual int getExperienceCost() const = 0;
+    virtual bool canTrigger() const = 0;
 };
 
 class SpellImpl : public SpellInterface {
@@ -17,6 +18,7 @@ public:
 
     void update(float elapsed) override;
     void trigger() override;
+    bool canTrigger() const override;
 
 protected:
     StateGame& m_state;

@@ -40,6 +40,8 @@ public:
     static float ExperienceOrbPickupDistance();
     static float ExperienceOrbAttractDistance();
     static float PlayerAttackCooldown();
+
+    static float SpellSnipeProjectileSpeed();
 };
 
 #endif
