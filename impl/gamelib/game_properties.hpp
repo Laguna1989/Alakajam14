@@ -39,6 +39,7 @@ public:
     static float ExperienceOrbIdleTime();
     static float ExperienceOrbPickupDistance();
     static float ExperienceOrbAttractDistance();
+    static float PlayerAttackCooldown();
 };
 
 #endif

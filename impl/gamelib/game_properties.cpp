@@ -25,3 +25,4 @@ float GP::ExperienceOrbVelocity() { return 45.0f; }
 float GP::ExperienceOrbIdleTime() { return 0.6f; }
 float GP::ExperienceOrbPickupDistance() { return 8.0f; }
 float GP::ExperienceOrbAttractDistance() { return 28.0f; }
+float GP::PlayerAttackCooldown() { return 0.6f; }

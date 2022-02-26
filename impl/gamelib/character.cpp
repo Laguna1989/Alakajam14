@@ -42,12 +42,12 @@ void PlayerCharacter::createAnimation()
         m_animation->add("assets/player.png", "attack_down",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
                 static_cast<unsigned int>(GP::PlayerSize().y) },
-            { 78, 79, 80, 81, 82, 83, 84, 85, 86, 87 }, 0.2f, getGame()->gfx().textureManager());
+            { 78, 79, 80, 81, 82, 83, 84, 85, 86, 87 }, 0.05f, getGame()->gfx().textureManager());
 
         m_animation->add("assets/player.png", "attack_up",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
                 static_cast<unsigned int>(GP::PlayerSize().y) },
-            { 88, 89, 90, 91, 92, 93, 94, 95, 96 }, 0.2f, getGame()->gfx().textureManager());
+            { 88, 89, 90, 91, 92, 93, 94, 95, 96 }, 0.05f, getGame()->gfx().textureManager());
 
         m_animation->add("assets/player.png", "hurt",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
@@ -156,7 +156,7 @@ void PlayerCharacter::handleInputAttack()
         return;
     }
     if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Space)) {
-        m_attackCooldown = 1.0f; // TODO: GP and/or equipment dependent
+        m_attackCooldown = GP::PlayerAttackCooldown();
     }
 }
 
@@ -164,7 +164,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
 {
     auto const v = getVelocity();
     if (m_dashTimer > 0.0f) {
-        if (setAnimationIfNotSet("dash")) {
+        if (setAnimationIfNotSet("dash_down")) {
             m_animation->flash(0.3f);
             auto p = getPosition();
             auto vn = v;
@@ -180,7 +180,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
         }
 
     } else if (m_attackCooldown > 0.0f) {
-        if (setAnimationIfNotSet("attack")) {
+        if (setAnimationIfNotSet("attack_down")) {
             // TODO: Spore particle effects or whatev
 
             for (auto enemyWk : *m_state.getEnemies()) {
