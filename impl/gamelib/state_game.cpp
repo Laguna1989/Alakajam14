@@ -1,6 +1,7 @@
 ﻿#include "state_game.hpp"
 #include "box2dwrapper/box2d_world_impl.hpp"
 #include "color.hpp"
+#include "enemies/enemy_crystal_small.hpp"
 #include "enemies/enemy_grunt.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
@@ -11,6 +12,7 @@
 #include "sprite.hpp"
 #include "state_menu.hpp"
 #include "tilemap/tileson_loader.hpp"
+#include "enemies/enemy_crystal_mid.hpp"
 
 namespace {
 void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
@@ -106,20 +108,22 @@ void StateGame::createExperienceOrbs()
 void StateGame::createEnemies()
 {
     m_enemies = std::make_shared<jt::ObjectGroup<EnemyBase>>();
+
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(3 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
     bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyGrunt>(m_world, &bodyDef, *this);
+    auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef, *this);
     m_enemies->push_back(e);
     add(e);
+
     b2BodyDef bodyDef2;
     bodyDef2.fixedRotation = true;
     bodyDef2.type = b2_dynamicBody;
     bodyDef2.position.Set(5 * GP::PlayerSize().x, 9 * GP::PlayerSize().y);
     bodyDef2.linearDamping = 16.0f;
-    auto e2 = std::make_shared<EnemyGrunt>(m_world, &bodyDef2, *this);
+    auto e2 = std::make_shared<EnemyCrystalMid>(m_world, &bodyDef2, *this);
     m_enemies->push_back(e2);
     add(e2);
 }

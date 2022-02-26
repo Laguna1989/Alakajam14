@@ -11,23 +11,6 @@ EnemyBase::EnemyBase(
 {
 }
 
-void EnemyBase::doCreate()
-{
-    // TODO move into derived classes later
-    m_animation = std::make_shared<jt::Animation>();
-    m_animation->add("assets/enemy_test.png", "idle", jt::Vector2u { 16, 16 }, { 0 }, 0.5f,
-        getGame()->gfx().textureManager());
-    m_animation->play("idle");
-
-    b2FixtureDef fixtureDef;
-    b2CircleShape circle {};
-    circle.m_radius = GP::PlayerSize().x / 2.0f;
-
-    fixtureDef.shape = &circle;
-    fixtureDef.friction = 0.0f;
-    getB2Body()->CreateFixture(&fixtureDef);
-}
-
 void EnemyBase::doUpdate(const float elapsed)
 {
     doAI(elapsed);

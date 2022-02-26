@@ -19,7 +19,6 @@ protected:
     StateGame& m_state;
 
 private:
-    void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
 
