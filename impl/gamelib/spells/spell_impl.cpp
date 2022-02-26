@@ -6,9 +6,11 @@ SpellImpl::SpellImpl(StateGame& state)
 }
 void SpellImpl::update(float elapsed) { m_cooldown -= elapsed; }
 
+bool SpellImpl::canTrigger() const { return m_cooldown <= 0.0f; }
+
 void SpellImpl::trigger()
 {
-    if (m_cooldown <= 0.0f) {
+    if (canTrigger()) {
         doTrigger();
     }
 }

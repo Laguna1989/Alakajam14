@@ -3,12 +3,14 @@
 #include "spell_interface.hpp"
 
 class StateGame;
+
 class SpellImpl : public SpellInterface {
 public:
     explicit SpellImpl(StateGame&);
 
     void update(float elapsed) override;
     void trigger() override;
+    bool canTrigger() const override;
 
 protected:
     StateGame& m_state;

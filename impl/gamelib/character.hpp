@@ -52,6 +52,7 @@ private:
     void createAnimation();
     void handleInputAttack();
     std::string selectDashAnimation(jt::Vector2f const& velocity) const;
+    void updateSpells(const float elapsed);
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP
