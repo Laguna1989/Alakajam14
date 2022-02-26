@@ -3,6 +3,7 @@
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
 #include "math_helper.hpp"
+#include "spells/spell_none.hpp"
 #include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
 
@@ -32,6 +33,8 @@ void PlayerCharacter::doCreate()
     m_equippedSpell1->onEquip();
     m_equippedSpell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
     m_equippedSpell2->onEquip();
+    m_equippedSpell3 = std::make_shared<SpellNone>();
+    m_equippedSpell3->onEquip();
 }
 
 void PlayerCharacter::createAnimation()

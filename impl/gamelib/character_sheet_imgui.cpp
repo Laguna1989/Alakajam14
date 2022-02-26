@@ -47,6 +47,11 @@ void CharacterSheetImgui::doDraw() const
 
     ImGui::Text("Movement speed factor: %s",
         jt::MathHelper::floatToStringWithXDigits(getMovementSpeedFactor(), 2).c_str());
+    ImGui::Text("Dash speed factor: %s",
+        jt::MathHelper::floatToStringWithXDigits(getDashFactor(), 2).c_str());
+
+    ImGui::Text("Attackda speed factor: %s",
+        jt::MathHelper::floatToStringWithXDigits(getAttackSpeedFactor(), 2).c_str());
 
     ImGui::End();
 }
