@@ -31,7 +31,7 @@ void PlayerCharacter::createAnimation()
     m_animation->add("assets/player.png", "idle",
         jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
             static_cast<unsigned int>(GP::PlayerSize().y) },
-        { 25, 26, 27, 28, 29, 30, 31 }, 0.25f, getGame()->gfx().textureManager());
+        { 25, 25, 26, 27, 28, 29, 30, 31 }, 0.25f, getGame()->gfx().textureManager());
 
     m_animation->add("assets/player.png", "right",
         jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
