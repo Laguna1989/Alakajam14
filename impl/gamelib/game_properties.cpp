@@ -6,7 +6,7 @@ jt::Palette GP::getPalette()
         jt::Color { 184, 39, 45 }, jt::Color { 64, 23, 58 }, jt::Color { 157, 64, 43 } } };
 }
 
-float GP::GetZoom() { return 2.5f; }
+float GP::GetZoom() { return 2.0f; }
 jt::Vector2f GP::GetWindowSize() { return jt::Vector2f { 800, 600 }; }
 jt::Vector2f GP::GetScreenSize() { return GetWindowSize() * (1.0f / GetZoom()); }
 
