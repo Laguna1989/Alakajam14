@@ -33,7 +33,6 @@ void PlayerCharacter::doCreate()
     m_spellBook->setGameInstance(getGame());
     m_spellBook->makeSpellAvailable("Improve Dash");
     m_spellBook->makeSpellAvailable("Snipe");
-    m_spellBook->getEquippedSpells()
 }
 
 void PlayerCharacter::createAnimation()

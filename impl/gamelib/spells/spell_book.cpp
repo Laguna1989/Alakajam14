@@ -19,7 +19,7 @@ SpellBook::SpellBook(StateGame& state)
     m_spells.push_back(std::make_shared<SpellPassiveDash>(*state.getPlayer()->getCharSheet()));
     m_spells.push_back(std::make_shared<SpellAttackSnipe>(state));
 
-    m_equippedSpells.push_back(getSpellByName("None"));
+    m_equippedSpells.push_back(getSpellByName("Snipe"));
     m_equippedSpells.push_back(getSpellByName("None"));
     m_equippedSpells.push_back(getSpellByName("None"));
 }
