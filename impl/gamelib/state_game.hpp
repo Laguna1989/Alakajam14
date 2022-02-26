@@ -4,6 +4,7 @@
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "character.hpp"
 #include "enemies/enemy_base.hpp"
+#include "experience_orb.hpp"
 #include "game_state.hpp"
 #include "inventory/item_repository.hpp"
 #include "object_group.hpp"
@@ -32,6 +33,10 @@ public:
 
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> getEnemies();
 
+    void spawnExperience(int amount, jt::Vector2f const& pos);
+
+    std::shared_ptr<Hud> m_hud;
+
 private:
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround2;
@@ -45,9 +50,10 @@ private:
     std::shared_ptr<jt::ObjectGroup<WorldItem>> m_worldItems;
 
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> m_enemies;
+    std::shared_ptr<jt::ObjectGroup<ExperienceOrb>> m_experienceOrbs;
 
     std::shared_ptr<jt::Sprite> m_vignette;
-    std::shared_ptr<Hud> m_hud;
+
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
 
     std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders {};
@@ -72,6 +78,11 @@ private:
     void createPlayer();
     void handleItemSpawns();
     void drawTileNodeOverlay();
+    void createEnemies();
+    void createExperienceOrbs();
+    void spawnOneExperienceOrb(jt::Vector2f const& pos, int value);
+    void updateTileNodes(float const elapsed);
+    void updateExperience() const;
 };
 
 #endif

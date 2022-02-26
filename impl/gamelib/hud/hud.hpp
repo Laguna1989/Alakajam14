@@ -10,15 +10,12 @@ class ScoreDisplay;
 
 class Hud : public jt::GameObject {
 public:
-    std::shared_ptr<ObserverInterface<int>> getObserverScoreP1() const;
-    std::shared_ptr<ObserverInterface<int>> getObserverScoreP2() const;
+    std::shared_ptr<ObserverInterface<int>> getObserverExperience() const;
 
 private:
-    std::shared_ptr<ScoreDisplay> m_scoreP1Display;
-    std::shared_ptr<ScoreDisplay> m_scoreP2Display;
+    std::shared_ptr<ScoreDisplay> m_displayExperience;
 
-    jt::Text::Sptr m_scoreP1Text;
-    jt::Text::Sptr m_scoreP2Text;
+    jt::Text::Sptr m_TextExperience;
 
     void doCreate() override;
 

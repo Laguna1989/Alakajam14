@@ -8,6 +8,7 @@ EnemyGrunt::EnemyGrunt(
     : EnemyBase { world, def, state }
 {
     m_hitpoints = 100.0f;
+    m_experience = 22.0f;
 }
 
 void EnemyGrunt::doAI(float elapsed)

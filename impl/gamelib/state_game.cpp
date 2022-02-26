@@ -5,12 +5,12 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
+#include "math_helper.hpp"
 #include "random/random.hpp"
 #include "shape.hpp"
 #include "sprite.hpp"
 #include "state_menu.hpp"
 #include "tilemap/tileson_loader.hpp"
-#include "tweens/tween_alpha.hpp"
 
 namespace {
 void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
@@ -61,7 +61,6 @@ void StateGame::doInternalCreate()
     float const h = static_cast<float>(GP::GetWindowSize().y);
 
     using jt::Shape;
-    using jt::TweenAlpha;
 
     m_vignette = std::make_shared<jt::Sprite>("#v#"
             + std::to_string(static_cast<int>(GP::GetScreenSize().x)) + "#"
@@ -81,6 +80,21 @@ void StateGame::doInternalCreate()
 
     createPlayer();
 
+    createEnemies();
+
+    createExperienceOrbs();
+
+    // StateGame will call drawObjects itself.
+    setAutoDraw(false);
+}
+void StateGame::createExperienceOrbs()
+{
+    m_experienceOrbs = std::make_shared<jt::ObjectGroup<ExperienceOrb>>();
+    add(m_experienceOrbs);
+}
+
+void StateGame::createEnemies()
+{
     m_enemies = std::make_shared<jt::ObjectGroup<EnemyBase>>();
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
@@ -90,9 +104,6 @@ void StateGame::doInternalCreate()
     auto e = std::make_shared<EnemyGrunt>(m_world, &bodyDef, *this);
     m_enemies->push_back(e);
     add(e);
-
-    // StateGame will call drawObjects itself.
-    setAutoDraw(false);
 }
 
 void StateGame::createPlayer()
@@ -113,21 +124,53 @@ void StateGame::doInternalUpdate(float const elapsed)
 
         m_tileLayerGround1->update(elapsed);
         m_tileLayerOverlay->update(elapsed);
-        //        std::cout << m_nodeLayer->getAllTiles().size() << std::endl;
-        for (auto const& t : m_nodeLayer->getAllTiles()) {
 
-            t->getDrawable()->update(elapsed);
-        }
+        updateTileNodes(elapsed);
 
         camFollowObject(
             getGame()->gfx().camera(), getGame()->gfx().window().getSize(), m_player, elapsed);
 
-        pickupItems();
+        updateExperience();
 
+        pickupItems();
         handleItemSpawns();
     }
 
     m_vignette->update(elapsed);
+}
+
+void StateGame::updateExperience() const
+{
+    for (auto const& e : *m_experienceOrbs) {
+        auto experienceOrb = e.lock();
+        if (!experienceOrb) {
+            continue;
+        }
+        if (experienceOrb->getAge() < GP::ExperienceOrbIdleTime()) {
+            continue;
+        }
+
+        auto const playerPosition = m_player->getPosition();
+        auto const orbPosition = experienceOrb->getPosition();
+        auto diff = playerPosition - orbPosition;
+        auto const distance = jt::MathHelper::lengthSquared(diff);
+
+        if (distance < GP::ExperienceOrbAttractDistance() * GP::ExperienceOrbAttractDistance()) {
+            jt::MathHelper::normalizeMe(diff);
+            experienceOrb->setVelocity(diff * GP::ExperienceOrbVelocity());
+        }
+        if (distance < GP::ExperienceOrbPickupDistance() * GP::ExperienceOrbPickupDistance()) {
+            experienceOrb->kill();
+            m_player->gainExperience(experienceOrb->m_value);
+        }
+    }
+}
+void StateGame::updateTileNodes(float const elapsed)
+{
+    for (auto const& t : m_nodeLayer->getAllTiles()) {
+
+        t->getDrawable()->update(elapsed);
+    }
 }
 
 void StateGame::handleItemSpawns()
@@ -147,6 +190,7 @@ void StateGame::doInternalDraw() const
     m_tileLayerGround1->draw(getGame()->gfx().target());
     m_tileLayerOverlay->draw(getGame()->gfx().target());
     drawObjects();
+    m_experienceOrbs->draw();
     m_enemies->draw();
     //    drawTileNodeOverlay();
     m_vignette->draw(getGame()->gfx().target());
@@ -282,4 +326,31 @@ std::shared_ptr<jt::pathfinder::NodeInterface> StateGame::getTileAtPosition(
 
     return m_nodeLayer->getTileAt(actorPosInInt.x, actorPosInInt.y)->getNode();
 }
+
 std::shared_ptr<jt::ObjectGroup<EnemyBase>> StateGame::getEnemies() { return m_enemies; }
+
+void StateGame::spawnExperience(int amount, jt::Vector2f const& pos)
+{
+    while (amount >= 5) {
+        int value = jt::Random::getInt(1, 5);
+        amount -= value;
+        spawnOneExperienceOrb(pos, value);
+    }
+    spawnOneExperienceOrb(pos, amount);
+}
+
+void StateGame::spawnOneExperienceOrb(jt::Vector2f const& pos, int value)
+{
+    auto direction = jt::Random::getRandomPointIn(jt::Rectf { -32.0f, -32.0f, 64.0f, 64.0f });
+
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(pos.x, pos.y);
+    bodyDef.linearDamping = 1.0f;
+
+    auto e = std::make_shared<ExperienceOrb>(m_world, &bodyDef, pos, value);
+    e->setVelocity(direction);
+    add(e);
+    m_experienceOrbs->push_back(e);
+}

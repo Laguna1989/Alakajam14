@@ -2,6 +2,7 @@
 #include "character.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "state_game.hpp"
 
 EnemyBase::EnemyBase(
     std::shared_ptr<jt::Box2DWorldInterface> world, const b2BodyDef* def, StateGame& state)
@@ -41,7 +42,7 @@ void EnemyBase::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
 void EnemyBase::receiveDamage(const Damage& dmg)
 {
     m_hitpoints -= dmg.value;
-    m_animation->flash(0.1f);
+    m_animation->flash(0.1f, jt::colors::Red);
     if (m_hitpoints <= 0.0f) {
         die();
     }
@@ -50,5 +51,6 @@ void EnemyBase::die()
 {
     // Graphical stuff; override in subclass
     // Don't forget to call kill() in subclass
+    m_state.spawnExperience(m_experience, getPosition());
     kill();
 }

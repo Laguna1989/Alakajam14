@@ -1,8 +1,8 @@
 #ifndef GUARD_JAMTEMPLATE_ENEMY_GUARD_HPP
 #define GUARD_JAMTEMPLATE_ENEMY_GUARD_HPP
-#include "Damage.h"
 #include "animation.hpp"
 #include "box2dwrapper/box2d_object.hpp"
+#include "damage.h"
 
 class StateGame;
 
@@ -14,6 +14,7 @@ public:
 
 protected:
     float m_hitpoints;
+    float m_experience;
     std::shared_ptr<jt::Animation> m_animation;
     StateGame& m_state;
 

@@ -1,6 +1,6 @@
 file(GLOB_RECURSE GAMELIBFILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*)
 
-add_library(GameLib STATIC ${GAMELIBFILES} Damage.cpp Damage.h)
+add_library(GameLib STATIC ${GAMELIBFILES} damage.cpp damage.h)
 if (JT_ENABLE_WEB)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif ()

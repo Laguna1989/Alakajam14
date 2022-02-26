@@ -1,6 +1,7 @@
 #include "character.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "hud/hud.hpp"
 #include "math_helper.hpp"
 #include "state_game.hpp"
 
@@ -122,7 +123,6 @@ void PlayerCharacter::updateAnimation(float const elapsed)
 
     } else if (m_attackCooldown > 0.0f) {
         if (setAnimationIfNotSet("attack")) {
-            m_animation->flash(0.4f, jt::colors::Red);
             // TODO: Spore particle effects or whatev
 
             for (auto enemyWk : *m_state.getEnemies()) {
@@ -242,3 +242,9 @@ void PlayerCharacter::doDraw() const
 
 std::shared_ptr<InventoryInterface> PlayerCharacter::getInventory() { return m_inventory; }
 std::shared_ptr<CharacterSheetImgui> PlayerCharacter::getCharSheet() { return m_charsheet; }
+
+void PlayerCharacter::gainExperience(int value)
+{
+    m_experience += value;
+    m_state.m_hud->getObserverExperience()->notify(m_experience);
+}

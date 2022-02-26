@@ -25,6 +25,8 @@ public:
     void updateAnimation(float const elapsed);
     bool setAnimationIfNotSet(std::string const& newAnimationName);
 
+    void gainExperience(int value);
+
 private:
     std::shared_ptr<jt::Animation> m_animation;
     std::shared_ptr<InventoryListImgui> m_inventory;
@@ -34,7 +36,6 @@ private:
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
     jt::Vector2f m_dashVelocity { 0.0f, 0.0f };
-
     float m_attackCooldown { -1.0f };
 
     void doCreate() override;
@@ -43,6 +44,7 @@ private:
     void handleDashInput();
     void createAnimation();
     void handleInputAttack();
+    int m_experience { 0 };
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP
