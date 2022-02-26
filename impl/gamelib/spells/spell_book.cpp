@@ -96,39 +96,39 @@ void SpellBook::drawEquippedSpells() const
             if (strutil::starts_with(displayName, "None")) {
                 ImGui::Text("Nothing Equipped");
             }
+
+            auto const possibleSpells = getEquippableSpells();
+            for (auto const& spell : possibleSpells) {
+                if (ImGui::Selectable(spell.c_str())) {
+                    m_equippedSpells.at(i)->onUnEquip();
+                    m_equippedSpells.at(i) = getSpellByName(spell);
+                    m_equippedSpells.at(i)->onEquip();
+                }
+            }
+
             ImGui::EndPopup();
         }
-        //            if (displayName == "None") {
-        //                ImGui::Text("Nothing Equipped");
-        //            } else {
-        //                std::string unequipButtonText = "Unequip##" + slotName;
-        //                // TODO unequip spell
-        //                //                if (ImGui::Selectable(unequipButtonText.c_str())) {
-        //                //                    m_itemToUnequip = kvp.second;
-        //                //                }
-        //            }
-
-        //            auto const possibleItems = getItemReferenceIdsForEquipmentSlot(kvp.first);
-        //            for (auto const& itemReferenceId : possibleItems) {
-        //                if (kvp.second == itemReferenceId) {
-        //                    continue;
-        //                }
-        //                auto itemReference
-        //                    =
-        //                    m_repository.lock()->getItemReferenceFromString(itemReferenceId);
-        //                std::string const itemName = itemReference->listName;
-        //                if (ImGui::Selectable(itemName.c_str())) {
-        //                    if (!kvp.second.empty()) {
-        //                        m_itemToUnequip = kvp.second;
-        //                    }
-        //                    m_itemToEquip = itemReferenceId;
-        //                }
-        //            }
-        //        ImGui::EndPopup();
-        //    }
     }
 }
+
 std::vector<std::shared_ptr<SpellInterface>> SpellBook::getEquippedSpells()
 {
     return m_equippedSpells;
+}
+
+std::vector<std::string> SpellBook::getEquippableSpells() const
+{
+    std::vector<std::string> values;
+
+    for (auto const& currentSpellName : m_availableSpells) {
+        if (std::find_if(m_equippedSpells.cbegin(), m_equippedSpells.cend(),
+                [&currentSpellName](auto const& potentialSpellToBeAdded) {
+                    return potentialSpellToBeAdded->getName() == currentSpellName;
+                })
+            == m_equippedSpells.end()) {
+            values.push_back(currentSpellName);
+        }
+    }
+
+    return values;
 }

@@ -31,6 +31,9 @@ void PlayerCharacter::doCreate()
 
     m_spellBook = std::make_shared<SpellBook>(m_state);
     m_spellBook->setGameInstance(getGame());
+    m_spellBook->makeSpellAvailable("Improve Dash");
+    m_spellBook->makeSpellAvailable("Snipe");
+    m_spellBook->getEquippedSpells()
 }
 
 void PlayerCharacter::createAnimation()
@@ -173,9 +176,9 @@ void PlayerCharacter::updateSpells(const float elapsed)
 {
     auto const& equippedSpells = m_spellBook->getEquippedSpells();
 
-    //    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Q);
-    //    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::E);
-    //    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Tab);
+    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Q);
+    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::E);
+    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Tab);
 }
 
 void PlayerCharacter::updateOneSpell(

@@ -32,7 +32,8 @@ private:
     std::vector<std::string> m_availableSpells {};
     void drawEquippedSpells() const;
 
-    std::vector<std::shared_ptr<SpellInterface>> m_equippedSpells;
+    mutable std::vector<std::shared_ptr<SpellInterface>> m_equippedSpells;
+    std::vector<std::string> getEquippableSpells() const;
 };
 
 #endif // ALAKAJAM14_SPELL_BOOK_HPP
