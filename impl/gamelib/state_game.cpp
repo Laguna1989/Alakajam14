@@ -114,6 +114,14 @@ void StateGame::createEnemies()
     auto e = std::make_shared<EnemyGrunt>(m_world, &bodyDef, *this);
     m_enemies->push_back(e);
     add(e);
+    b2BodyDef bodyDef2;
+    bodyDef2.fixedRotation = true;
+    bodyDef2.type = b2_dynamicBody;
+    bodyDef2.position.Set(5 * GP::PlayerSize().x, 9 * GP::PlayerSize().y);
+    bodyDef2.linearDamping = 16.0f;
+    auto e2 = std::make_shared<EnemyGrunt>(m_world, &bodyDef2, *this);
+    m_enemies->push_back(e2);
+    add(e2);
 }
 
 void StateGame::createPlayer()
@@ -371,4 +379,8 @@ void StateGame::spawnSnipeProjectile(std::shared_ptr<SnipeProjectile> projectile
     m_snipeProjectiles->push_back(projectile);
     add(projectile);
     std::cout << m_snipeProjectiles->size() << std::endl;
+}
+const std::shared_ptr<jt::ObjectGroup<SnipeProjectile>>& StateGame::getSnipeProjectiles() const
+{
+    return m_snipeProjectiles;
 }

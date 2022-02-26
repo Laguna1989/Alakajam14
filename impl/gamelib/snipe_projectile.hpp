@@ -2,6 +2,7 @@
 #define ALAKAJAM14_SNIPE_PROJECTILE_HPP
 
 #include "box2dwrapper/box2d_object.hpp"
+#include "damage.hpp"
 #include "graphics/drawable_interface.hpp"
 #include <memory>
 
@@ -15,6 +16,10 @@ public:
 
 private:
     std::shared_ptr<jt::DrawableInterface> m_shape;
+    Damage m_damage;
+
+public:
+    Damage getDamage() const;
 };
 
 #endif // ALAKAJAM14_SNIPE_PROJECTILE_HPP

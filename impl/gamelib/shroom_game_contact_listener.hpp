@@ -14,6 +14,7 @@ public:
 private:
     StateGame& m_state;
     virtual void BeginContact(b2Contact*);
+    void handleSnipeProjectiles(const b2Body* bodyA, const b2Body* bodyB);
 };
 
 #endif // ALAKAJAM14_SHROOM_GAME_CONTACT_LISTENER_HPP

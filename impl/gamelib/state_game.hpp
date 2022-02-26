@@ -1,7 +1,6 @@
 ﻿#ifndef GAME_STATE_GAME_HPP_INCLUDEGUARD
 #define GAME_STATE_GAME_HPP_INCLUDEGUARD
 
-#include "shroom_game_contact_listener.hpp"
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "character.hpp"
 #include "enemies/enemy_base.hpp"
@@ -9,6 +8,7 @@
 #include "game_state.hpp"
 #include "inventory/item_repository.hpp"
 #include "object_group.hpp"
+#include "shroom_game_contact_listener.hpp"
 #include "snipe_projectile.hpp"
 #include "tilemap/node_layer.hpp"
 #include "tilemap/object_layer.hpp"
@@ -60,6 +60,10 @@ private:
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> m_snipeProjectiles;
 
+public:
+    const std::shared_ptr<jt::ObjectGroup<SnipeProjectile>>& getSnipeProjectiles() const;
+
+private:
     std::shared_ptr<jt::Sprite> m_vignette;
 
     std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders {};
