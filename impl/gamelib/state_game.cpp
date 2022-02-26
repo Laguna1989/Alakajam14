@@ -1,6 +1,7 @@
 ﻿#include "state_game.hpp"
 #include "box2dwrapper/box2d_world_impl.hpp"
 #include "color.hpp"
+#include "enemies/enemy_grunt.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
@@ -80,13 +81,13 @@ void StateGame::doInternalCreate()
 
     createPlayer();
 
-    m_enemies = std::make_shared<jt::ObjectGroup<Enemy>>();
+    m_enemies = std::make_shared<jt::ObjectGroup<EnemyBase>>();
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(3 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
     bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<Enemy>(m_world, &bodyDef);
+    auto e = std::make_shared<EnemyGrunt>(m_world, &bodyDef, *this);
     m_enemies->push_back(e);
     add(e);
 
@@ -112,6 +113,11 @@ void StateGame::doInternalUpdate(float const elapsed)
 
         m_tileLayerGround1->update(elapsed);
         m_tileLayerOverlay->update(elapsed);
+        //        std::cout << m_nodeLayer->getAllTiles().size() << std::endl;
+        for (auto const& t : m_nodeLayer->getAllTiles()) {
+
+            t->getDrawable()->update(elapsed);
+        }
 
         camFollowObject(
             getGame()->gfx().camera(), getGame()->gfx().window().getSize(), m_player, elapsed);
@@ -142,8 +148,18 @@ void StateGame::doInternalDraw() const
     m_tileLayerOverlay->draw(getGame()->gfx().target());
     drawObjects();
     m_enemies->draw();
+    //    drawTileNodeOverlay();
     m_vignette->draw(getGame()->gfx().target());
     m_hud->draw();
+}
+void StateGame::drawTileNodeOverlay()
+{
+    for (auto const& t : m_nodeLayer->getAllTiles()) {
+        if (t->getBlocked()) {
+            continue;
+        }
+        t->getDrawable()->draw(getGame()->gfx().target());
+    }
 }
 
 void StateGame::endGame()
@@ -181,6 +197,9 @@ void StateGame::loadTilemap()
 
     m_objectsLayer
         = std::make_shared<jt::tilemap::ObjectLayer>(loader.loadObjectsFromLayer("items"));
+
+    m_nodeLayer = std::make_shared<jt::tilemap::NodeLayer>(
+        loader.loadNodesFromLayer("ground1", getGame()->gfx().textureManager()));
 
     auto tileCollisions = loader.loadCollisionsFromLayer("ground1");
     auto const levelColliderCountInitial = tileCollisions.getRects().size();
@@ -247,4 +266,18 @@ void StateGame::spawnWorldItem(std::string const& itemReferenceId, jt::Vector2f 
     item->getDrawable()->setPosition(pos);
     add(item);
     m_worldItems->push_back(item);
+}
+
+std::shared_ptr<PlayerCharacter> StateGame::getPlayer() { return m_player; }
+
+std::shared_ptr<jt::pathfinder::NodeInterface> StateGame::getTileAtPosition(
+    jt::Vector2f const& actorPosInFloat)
+{
+    m_nodeLayer->reset();
+    // TODO introduce TileSize in GP
+    auto const actorPosInInt
+        = jt::Vector2u { static_cast<unsigned int>(actorPosInFloat.x / GP::PlayerSize().x),
+              static_cast<unsigned int>(actorPosInFloat.y / GP::PlayerSize().y) };
+
+    return m_nodeLayer->getTileAt(actorPosInInt.x, actorPosInInt.y)->getNode();
 }

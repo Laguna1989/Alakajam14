@@ -3,10 +3,11 @@
 
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "character.hpp"
-#include "enemies/enemy.hpp"
+#include "enemies/enemy_base.hpp"
 #include "game_state.hpp"
 #include "inventory/item_repository.hpp"
 #include "object_group.hpp"
+#include "tilemap/node_layer.hpp"
 #include "tilemap/object_layer.hpp"
 #include "tilemap/tile_layer.hpp"
 #include <memory>
@@ -24,17 +25,23 @@ class StateGame : public jt::GameState {
 public:
     std::string getName() const override;
 
+    std::shared_ptr<PlayerCharacter> getPlayer();
+
+    std::shared_ptr<jt::pathfinder::NodeInterface> getTileAtPosition(
+        jt::Vector2f const& actorPosInFloat);
+
 private:
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround2;
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerOverlay;
     std::shared_ptr<jt::tilemap::ObjectLayer> m_objectsLayer;
+    std::shared_ptr<jt::tilemap::NodeLayer> m_nodeLayer;
 
     std::shared_ptr<PlayerCharacter> m_player;
 
     std::shared_ptr<ItemRepository> m_itemRepository;
     std::shared_ptr<jt::ObjectGroup<WorldItem>> m_worldItems;
-    std::shared_ptr<jt::ObjectGroup<Enemy>> m_enemies;
+    std::shared_ptr<jt::ObjectGroup<EnemyBase>> m_enemies;
 
     std::shared_ptr<jt::Sprite> m_vignette;
     std::shared_ptr<Hud> m_hud;
@@ -61,6 +68,7 @@ private:
     void spawnWorldItem(std::string const& itemReferenceId, jt::Vector2f const& pos);
     void createPlayer();
     void handleItemSpawns();
+    void drawTileNodeOverlay();
 };
 
 #endif

@@ -24,6 +24,7 @@ void PlayerCharacter::doCreate()
     m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
 }
+
 void PlayerCharacter::createAnimation()
 {
     m_animation = std::make_shared<jt::Animation>();
