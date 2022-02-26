@@ -30,6 +30,7 @@ public:
 
 private:
     std::shared_ptr<jt::Animation> m_animation;
+    std::shared_ptr<jt::Animation> m_attackUnderlay;
     std::shared_ptr<InventoryListImgui> m_inventory;
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
     StateGame& m_state;
