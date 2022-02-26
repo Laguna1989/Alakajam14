@@ -8,6 +8,7 @@
 #include "inventory/inventory_list_imgui.hpp"
 #include "spells/spell_attack_snipe.hpp"
 #include <memory>
+#include <string>
 
 class CharacterInterface {
 public:
@@ -42,12 +43,15 @@ private:
     jt::Vector2f m_dashVelocity { 0.0f, 0.0f };
     float m_attackCooldown { -1.0f };
 
+    int m_experience { 0 };
+
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
     void handleDashInput();
     void createAnimation();
     void handleInputAttack();
+    std::string selectDashAnimation(jt::Vector2f const& velocity) const;
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP

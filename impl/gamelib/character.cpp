@@ -135,14 +135,17 @@ void PlayerCharacter::createAnimation()
             { 51, 52, 53, 54, 55 }, 0.1f, getGame()->gfx().textureManager());
     }
 
+    m_animation->play("idle");
+    m_animation->setPosition(jt::Vector2f { 5 * 24, 7 * 24 });
+
     m_attackUnderlay = std::make_shared<jt::Animation>();
     m_attackUnderlay->setLooping(false);
+    m_attackUnderlay->add("assets/attack_underlay.png", "initial", jt::Vector2u { 32u, 32u }, { 0 },
+        0.1f, getGame()->gfx().textureManager());
     m_attackUnderlay->add("assets/attack_underlay.png", "attack", jt::Vector2u { 32u, 32u },
         jt::MathHelper::numbersBetween(0u, 9u), frameTimeAttack * 2.0f,
         getGame()->gfx().textureManager());
-
-    m_animation->play("idle");
-    m_animation->setPosition(jt::Vector2f { 5 * 24, 7 * 24 });
+    m_attackUnderlay->play("initial");
 }
 
 void PlayerCharacter::doUpdate(float const elapsed)
@@ -188,7 +191,8 @@ void PlayerCharacter::updateAnimation(float const elapsed)
 {
     auto const v = getVelocity();
     if (m_dashTimer > 0.0f) {
-        if (setAnimationIfNotSet("dash_down")) {
+        auto const dashAnimationName = selectDashAnimation(v);
+        if (setAnimationIfNotSet(dashAnimationName)) {
             m_animation->flash(0.3f);
             auto p = getPosition();
             auto vn = v;
@@ -255,8 +259,12 @@ void PlayerCharacter::updateAnimation(float const elapsed)
                 setAnimationIfNotSet("left");
             }
         } else {
-            if (v.y > 0) {
+            if (v.y > 0 && abs(v.x) < 0.1f) {
                 setAnimationIfNotSet("down");
+            } else if (v.y > 0 && v.x > 0) {
+                setAnimationIfNotSet("down_right");
+            } else if (v.y > 0 && v.x < 0) {
+                setAnimationIfNotSet("down_left");
             } else {
                 setAnimationIfNotSet("up");
             }
@@ -269,6 +277,23 @@ void PlayerCharacter::updateAnimation(float const elapsed)
 
     m_animation->update(elapsed);
     m_attackUnderlay->update(elapsed);
+}
+
+std::string PlayerCharacter::selectDashAnimation(jt::Vector2f const& velocity) const
+{
+    auto dashAnimationName { "dash_down" };
+    if (velocity.x > 0 && abs(velocity.y) >= 0 && abs(velocity.y) < 0.1f) {
+        dashAnimationName = "dash_right";
+    } else if (velocity.x < 0 && abs(velocity.y) >= 0 && abs(velocity.y) < 0.1f) {
+        dashAnimationName = "dash_left";
+    } else if (velocity.x > 0 && velocity.y < 0) {
+        dashAnimationName = "dash_up_right";
+    } else if (velocity.x < 0 && velocity.y < 0) {
+        dashAnimationName = "dash_up_left";
+    } else if (abs(velocity.x) >= 0 && abs(velocity.x) < 0.1f && velocity.y < 0) {
+        dashAnimationName = "dash_up";
+    }
+        return dashAnimationName;
 }
 
 bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
