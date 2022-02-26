@@ -16,7 +16,9 @@ void EnemyCrystalSmall::doCreate()
 
     m_animation->add("assets/crystal_idle_small_green.png", "idle", jt::Vector2u { 16, 16 },
         { 0, 1, 2, 3, 4 }, 0.1f, getGame()->gfx().textureManager());
-    m_animation->add("assets/crystal_shoot_small_green.png", "idle", jt::Vector2u { 16, 16 },
+    m_animation->add("assets/crystal_shoot_small_green.png", "shoot", jt::Vector2u { 16, 16 },
+        { 0, 1, 2, 3 }, 0.1f, getGame()->gfx().textureManager());
+    m_animation->add("assets/crystal_dead_small_green.png", "dead", jt::Vector2u { 48, 48 },
         { 0, 1, 2, 3 }, 0.1f, getGame()->gfx().textureManager());
 
     m_animation->play("idle");
