@@ -1,4 +1,5 @@
 #include "enemy_grunt.hpp"
+#include "game_properties.hpp"
 #include "math_helper.hpp"
 #include "pathfinder/pathfinder.hpp"
 #include "state_game.hpp"
@@ -45,22 +46,19 @@ void EnemyGrunt::walkTowardsPlayer(jt::Vector2f diff)
     auto const tileForPlayer = m_state.getTileAtPosition(m_state.getPlayer()->getPosition());
 
     auto path = jt::pathfinder::calculatePath(tileForEnemy, tileForPlayer);
-    std::cout << path.size() << std::endl;
     if (path.size() < 2) {
         return;
     }
 
     auto const nextTilePosition = path.at(1)->getTilePosition();
 
-    std::cout << "move to " << nextTilePosition.x << ", " << nextTilePosition.y << std::endl;
-
     // TODO move to GP
-    jt::Vector2f const nextTilePositionFloat { nextTilePosition.x * 16.0f,
-        nextTilePosition.y * 16.0f };
+    jt::Vector2f const nextTilePositionFloat { nextTilePosition.x * 16.0f + 8,
+        nextTilePosition.y * 16.0f + 8 };
 
     auto const enemyPosition = getPosition();
     auto diffToTile = nextTilePositionFloat - enemyPosition;
     jt::MathHelper::normalizeMe(diffToTile);
 
-    setVelocity(diffToTile * 10.0f);
+    setVelocity(diffToTile * 20.0f);
 }

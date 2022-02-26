@@ -19,9 +19,11 @@ void EnemyBase::doCreate()
     m_animation->play("idle");
 
     b2FixtureDef fixtureDef;
-    b2PolygonShape boxCollider {};
-    boxCollider.SetAsBox(GP::PlayerSize().x / 2.0f, GP::PlayerSize().y / 2.0f);
-    fixtureDef.shape = &boxCollider;
+    b2CircleShape circle {};
+    circle.m_radius = GP::PlayerSize().x / 2.0f;
+
+    fixtureDef.shape = &circle;
+    fixtureDef.friction = 0.0f;
     getB2Body()->CreateFixture(&fixtureDef);
 }
 

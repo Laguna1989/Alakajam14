@@ -158,6 +158,7 @@ void StateGame::drawTileNodeOverlay()
         if (t->getBlocked()) {
             continue;
         }
+
         t->getDrawable()->draw(getGame()->gfx().target());
     }
 }
