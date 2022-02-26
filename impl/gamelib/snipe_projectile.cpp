@@ -7,6 +7,7 @@ SnipeProjectile::SnipeProjectile(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def)
     : Box2DObject(world, def)
 {
+    m_damage = { 200.0f };
 }
 
 void SnipeProjectile::doCreate()

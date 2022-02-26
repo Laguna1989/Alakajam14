@@ -40,5 +40,5 @@ void SpellAttackSnipe::doTrigger()
     // m_state.getPlayer()->addVelocity(projectileVelocity * -0.5f);
 }
 
-int SpellAttackSnipe::getExperienceCost() const { return 10; }
+int SpellAttackSnipe::getExperienceCost() const { return 0; }
 std::string SpellAttackSnipe::getName() const { return "Snipe"; }
