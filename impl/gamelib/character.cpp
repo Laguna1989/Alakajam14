@@ -1,6 +1,7 @@
 #include "character.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "math_helper.hpp"
 
 PlayerCharacter::PlayerCharacter(std::shared_ptr<jt::Box2DWorldInterface> world,
     b2BodyDef const* def, std::weak_ptr<ItemRepository> repo)
@@ -53,39 +54,63 @@ void PlayerCharacter::doCreate()
 
 void PlayerCharacter::doUpdate(float const elapsed)
 {
-    auto keyboard = getGame()->input().keyboard();
-    jt::Vector2f newVelocity { 0.0f, 0.0f };
-    float const speed = 85.0f;
-    if (keyboard->pressed(jt::KeyCode::D)) {
-        newVelocity += jt::Vector2f { speed, 0.0f };
-    }
-    if (keyboard->pressed(jt::KeyCode::A)) {
-        newVelocity += jt::Vector2f { -speed, 0.0f };
-    }
+    handleInputMovement();
 
-    if (keyboard->pressed(jt::KeyCode::W)) {
-        newVelocity += jt::Vector2f { 0.0f, -speed };
-    }
-    if (keyboard->pressed(jt::KeyCode::S)) {
-        newVelocity += jt::Vector2f { 0.0f, speed };
-    }
-
-    setVelocity(newVelocity);
-
-    m_animation->setPosition(getPosition() - jt::Vector2f { 12, 12 });
-    m_animation->update(elapsed);
-
-    if (newVelocity.x > 0) {
-        //        m_animation->setScale({ -1.0f, 0.0 });
-        //        m_animation->setOffset({ 24, 0 });
-    } else {
-        //        m_animation->setScale({ 1.0f, 0.0 });
-        //        m_animation->setOffset({ 0.0f, 0 });
-    }
+    updateAnimation(elapsed);
 
     m_inventory->update(elapsed);
     m_charsheet->update(elapsed);
     m_charsheet->setEquippedItems(m_inventory->getEquippedItems());
+}
+
+void PlayerCharacter::updateAnimation(float const elapsed)
+{
+    auto const v = getVelocity();
+    if (jt::MathHelper::lengthSquared(v) < 2) {
+        setAnimationIfNotSet("idle");
+    } else if (abs(v.x) > abs(v.y)) {
+        if (v.x > 0) {
+            setAnimationIfNotSet("right");
+        } else {
+            setAnimationIfNotSet("left");
+        }
+    } else {
+        if (v.y > 0) {
+            setAnimationIfNotSet("down");
+        } else {
+            setAnimationIfNotSet("up");
+        }
+    }
+    m_animation->setPosition(getPosition() - GP::PlayerSize() * 0.5f);
+    m_animation->update(elapsed);
+}
+
+void PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
+{
+    std::string const& currentAnimationNAme = m_animation->getCurrentAnimationName();
+    if (currentAnimationNAme != newAnimationName) {
+        m_animation->play(newAnimationName);
+    }
+}
+
+void PlayerCharacter::handleInputMovement()
+{
+    auto keyboard = getGame()->input().keyboard();
+    setVelocity(jt::Vector2f { 0.0f, 0.0f });
+    float const speed = GP::PlayerBaseMovementSpeed();
+    if (keyboard->pressed(jt::KeyCode::D)) {
+        addVelocity(jt::Vector2f { speed, 0.0f });
+    }
+    if (keyboard->pressed(jt::KeyCode::A)) {
+        addVelocity(jt::Vector2f { -speed, 0.0f });
+    }
+
+    if (keyboard->pressed(jt::KeyCode::W)) {
+        addVelocity(jt::Vector2f { 0.0f, -speed });
+    }
+    if (keyboard->pressed(jt::KeyCode::S)) {
+        addVelocity(jt::Vector2f { 0.0f, speed });
+    }
 }
 
 void PlayerCharacter::doDraw() const

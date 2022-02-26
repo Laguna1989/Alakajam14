@@ -31,6 +31,9 @@ private:
 public:
     std::shared_ptr<InventoryInterface> getInventory() override;
     std::shared_ptr<CharacterSheetImgui> getCharSheet() override;
+    void handleInputMovement();
+    void updateAnimation(float const elapsed);
+    void setAnimationIfNotSet(std::string const& newAnimationName);
 };
 
 #endif // GUATD_JAMTEMPLATE_CHARACTER_HPP

@@ -29,6 +29,7 @@ public:
     static int PhysicPositionIterations();
 
     static jt::Vector2f PlayerSize();
+    static float PlayerBaseMovementSpeed();
 };
 
 #endif
