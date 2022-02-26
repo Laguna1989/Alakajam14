@@ -1,5 +1,5 @@
-#ifndef GUATD_JAMTEMPLATE_CHARACTER_HPP
-#define GUATD_JAMTEMPLATE_CHARACTER_HPP
+#ifndef GUARD_JAMTEMPLATE_CHARACTER_HPP
+#define GUARD_JAMTEMPLATE_CHARACTER_HPP
 
 #include "animation.hpp"
 #include "box2dwrapper/box2d_object.hpp"
@@ -34,11 +34,14 @@ private:
     float m_dashCooldown { -1.0f };
     jt::Vector2f m_dashVelocity { 0.0f, 0.0f };
 
+    float m_attackCooldown { -1.0f };
+
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
     void handleDashInput();
     void createAnimation();
+    void handleInputAttack();
 };
 
-#endif // GUATD_JAMTEMPLATE_CHARACTER_HPP
+#endif // GUARD_JAMTEMPLATE_CHARACTER_HPP
