@@ -28,10 +28,10 @@ void PlayerCharacter::doCreate()
     m_inventory->setGameInstance(getGame());
     m_charsheet->setGameInstance(getGame());
 
-    m_equipeedSpell1 = std::make_shared<SpellAttackSnipe>(m_state);
-    m_equipeedSpell1->onEquip();
-    m_equipeedSpell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
-    m_equipeedSpell2->onEquip();
+    m_equippedSpell1 = std::make_shared<SpellAttackSnipe>(m_state);
+    m_equippedSpell1->onEquip();
+    m_equippedSpell2 = std::make_shared<SpellPassiveMovementSpeed>(m_state);
+    m_equippedSpell2->onEquip();
 }
 
 void PlayerCharacter::createAnimation()
@@ -171,9 +171,9 @@ void PlayerCharacter::doUpdate(float const elapsed)
 
 void PlayerCharacter::updateSpells(const float elapsed)
 {
-    updateOneSpell(elapsed, m_equipeedSpell1, jt::KeyCode::Q);
-    updateOneSpell(elapsed, m_equipeedSpell2, jt::KeyCode::E);
-    updateOneSpell(elapsed, m_equipeedSpell3, jt::KeyCode::Tab);
+    updateOneSpell(elapsed, m_equippedSpell1, jt::KeyCode::Q);
+    updateOneSpell(elapsed, m_equippedSpell2, jt::KeyCode::E);
+    updateOneSpell(elapsed, m_equippedSpell3, jt::KeyCode::Tab);
 }
 
 void PlayerCharacter::updateOneSpell(
