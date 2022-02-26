@@ -223,7 +223,8 @@ void PlayerCharacter::updateAnimation(float const elapsed)
 
             // TODO trigger eye candy
         }
-        if (m_dashTimer >= GP::PlayerDashTotalTime() - GP::PlayerDashActiveTime()) {
+        if (m_dashTimer >= GP::PlayerDashTotalTime()
+                - GP::PlayerDashActiveTime() * m_charsheet->getDashFactor()) {
             setVelocity(m_dashVelocity);
         } else {
             setVelocity(jt::Vector2f { 0.0f, 0.0f });
