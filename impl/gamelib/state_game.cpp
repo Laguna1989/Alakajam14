@@ -289,8 +289,9 @@ void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
         } else if (o.type == "stairs") {
             loadStairs(o.position);
         } else if (o.type == "key") {
-            std::cout << o.position.x << ", " << o.position.y << std::endl;
             loadKey(o.position);
+        } else if (o.type == "dest") {
+            m_stairsDest = o.position;
         }
     }
     getGame()->getLogger().debug("parsed N =" + std::to_string(m_enemies->size()) + " enemies");
@@ -498,7 +499,7 @@ void StateGame::spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f 
 }
 void StateGame::loadStairs(jt::Vector2f f)
 {
-    m_stairs = std::make_shared<Stairs>(f);
+    m_stairs = std::make_shared<Stairs>(f, *this);
     add(m_stairs);
 }
 std::shared_ptr<Stairs> StateGame::getStairs() const { return m_stairs; }
@@ -507,3 +508,4 @@ void StateGame::loadKey(jt::Vector2f f)
     m_key = std::make_shared<Key>(f, *this);
     add(m_key);
 }
+jt::Vector2f& StateGame::getStairsDest() { return m_stairsDest; }
