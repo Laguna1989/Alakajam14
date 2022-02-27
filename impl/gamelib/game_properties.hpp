@@ -10,10 +10,13 @@ class GP {
 public:
     GP() = delete;
 
-    static std::string GameName() { return "MyAwesomeGame"; }
-    static std::string AuthorName() { return "TODO"; }
-    static std::string JamName() { return "TODO"; }
-    static std::string JamDate() { return "TODO"; }
+    static std::string GameName() { return "Funky Trip"; }
+    static std::string AuthorName()
+    {
+        return "adkiem, Aneira, BloodyOrange,\nLaguna, Synchronleuchter, Thunraz\n";
+    }
+    static std::string JamName() { return "Alakajam 14"; }
+    static std::string JamDate() { return "February 2022"; }
 
     static jt::Vector2f GetWindowSize();
     static float GetZoom();
