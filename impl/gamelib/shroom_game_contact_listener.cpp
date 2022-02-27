@@ -27,6 +27,9 @@ void ShroomGameContactListener::BeginContact(b2Contact* contact)
         }
         auto crystalBody = crystalProjectile->getB2Body();
         if (bodyA == crystalBody || bodyB == crystalBody) {
+            if (crystalProjectile->getAge() > 0.2f) {
+                crystalProjectile->kill();
+            }
             auto const playerBody = m_state.getPlayer()->getB2Body();
             if (bodyA == playerBody || bodyB == playerBody) {
                 crystalProjectile->kill();

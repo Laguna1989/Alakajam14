@@ -32,8 +32,8 @@ int GP::SpellSnipeExpCosts() { return 10; }
 float GP::SpellBroadProjectileSpeed() { return 150.0f; }
 int GP::SpellBroadExpCosts() { return 10; }
 
-float GP::EnemyCrystallSmallHitPoints() { return 100.0f; }
-float GP::EnemyCrystallMediumHitPoints() { return 300.0f; }
+float GP::EnemyCrystallSmallHitPoints() { return 120.0f; }
+float GP::EnemyCrystallMediumHitPoints() { return 80.0f; }
 float GP::EnemyCrystallLargeHitPoints() { return 1000.0f; }
 int GP::LootExperienceSmallAmount() { return 15; }
 int GP::LootExperienceMediumAmount() { return 35; }
@@ -42,4 +42,4 @@ int GP::LootExperienceLargeAmount() { return 75; }
 float GP::EnemyShotSpeed() { return 150.0f; }
 float GP::EnemyShotTimer() { return 1.1f; }
 float GP::EnemyShotRange() { return 250.0f; }
-float GP::EnemyShotDamage() { return 15.0f; }
+float GP::EnemyShotDamage() { return 10.0f; }
