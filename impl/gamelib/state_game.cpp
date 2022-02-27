@@ -280,7 +280,7 @@ std::shared_ptr<jt::pathfinder::NodeInterface> StateGame::getTileAtPosition(
         = jt::Vector2u { static_cast<unsigned int>(actorPosInFloat.x / GP::PlayerSize().x),
               static_cast<unsigned int>(actorPosInFloat.y / GP::PlayerSize().y) };
 
-    return m_nodeLayer->getTileAt(actorPosInInt.x, actorPosInInt.y)->getNode();
+    return m_nodeLayer->getTileAt(actorPosInInt)->getNode();
 }
 
 std::shared_ptr<jt::ObjectGroup<EnemyBase>> StateGame::getEnemies() { return m_enemies; }
