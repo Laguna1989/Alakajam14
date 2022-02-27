@@ -158,9 +158,10 @@ void StateGame::updateExperience() const
             jt::MathHelper::normalizeMe(diff);
             experienceOrb->setVelocity(diff * GP::ExperienceOrbVelocity());
         }
-        if (distance < GP::ExperienceOrbPickupDistance() * GP::ExperienceOrbPickupDistance()) {
-            experienceOrb->kill();
+        if (distance < GP::ExperienceOrbPickupDistance() * GP::ExperienceOrbPickupDistance()
+            && !experienceOrb->m_pickedUp) {
             m_player->gainExperience(experienceOrb->m_value);
+            experienceOrb->pickUp();
         }
     }
 }
