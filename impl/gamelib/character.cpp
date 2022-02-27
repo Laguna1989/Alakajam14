@@ -38,24 +38,23 @@ void PlayerCharacter::doCreate()
     m_soundStomp = std::make_shared<jt::Sound>("assets/sound/attack_stomp.ogg");
     m_soundStomp->setVolume(0.4f);
 
-    auto const soundHurt1
-        = std::make_shared<jt::Sound>("assets/sound/Grunting-from-Being-Hit-A1.ogg");
-    auto const soundHurt2
-        = std::make_shared<jt::Sound>("assets/sound/Grunting-from-Being-Hit-A2.ogg");
-    auto const soundHurt3
-        = std::make_shared<jt::Sound>("assets/sound/Grunting-from-Being-Hit-A3.ogg");
-    auto const soundHurt4
-        = std::make_shared<jt::Sound>("assets/sound/Grunting-from-Being-Hit-A10.ogg");
+    auto const soundHurt1 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_01.ogg");
+    auto const soundHurt2 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_02.ogg");
+    auto const soundHurt3 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_03.ogg");
+    auto const soundHurt4 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_04.ogg");
+    auto const soundHurt5 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_05.ogg");
     soundHurt1->setVolume(0.6f);
     soundHurt2->setVolume(0.6f);
     soundHurt3->setVolume(0.6f);
     soundHurt4->setVolume(0.6f);
+    soundHurt5->setVolume(0.6f);
 
     m_soundGroupHurt = std::make_shared<jt::SoundGroup>();
     m_soundGroupHurt->add(soundHurt1);
     m_soundGroupHurt->add(soundHurt2);
     m_soundGroupHurt->add(soundHurt3);
     m_soundGroupHurt->add(soundHurt4);
+    m_soundGroupHurt->add(soundHurt5);
 }
 
 void PlayerCharacter::createAnimation()
