@@ -321,9 +321,6 @@ void StateGame::loadTileColliders(jt::tilemap::TilesonLoader& loader)
         "Level colliders initial: " + std::to_string(levelColliderCountInitial)
             + " and optimized: " + std::to_string(levelColliderCountOptimized),
         { "level" });
-    std::cout << "Level colliders initial: " + std::to_string(levelColliderCountInitial)
-            + " and optimized: " + std::to_string(levelColliderCountOptimized)
-              << std::endl;
 
     for (auto const& r : tileCollisions.getRects()) {
         b2BodyDef bodyDef;

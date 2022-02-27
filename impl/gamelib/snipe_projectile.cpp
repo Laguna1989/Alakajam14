@@ -33,9 +33,6 @@ void SnipeProjectile::doUpdate(float const elapsed)
         - jt::Vector2f { m_animation->getLocalBounds().width, m_animation->getLocalBounds().height }
             / 2.0f);
     m_animation->update(elapsed);
-    if (!m_animation->isVisible()) {
-        kill();
-    }
 }
 
 void SnipeProjectile::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
