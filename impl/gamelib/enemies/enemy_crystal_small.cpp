@@ -1,6 +1,10 @@
 #include "enemy_crystal_small.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "math_helper.hpp"
+#include "pathfinder/pathfinder.hpp"
+#include "random/random.hpp"
+#include "state_game.hpp"
 
 EnemyCrystalSmall::EnemyCrystalSmall(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
@@ -9,8 +13,6 @@ EnemyCrystalSmall::EnemyCrystalSmall(
     m_experience = 50;
     m_hitpoints = GP::EnemyCrystallSmallHitPoints();
 }
-
-void EnemyCrystalSmall::doAI(float elapsed) { }
 
 void EnemyCrystalSmall::doCreate()
 {
@@ -32,4 +34,62 @@ void EnemyCrystalSmall::doCreate()
     fixtureDef.shape = &circle;
     fixtureDef.friction = 0.0f;
     getB2Body()->CreateFixture(&fixtureDef);
+}
+
+void EnemyCrystalSmall::doAI(float elapsed)
+{
+    m_timeToPathfind -= elapsed;
+    auto const playerPosition = m_state.getPlayer()->getPosition();
+    auto const enemyPosition = getPosition();
+
+    auto diff = playerPosition - enemyPosition;
+
+    auto const distance = jt::MathHelper::length(diff);
+
+    if (m_followingPlayer) {
+        auto const forgetRange = 200;
+        if (distance > forgetRange) {
+            m_followingPlayer = false;
+            return;
+        }
+
+        walkTowardsPlayer(diff);
+
+    } else {
+        int detectRange = 100;
+        if (distance < detectRange) {
+            m_followingPlayer = true;
+            // TODO render exclamation mark
+        }
+        // idle
+    }
+}
+
+void EnemyCrystalSmall::walkTowardsPlayer(jt::Vector2f diff)
+{
+    jt::MathHelper::normalizeMe(diff);
+
+    auto const tileForEnemy = m_state.getTileAtPosition(getPosition());
+    auto const tileForPlayer = m_state.getTileAtPosition(m_state.getPlayer()->getPosition());
+
+    if (m_timeToPathfind <= 0) {
+        m_path = jt::pathfinder::calculatePath(tileForEnemy, tileForPlayer);
+        m_timeToPathfind = jt::Random::getFloat(0.2f, 0.4f);
+    }
+
+    if (m_path.size() < 2) {
+        return;
+    }
+
+    auto const nextTilePosition = m_path.at(1)->getTilePosition();
+
+    // TODO move to GP
+    jt::Vector2f const nextTilePositionFloat { nextTilePosition.x * 16.0f + 8,
+        nextTilePosition.y * 16.0f + 8 };
+
+    auto const enemyPosition = getPosition();
+    auto diffToTile = nextTilePositionFloat - enemyPosition;
+    jt::MathHelper::normalizeMe(diffToTile);
+
+    setVelocity(diffToTile * 20.0f);
 }

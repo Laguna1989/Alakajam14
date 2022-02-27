@@ -2,6 +2,7 @@
 #define ALAKAJAM14_ENEMY_CRYSTAL_SMALL_HPP
 
 #include "enemy_base.hpp"
+#include "pathfinder/node_interface.hpp"
 
 class EnemyCrystalSmall : public EnemyBase {
 public:
@@ -9,8 +10,13 @@ public:
         std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
 
 private:
+    bool m_followingPlayer { false };
+    float m_timeToPathfind { -1.0f };
+    std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> m_path;
+
     void doAI(float elapsed) override;
     void doCreate() override;
+    void walkTowardsPlayer(jt::Vector2f diff);
 };
 
 #endif // ALAKAJAM14_ENEMY_CRYSTAL_SMALL_HPP

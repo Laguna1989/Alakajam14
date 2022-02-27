@@ -19,6 +19,7 @@ protected:
     StateGame& m_state;
 
     bool m_isInDieAnimation { false };
+    jt::Vector2f m_deathPosition { 0.0f, 0.0f };
 
 private:
     void doUpdate(float const /*elapsed*/) override;

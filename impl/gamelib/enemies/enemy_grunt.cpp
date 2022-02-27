@@ -39,6 +39,7 @@ void EnemyGrunt::doAI(float elapsed)
         // idle
     }
 }
+
 void EnemyGrunt::walkTowardsPlayer(jt::Vector2f diff)
 {
     jt::MathHelper::normalizeMe(diff);

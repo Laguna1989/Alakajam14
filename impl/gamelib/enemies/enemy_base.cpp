@@ -14,11 +14,20 @@ EnemyBase::EnemyBase(
 
 void EnemyBase::doUpdate(const float elapsed)
 {
-    doAI(elapsed);
 
-    m_animation->setPosition(getPosition()
-        - jt::Vector2f { m_animation->getLocalBounds().width, m_animation->getLocalBounds().height }
-            * 0.5f);
+    if (!m_isInDieAnimation) {
+        doAI(elapsed);
+        m_animation->setPosition(getPosition()
+            - jt::Vector2f { m_animation->getLocalBounds().width,
+                  m_animation->getLocalBounds().height }
+                * 0.5f);
+
+    } else {
+        m_animation->setPosition(m_deathPosition
+            - jt::Vector2f { m_animation->getLocalBounds().width,
+                  m_animation->getLocalBounds().height }
+                * 0.5f);
+    }
     m_animation->update(elapsed);
 }
 
@@ -36,15 +45,18 @@ void EnemyBase::receiveDamage(const Damage& dmg)
 void EnemyBase::die()
 {
     if (!m_isInDieAnimation) {
-        // Graphical stuff; override in subclass
-        // Don't forget to call kill() in subclass
         m_isInDieAnimation = true;
         m_animation->play("dead");
+        m_deathPosition = getPosition();
+
+        // move collider out
+        setPosition(jt::Vector2f { -9999999999.0f, -999999999999999.0f });
+
         auto t = std::make_shared<jt::Timer>(
             m_animation->getCurrentAnimTotalTime(),
             [this]() {
                 kill();
-                m_state.spawnExperience(m_experience, getPosition());
+                m_state.spawnExperience(m_experience, m_deathPosition);
             },
             1);
         m_state.add(t);
