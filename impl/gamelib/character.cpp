@@ -12,7 +12,8 @@ PlayerCharacter::PlayerCharacter(
     : jt::Box2DObject { world, def }
     , m_state { state }
 {
-    m_charsheet = std::make_shared<CharacterSheetImgui>(m_state.m_hud->getObserverExperience());
+    m_charsheet = std::make_shared<CharacterSheetImgui>(
+        m_state.m_hud->getObserverExperience(), m_state.m_hud->getObserverHealth());
 }
 
 void PlayerCharacter::doCreate()
@@ -26,6 +27,7 @@ void PlayerCharacter::doCreate()
     createAnimation();
 
     m_charsheet->setGameInstance(getGame());
+    m_charsheet->create();
 
     m_spellBook = std::make_shared<SpellBook>(m_state);
     m_spellBook->setGameInstance(getGame());

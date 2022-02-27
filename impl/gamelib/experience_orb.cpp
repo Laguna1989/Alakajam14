@@ -22,8 +22,13 @@ void ExperienceOrb::doCreate()
     m_animation->add("assets/shards_blue.png", "idle3", { 16, 16 }, { 0, 1, 2, 3 }, 0.2f,
         getGame()->gfx().textureManager());
 
-    std::string animName = "idle" + std::to_string(jt::Random::getInt(1, 3));
+    std::string animName = "idle" + std::to_string(jt::Random::getInt(2, 3));
     m_animation->play(animName);
+
+    if (m_value >= 10) {
+        m_animation->play("idle1");
+    }
+
     m_animation->setScreenSizeHint(GP::GetScreenSize());
 
     m_soundBling = std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg");

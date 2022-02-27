@@ -8,7 +8,9 @@
 
 class CharacterSheetImgui : public jt::GameObject {
 public:
-    CharacterSheetImgui(std::shared_ptr<ObserverInterface<int>> experienceObserver);
+    CharacterSheetImgui(std::shared_ptr<ObserverInterface<int>> experienceObserver,
+        std::shared_ptr<ObserverInterface<float>> healthObserver);
+    void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
 
@@ -31,6 +33,7 @@ public:
 
 private:
     std::shared_ptr<ObserverInterface<int>> m_experienceObserver { nullptr };
+    std::shared_ptr<ObserverInterface<float>> m_healthObserver { nullptr };
 
     std::map<std::string, float> m_movementSpeedFactorsAdditive;
     std::map<std::string, float> m_attackSpeedFactorsAdditive;

@@ -8,6 +8,7 @@ std::shared_ptr<ObserverInterface<int>> Hud::getObserverExperience() const
 {
     return m_displayExperience;
 }
+std::shared_ptr<ObserverInterface<float>> Hud::getObserverHealth() const { return m_displayHealth; }
 
 void Hud::doCreate()
 {
@@ -20,8 +21,24 @@ void Hud::doCreate()
     m_TextExperience->setIgnoreCamMovement(true);
 
     m_displayExperience = std::make_shared<ScoreDisplay>(m_TextExperience, "Experience: ");
+
+    m_healthBar = std::make_shared<jt::Bar>(96, 16, true, getGame()->gfx().textureManager());
+    m_healthBar->setIgnoreCamMovement(true);
+    m_healthBar->setPosition(jt::Vector2f { 8.0f, 8.0f });
+    m_healthBar->setMaxValue(100.0f);
+    m_healthBar->setFrontColor(jt::Color { 200, 0, 0 });
+    m_healthBar->setBackColor(jt::Color { 20, 20, 20 });
+    m_displayHealth = std::make_shared<HealthDisplay>(m_healthBar);
 }
 
-void Hud::doUpdate(float const elapsed) { m_TextExperience->update(elapsed); }
+void Hud::doUpdate(float const elapsed)
+{
+    m_TextExperience->update(elapsed);
+    m_healthBar->update(elapsed);
+}
 
-void Hud::doDraw() const { m_TextExperience->draw(getGame()->gfx().target()); }
+void Hud::doDraw() const
+{
+    m_TextExperience->draw(getGame()->gfx().target());
+    m_healthBar->draw(getGame()->gfx().target());
+}

@@ -80,10 +80,8 @@ void StateGame::doInternalCreate()
 
     createPlayer();
     createEnemies();
-
-    loadTilemap();
-
     createExperienceOrbs();
+    loadTilemap();
 
     createSnipeProjectilesGroup();
 
@@ -139,6 +137,10 @@ void StateGame::doInternalUpdate(float const elapsed)
             getGame()->gfx().camera(), getGame()->gfx().window().getSize(), m_player, elapsed);
 
         updateExperience();
+
+        if (m_player->getCharSheet()->getHitpoints() < 0) {
+            endGame();
+        }
 
         if (m_musicIntro->isPlaying()) {
             m_musicIntro->update();
@@ -267,7 +269,7 @@ void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
     for (auto const& o : objects) {
         if (strutil::contains(o.name, "enemy")) {
             loadSingleEnemy(o);
-        } else if (o.type == "loot") {
+        } else if (strutil::contains(o.name, "loot")) {
             loadSingleLoot(o);
         }
     }
@@ -389,19 +391,22 @@ std::shared_ptr<jt::pathfinder::NodeInterface> StateGame::getTileAtPosition(
 
 std::shared_ptr<jt::ObjectGroup<EnemyBase>> StateGame::getEnemies() { return m_enemies; }
 
-void StateGame::spawnExperience(int amount, jt::Vector2f const& pos)
+void StateGame::spawnExperience(int amount, jt::Vector2f const& pos, bool single)
 {
-    while (amount >= 5) {
-        int value = jt::Random::getInt(1, 5);
-        amount -= value;
-        spawnOneExperienceOrb(pos, value);
+    if (!single) {
+        std::cout << "spawn experience" << std::endl;
+        while (amount >= 5) {
+            int value = jt::Random::getInt(1, 5);
+            amount -= value;
+            spawnOneExperienceOrb(pos, value);
+        }
     }
     spawnOneExperienceOrb(pos, amount);
 }
 
 void StateGame::spawnOneExperienceOrb(jt::Vector2f const& pos, int value)
 {
-    auto direction = jt::Random::getRandomPointIn(jt::Rectf { -32.0f, -32.0f, 64.0f, 64.0f });
+    auto direction = jt::Random::getRandomPointIn(jt::Rectf { -48.0f, -48.0f, 96.0f, 96.0f });
 
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
@@ -409,7 +414,8 @@ void StateGame::spawnOneExperienceOrb(jt::Vector2f const& pos, int value)
     bodyDef.position.Set(pos.x, pos.y);
     bodyDef.linearDamping = 1.0f;
 
-    auto e = std::make_shared<ExperienceOrb>(m_world, &bodyDef, pos, value);
+    auto e = std::make_shared<ExperienceOrb>(
+        m_world, &bodyDef, pos + direction * jt::Random::getFloat(0.0f, 0.125f), value);
     e->setVelocity(direction);
     add(e);
     m_experienceOrbs->push_back(e);
