@@ -24,7 +24,7 @@ void CrystalProjectile::doCreate()
 
     b2FixtureDef fixtureDef;
     b2PolygonShape boxCollider {};
-    boxCollider.SetAsBox(8.0f, 8.0f);
+    boxCollider.SetAsBox(2.0f, 2.0f);
     fixtureDef.shape = &boxCollider;
     getB2Body()->CreateFixture(&fixtureDef);
 }
@@ -36,7 +36,7 @@ void CrystalProjectile::doUpdate(float const elapsed)
             / 2.0f);
     m_animation->update(elapsed);
 
-    if (m_age >= 5.0f) {
+    if (m_age >= 1.6f) {
         kill();
     }
 }
