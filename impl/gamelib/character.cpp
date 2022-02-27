@@ -199,7 +199,7 @@ void PlayerCharacter::doUpdate(float const elapsed)
     m_soundGroupHurt->update();
     m_soundDeath->update();
 
-    if (getCharSheet()->getHitpoints() <= 0 && !m_soundDeath->isPlaying()) {
+    if (getCharSheet()->getHitpoints() <= 0 && !m_soundDeath->isPlaying() && m_isDying) {
         m_hasFinishedDying = true;
     }
 }
@@ -429,7 +429,7 @@ void PlayerCharacter::gainExperience(int value) { m_charsheet->changeExperienceP
 void PlayerCharacter::receiveDamage(Damage const& dmg)
 {
     m_charsheet->changeHitpoints(dmg.value);
-    m_animation->play("hurt");
+    setAnimationIfNotSet("hurt");
     m_soundGroupHurt->play();
 }
 
