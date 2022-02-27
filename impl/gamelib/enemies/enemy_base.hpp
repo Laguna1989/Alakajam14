@@ -18,6 +18,8 @@ protected:
     std::shared_ptr<jt::Animation> m_animation;
     StateGame& m_state;
 
+    bool m_isInDieAnimation { false };
+
 private:
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
