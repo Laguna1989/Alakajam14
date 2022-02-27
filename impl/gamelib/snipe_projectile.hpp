@@ -1,9 +1,9 @@
 #ifndef ALAKAJAM14_SNIPE_PROJECTILE_HPP
 #define ALAKAJAM14_SNIPE_PROJECTILE_HPP
 
+#include "animation.hpp"
 #include "box2dwrapper/box2d_object.hpp"
 #include "damage.hpp"
-#include "graphics/drawable_interface.hpp"
 #include <memory>
 
 class SnipeProjectile : public jt::Box2DObject {
@@ -18,7 +18,7 @@ public:
     virtual void doDraw() const;
 
 private:
-    std::shared_ptr<jt::DrawableInterface> m_shape;
+    std::shared_ptr<jt::Animation> m_animation;
     Damage m_damage;
 };
 
