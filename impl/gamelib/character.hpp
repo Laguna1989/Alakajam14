@@ -2,6 +2,8 @@
 #define GUARD_JAMTEMPLATE_CHARACTER_HPP
 
 #include "animation.hpp"
+#include "audio/sound.hpp"
+#include "audio/sound_group.hpp"
 #include "box2dwrapper/box2d_object.hpp"
 #include "character_sheet_imgui.hpp"
 #include "damage.hpp"
@@ -11,8 +13,6 @@
 #include "spells/spell_book.hpp"
 #include <memory>
 #include <string>
-#include "audio/sound.hpp"
-#include "audio/sound_group.hpp"
 
 class StateGame;
 class PlayerCharacter : public jt::Box2DObject {

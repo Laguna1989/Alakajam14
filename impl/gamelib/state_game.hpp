@@ -78,6 +78,8 @@ private:
     std::shared_ptr<jt::Sound> m_musicLoop;
     bool m_isIntroMusicPlaying { true };
 
+    std::shared_ptr<jt::Sound> m_soundDeath;
+
     bool m_running { true };
 
     bool m_hasEnded { false };

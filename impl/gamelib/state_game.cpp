@@ -94,6 +94,8 @@ void StateGame::doInternalCreate()
 
     m_musicLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_loop.ogg");
     m_musicLoop->setLoop(true);
+
+    m_soundDeath = std::make_shared<jt::Sound>("assets/sound/GAME_OVER.ogg");
 }
 
 void StateGame::createSnipeProjectilesGroup()
@@ -231,6 +233,7 @@ void StateGame::endGame()
 {
     if (m_hasEnded) {
         // trigger this function only once
+        m_soundDeath->play();
         return;
     }
     m_hasEnded = true;
