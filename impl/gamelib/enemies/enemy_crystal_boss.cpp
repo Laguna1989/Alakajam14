@@ -31,7 +31,7 @@ void EnemyCrystalBoss::doCreate()
 
     b2FixtureDef fixtureDef;
     b2CircleShape circle {};
-    circle.m_radius = GP::PlayerSize().x;
+    circle.m_radius = GP::PlayerSize().x * 1.5f;
 
     fixtureDef.shape = &circle;
     fixtureDef.friction = 0.0f;

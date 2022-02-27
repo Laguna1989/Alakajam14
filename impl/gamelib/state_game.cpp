@@ -222,7 +222,13 @@ void StateGame::doInternalDraw() const
 
     drawObjects();
     m_experienceOrbs->draw();
-    m_enemies->draw();
+    for (auto o : *m_enemies) {
+        auto ob = o.lock();
+        if (ob == nullptr) {
+            continue;
+        }
+        ob->draw();
+    }
     //    drawTileNodeOverlay();
     m_snipeProjectiles->draw();
     m_crystalProjectiles->draw();
