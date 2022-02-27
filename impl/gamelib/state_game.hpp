@@ -47,7 +47,8 @@ public:
     void spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
     void spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
 
-    void spawnCrystalProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
+    void spawnCrystalProjectile(
+        jt::Vector2f const& position, jt::Vector2f const& velocity, bool isBoss = false);
 
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
 

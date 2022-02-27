@@ -8,7 +8,8 @@
 
 class CrystalProjectile : public jt::Box2DObject {
 public:
-    CrystalProjectile(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
+    CrystalProjectile(
+        std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, bool isBoss = false);
 
     void setDamage(Damage const& d);
     void setRotation(float rotation);
@@ -22,6 +23,7 @@ private:
     std::shared_ptr<jt::Animation> m_animation;
     float m_rotation { 0.0f };
     Damage m_damage;
+    bool m_isBoss;
 };
 
 #endif // ALAKAJAM14_CRYSTAL_PROJECTILE_HPP

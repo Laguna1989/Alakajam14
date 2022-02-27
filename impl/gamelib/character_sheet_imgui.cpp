@@ -47,6 +47,7 @@ void CharacterSheetImgui::doDraw() const
 
             changeExperiencePoints(-getNextLevelUpCost());
             changeHitpointsMax(GP::LevelUpHealthIncrease());
+            changeHitpoints(-GP::LevelUpHealthIncrease());
             m_numberOfLevelUps++;
         }
     }
