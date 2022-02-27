@@ -20,12 +20,12 @@ float GP::PlayerBaseDashVelocity() { return 500.0f; }
 float GP::PlayerBaseDashCooldown() { return 1.4f; }
 float GP::PlayerDashTotalTime() { return 0.29f; }
 float GP::PlayerDashActiveTime() { return 0.069f; }
-
-float GP::ExperienceOrbVelocity() { return 45.0f; }
-float GP::ExperienceOrbIdleTime() { return 0.6f; }
-float GP::ExperienceOrbPickupDistance() { return 8.0f; }
-float GP::ExperienceOrbAttractDistance() { return 28.0f; }
 float GP::PlayerAttackCooldown() { return 0.6f; }
+
+float GP::ExperienceOrbVelocity() { return 55.0f; }
+float GP::ExperienceOrbIdleTime() { return 0.4f; }
+float GP::ExperienceOrbPickupDistance() { return 8.0f; }
+float GP::ExperienceOrbAttractDistance() { return 36.0f; }
 
 float GP::SpellSnipeProjectileSpeed() { return 250.0f; }
 int GP::SpellSnipeExpCosts() { return 10; }
