@@ -27,6 +27,8 @@ void EnemyCrystalSmall::doCreate()
 
     m_animation->play("idle");
 
+    m_animation->setScreenSizeHint(GP::GetScreenSize());
+
     b2FixtureDef fixtureDef;
     b2CircleShape circle {};
     circle.m_radius = GP::PlayerSize().x / 2.0f - 4.0f;
@@ -111,5 +113,5 @@ void EnemyCrystalSmall::walkTowardsPlayer(jt::Vector2f diff)
     auto diffToTile = nextTilePositionFloat - enemyPosition;
     jt::MathHelper::normalizeMe(diffToTile);
 
-    setVelocity(diffToTile * 20.0f);
+    setVelocity(diffToTile * 45.0f);
 }

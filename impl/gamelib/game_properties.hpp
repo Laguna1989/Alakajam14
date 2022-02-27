@@ -48,6 +48,9 @@ public:
     static float EnemyCrystallSmallHitPoints();
     static float EnemyCrystallMediumHitPoints();
     static float EnemyCrystallLargeHitPoints();
+    static int LootExperienceMediumAmount();
+    static int LootExperienceSmallAmount();
+    static int LootExperienceLargeAmount();
 };
 
 #endif

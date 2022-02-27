@@ -246,7 +246,8 @@ void PlayerCharacter::updateAnimation(float const elapsed)
                 if (dist < circularHurtboxRange) {
                     // Circular hurtbox with short range
                     // TODO: Derive Damage from stats & gear
-                    enemy->receiveDamage(Damage { 50.0f });
+                    enemy->receiveDamage(Damage { 20.0f });
+                    continue;
                 } else {
                     if (dist < directedHurtboxRange) {
                         // Forward-facing hurtbox with medium range

@@ -15,7 +15,7 @@ int GP::PhysicVelocityIterations() { return 20; }
 int GP::PhysicPositionIterations() { return 20; }
 
 jt::Vector2f GP::PlayerSize() { return jt::Vector2f { 16.0f, 16.0f }; }
-float GP::PlayerBaseMovementSpeed() { return 75.0f; }
+float GP::PlayerBaseMovementSpeed() { return 55.0f; }
 float GP::PlayerBaseDashVelocity() { return 500.0f; }
 float GP::PlayerBaseDashCooldown() { return 1.4f; }
 float GP::PlayerDashTotalTime() { return 0.29f; }
@@ -35,3 +35,6 @@ int GP::SpellBroadExpCosts() { return 10; }
 float GP::EnemyCrystallSmallHitPoints() { return 100.0f; }
 float GP::EnemyCrystallMediumHitPoints() { return 300.0f; }
 float GP::EnemyCrystallLargeHitPoints() { return 1000.0f; }
+int GP::LootExperienceSmallAmount() { return 15; }
+int GP::LootExperienceMediumAmount() { return 35; }
+int GP::LootExperienceLargeAmount() { return 75; }

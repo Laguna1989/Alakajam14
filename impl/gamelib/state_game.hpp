@@ -93,6 +93,7 @@ private:
     void loadSingleEnemySmallCrystal(jt::Vector2f const& position);
     void loadSingleEnemyMediumCrystal(jt::Vector2f const& position);
     void loadSingleEnemyLargeCrystal(jt::Vector2f const& position);
+    void loadSingleLoot(jt::tilemap::InfoRect const& o);
 };
 
 #endif

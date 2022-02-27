@@ -1,5 +1,7 @@
 #include "experience_orb.hpp"
 #include "game_interface.hpp"
+#include "game_properties.hpp"
+#include "random/random.hpp"
 
 ExperienceOrb::ExperienceOrb(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
     jt::Vector2f const& pos, int value)
@@ -12,15 +14,21 @@ ExperienceOrb::ExperienceOrb(std::shared_ptr<jt::Box2DWorldInterface> world, b2B
 
 void ExperienceOrb::doCreate()
 {
-    m_animation->add("assets/enemy_test.png", "idle", { 16, 16 }, { 0 }, 0.2f,
+    m_animation->add("assets/shards_red.png", "idle1", { 16, 16 }, { 0, 1, 2, 3 }, 0.2f,
         getGame()->gfx().textureManager());
-    m_animation->play("idle");
-    m_animation->setScale(jt::Vector2f { 0.5f, 0.5f });
+    m_animation->add("assets/shards_green.png", "idle2", { 16, 16 }, { 0, 1, 2, 3 }, 0.2f,
+        getGame()->gfx().textureManager());
+    m_animation->add("assets/shards_blue.png", "idle3", { 16, 16 }, { 0, 1, 2, 3 }, 0.2f,
+        getGame()->gfx().textureManager());
+
+    std::string animName = "idle" + std::to_string(jt::Random::getInt(1, 3));
+    m_animation->play(animName);
+    m_animation->setScreenSizeHint(GP::GetScreenSize());
 }
 
 void ExperienceOrb::doUpdate(float const elapsed)
 {
-    m_animation->setPosition(getPosition());
+    m_animation->setPosition(getPosition() - GP::PlayerSize() * 0.5f);
     m_animation->update(elapsed);
 }
 

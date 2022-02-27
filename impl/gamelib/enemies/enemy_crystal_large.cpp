@@ -26,6 +26,7 @@ void EnemyCrystalLarge::doCreate()
         { 0, 1, 2, 3, 4, 5 }, 0.1f, getGame()->gfx().textureManager());
 
     m_animation->play("idle");
+    m_animation->setScreenSizeHint(GP::GetScreenSize());
 
     b2FixtureDef fixtureDef;
     b2CircleShape circle {};
@@ -68,7 +69,7 @@ void EnemyCrystalLarge::doAI(float elapsed)
             setVelocity(jt::Vector2f { 0.0f, 0.0f });
             if (m_timeSinceTriggeredAttack <= 0) {
                 // TODO Visual candy
-                if (distanceSquared < 22 * 22) {
+                if (distanceSquared < 24 * 24) {
                     m_state.getPlayer()->receiveDamage(Damage { 80.0f });
                     m_attackCooldown = 1.0f;
                 }
