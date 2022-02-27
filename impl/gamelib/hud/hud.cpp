@@ -24,7 +24,7 @@ void Hud::doCreate()
 
     m_healthBar = std::make_shared<jt::Bar>(96.0f, 16.0f, true, getGame()->gfx().textureManager());
     m_healthBar->setIgnoreCamMovement(true);
-    m_healthBar->setPosition(jt::Vector2f { 8.0f, 8.0f });
+    m_healthBar->setPosition(jt::Vector2f { GP::GetScreenSize().x - 96.0f - 8.0f, 8.0f });
     m_healthBar->setMaxValue(100.0f);
     m_healthBar->setFrontColor(jt::Color { 200, 0, 0 });
     m_healthBar->setBackColor(jt::Color { 20, 20, 20 });
