@@ -29,8 +29,8 @@ float GP::ExperienceOrbAttractDistance() { return 36.0f; }
 
 float GP::SpellSnipeProjectileSpeed() { return 250.0f; }
 int GP::SpellSnipeExpCosts() { return 10; }
-float GP::SpellBroadProjectileSpeed() { return 150.0f; }
-int GP::SpellBroadExpCosts() { return 10; }
+float GP::SpellBroadProjectileSpeed() { return 160.0f; }
+int GP::SpellBroadExpCosts() { return 20; }
 
 float GP::EnemyCrystallSmallHitPoints() { return 120.0f; }
 float GP::EnemyCrystallMediumHitPoints() { return 80.0f; }
@@ -39,12 +39,12 @@ int GP::LootExperienceSmallAmount() { return 15; }
 int GP::LootExperienceMediumAmount() { return 35; }
 int GP::LootExperienceLargeAmount() { return 75; }
 
-float GP::EnemyShotSpeed() { return 150.0f; }
-float GP::EnemyShotTimer() { return 1.1f; }
-float GP::EnemyShotRange() { return 250.0f; }
+float GP::EnemyShotSpeed() { return 175.0f; }
+float GP::EnemyShotTimer() { return 1.2f; }
+float GP::EnemyShotRange() { return 210.0f; }
 float GP::EnemyShotDamage() { return 10.0f; }
-float GP::BossHitPoints() { return 5 * 1000.f; }
+float GP::BossHitPoints() { return 2 * 1000.f; }
 
 float GP::LevelUpHealthIncrease() { return 7.0f; }
-float GP::LevelUpMovementSpeedIncrease() { return 0.015f; }
+float GP::LevelUpMovementSpeedIncrease() { return 0.035f; }
 float GP::LevelUpAttackDamageIncrease() { return 4; }

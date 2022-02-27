@@ -6,7 +6,7 @@ SpellPassiveAttackSpeed::SpellPassiveAttackSpeed(CharacterSheetImgui& sheet)
 {
 }
 
-void SpellPassiveAttackSpeed::onEquip() { m_charSheet.setAttackSpeedFactor("Spell", 0.15f); }
+void SpellPassiveAttackSpeed::onEquip() { m_charSheet.setAttackSpeedFactor("Spell", 0.175); }
 
 void SpellPassiveAttackSpeed::onUnEquip() { m_charSheet.setAttackSpeedFactor("Spell", 0.0f); }
 
