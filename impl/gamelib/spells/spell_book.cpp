@@ -24,6 +24,9 @@ SpellBook::SpellBook(StateGame& state)
     m_equippedSpells.push_back(getSpellByName("Snipe"));
     m_equippedSpells.push_back(getSpellByName("Broad Stroke"));
     m_equippedSpells.push_back(getSpellByName("None"));
+
+    m_selectSound = std::make_shared<jt::Sound>("assets/sound/spellbook_click.ogg");
+    m_selectSound->setVolume(0.5f);
 }
 
 std::shared_ptr<SpellInterface> SpellBook::getSpellByName(std::string const& name) const
@@ -59,8 +62,10 @@ void SpellBook::makeSpellAvailable(std::string const& name)
     m_availableSpells.push_back(name);
 }
 
-void SpellBook::doUpdate(float const)
+void SpellBook::doUpdate(float const /* elapsed */)
 {
+    m_selectSound->update();
+
     if (getGame()->input().keyboard()->justPressed(jt::KeyCode::L)) {
         m_drawSpellbook = !m_drawSpellbook;
     }
@@ -91,6 +96,9 @@ void SpellBook::drawEquippedSpells() const
 
         std::string displayName = m_equippedSpells.at(i)->getName() + "##" + slotName;
         if (ImGui::Button(displayName.c_str())) {
+            m_selectSound->stop();
+            m_selectSound->play();
+
             ImGui::OpenPopup(slotName.c_str());
         }
 

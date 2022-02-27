@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "audio/sound.hpp"
 
 class StateGame;
 
@@ -34,6 +35,8 @@ private:
 
     mutable std::vector<std::shared_ptr<SpellInterface>> m_equippedSpells;
     std::vector<std::string> getEquippableSpells() const;
+
+    std::shared_ptr<jt::Sound> m_selectSound;
 };
 
 #endif // ALAKAJAM14_SPELL_BOOK_HPP
