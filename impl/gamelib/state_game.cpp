@@ -23,7 +23,7 @@ void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
     auto const camPos = cam.getCamOffset();
     auto const dif = objPos - camPos;
 
-    float const margin = 150.0f;
+    float const margin = 140.0f;
     float const moveSpeed = GP::PlayerBaseMovementSpeed() * 1.0f;
     jt::Vector2f const screenSize = windowSize / cam.getZoom();
     if (dif.x < margin) {
