@@ -31,6 +31,9 @@ void PlayerCharacter::doCreate()
     m_spellBook->setGameInstance(getGame());
     m_spellBook->makeSpellAvailable("Improve Dash");
     m_spellBook->makeSpellAvailable("Snipe");
+
+    m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
+    m_soundDash->setVolume(0.4f);
 }
 
 void PlayerCharacter::createAnimation()
@@ -165,6 +168,8 @@ void PlayerCharacter::doUpdate(float const elapsed)
 
     m_charsheet->update(elapsed);
     m_spellBook->update(elapsed);
+
+    m_soundDash->update();
 }
 
 void PlayerCharacter::updateSpells(const float elapsed)
@@ -209,6 +214,10 @@ void PlayerCharacter::updateAnimation(float const elapsed)
     auto const v = getVelocity();
     if (m_dashTimer > 0.0f) {
         auto const dashAnimationName = selectDashAnimation(v);
+
+        m_soundDash->stop();
+        m_soundDash->play();
+
         if (setAnimationIfNotSet(dashAnimationName)) {
             m_animation->flash(0.3f);
             auto p = getPosition();

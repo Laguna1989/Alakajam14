@@ -11,6 +11,7 @@
 #include "spells/spell_book.hpp"
 #include <memory>
 #include <string>
+#include "audio/sound.hpp"
 
 class StateGame;
 class PlayerCharacter : public jt::Box2DObject {
@@ -32,6 +33,8 @@ private:
     std::shared_ptr<jt::Animation> m_animation;
     std::shared_ptr<jt::Animation> m_attackUnderlay;
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
+
+    std::shared_ptr<jt::Sound> m_soundDash;
 
     std::shared_ptr<SpellBook> m_spellBook;
 
