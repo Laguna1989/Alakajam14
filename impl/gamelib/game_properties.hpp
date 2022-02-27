@@ -56,6 +56,9 @@ public:
     static float EnemyShotTimer();
     static float EnemyShotRange();
     static float EnemyShotDamage();
+    static float LevelUpHealthIncrease();
+    static float LevelUpMovementSpeedIncrease();
+    static float LevelUpAttackDamageIncrease();
 };
 
 #endif

@@ -12,8 +12,8 @@ PlayerCharacter::PlayerCharacter(
     : jt::Box2DObject { world, def }
     , m_state { state }
 {
-    m_charsheet = std::make_shared<CharacterSheetImgui>(
-        m_state.m_hud->getObserverExperience(), m_state.m_hud->getObserverHealth());
+    m_charsheet = std::make_shared<CharacterSheetImgui>(m_state.m_hud->getObserverExperience(),
+        m_state.m_hud->getObserverHealth(), m_state.m_hud->getObserverHealthMax());
 }
 
 void PlayerCharacter::doCreate()
@@ -280,27 +280,25 @@ void PlayerCharacter::updateAnimation(float const elapsed)
                 float circularHurtboxRange = 20.0f;
                 float directedHurtboxRange = 45.0f;
 
-                if (dist < circularHurtboxRange) {
+                if (dist < directedHurtboxRange) {
+                    // Forward-facing hurtbox with medium range
+                    jt::Vector2f look = getVelocity();
+                    if (jt::MathHelper::length(look) < 0.1f) {
+                        // Look down if not moving
+                        look = { 0.0f, 1.0f };
+                    }
+                    jt::MathHelper::normalizeMe(look);
+                    jt::MathHelper::normalizeMe(delta);
+                    float sc = jt::MathHelper::dot(look, delta);
+                    if (sc > 0.5f) {
+                        // TODO: Derive Damage from stats & gear
+                        enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() });
+                    }
+                    continue;
+                } else if (dist < circularHurtboxRange) {
                     // Circular hurtbox with short range
                     // TODO: Derive Damage from stats & gear
-                    enemy->receiveDamage(Damage { 20.0f });
-                    continue;
-                } else {
-                    if (dist < directedHurtboxRange) {
-                        // Forward-facing hurtbox with medium range
-                        jt::Vector2f look = getVelocity();
-                        if (jt::MathHelper::length(look) < 0.1f) {
-                            // Look down if not moving
-                            look = { 0.0f, 1.0f };
-                        }
-                        jt::MathHelper::normalizeMe(look);
-                        jt::MathHelper::normalizeMe(delta);
-                        float sc = jt::MathHelper::dot(look, delta);
-                        if (sc > 0.5f) {
-                            // TODO: Derive Damage from stats & gear
-                            enemy->receiveDamage(Damage { 50.0f });
-                        }
-                    }
+                    enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() / 3.0f });
                 }
             }
         }
