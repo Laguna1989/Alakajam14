@@ -43,3 +43,4 @@ float GP::EnemyShotSpeed() { return 150.0f; }
 float GP::EnemyShotTimer() { return 1.1f; }
 float GP::EnemyShotRange() { return 250.0f; }
 float GP::EnemyShotDamage() { return 10.0f; }
+float GP::BossHitPoints() { return 20 * 1000.f; }

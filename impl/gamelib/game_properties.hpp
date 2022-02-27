@@ -56,6 +56,7 @@ public:
     static float EnemyShotTimer();
     static float EnemyShotRange();
     static float EnemyShotDamage();
+    static float BossHitPoints();
 };
 
 #endif

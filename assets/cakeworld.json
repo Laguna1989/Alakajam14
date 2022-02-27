@@ -3877,21 +3877,21 @@
                  "y":886.5
                 }, 
                 {
-                 "height":46.5,
+                 "height":9.83333333333348,
                  "id":239,
-                 "name":"boss",
+                 "name":"enemy_boss",
                  "properties":[
                         {
-                         "name":"boss",
+                         "name":"enemyType",
                          "type":"string",
                          "value":"boss"
                         }],
                  "rotation":0,
-                 "type":"boss",
+                 "type":"",
                  "visible":true,
-                 "width":48,
-                 "x":2213.83333333333,
-                 "y":2176.91666666667
+                 "width":13.333333333333,
+                 "x":2238.5,
+                 "y":2208.25
                 }, 
                 {
                  "height":16,

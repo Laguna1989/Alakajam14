@@ -1,6 +1,7 @@
 ﻿#include "state_game.hpp"
 #include "box2dwrapper/box2d_world_impl.hpp"
 #include "color.hpp"
+#include "enemies/enemy_crystal_boss.hpp"
 #include "enemies/enemy_crystal_large.hpp"
 #include "enemies/enemy_crystal_medium.hpp"
 #include "enemies/enemy_crystal_small.hpp"
@@ -318,6 +319,8 @@ void StateGame::loadSingleEnemy(jt::tilemap::InfoRect const& info)
         loadSingleEnemyMediumCrystal(position);
     } else if (type == "crystal_large") {
         loadSingleEnemyLargeCrystal(position);
+    } else if (type == "boss") {
+        loadSingleEnemyBoss(position);
     }
 }
 
@@ -353,6 +356,18 @@ void StateGame::loadSingleEnemyLargeCrystal(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalLarge>(m_world, &bodyDef, *this);
+    m_enemies->push_back(e);
+    add(e);
+}
+
+void StateGame::loadSingleEnemyBoss(jt::Vector2f const& position)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(position.x, position.y);
+    bodyDef.linearDamping = 16.0f;
+    auto e = std::make_shared<EnemyCrystalBoss>(m_world, &bodyDef, *this);
     m_enemies->push_back(e);
     add(e);
 }
