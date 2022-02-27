@@ -1,9 +1,7 @@
 #ifndef ALAKAJAM14_ENEMY_CRYSTAL_MEDIUM_HPP
 #define ALAKAJAM14_ENEMY_CRYSTAL_MEDIUM_HPP
 
-#include "box2dwrapper/box2d_world_interface.hpp"
 #include "enemy_base.hpp"
-#include <memory>
 
 class EnemyCrystalMedium : public EnemyBase {
 public:
