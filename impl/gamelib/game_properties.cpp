@@ -31,3 +31,7 @@ float GP::SpellSnipeProjectileSpeed() { return 250.0f; }
 int GP::SpellSnipeExpCosts() { return 10; }
 float GP::SpellBroadProjectileSpeed() { return 150.0f; }
 int GP::SpellBroadExpCosts() { return 10; }
+
+float GP::EnemyCrystallSmallHitPoints() { return 100.0f; }
+float GP::EnemyCrystallMediumHitPoints() { return 300.0f; }
+float GP::EnemyCrystallLargeHitPoints() { return 1000.0f; }

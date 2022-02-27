@@ -1,7 +1,8 @@
 ﻿#include "state_game.hpp"
 #include "box2dwrapper/box2d_world_impl.hpp"
 #include "color.hpp"
-#include "enemies/enemy_crystal_mid.hpp"
+#include "enemies/enemy_crystal_large.hpp"
+#include "enemies/enemy_crystal_medium.hpp"
 #include "enemies/enemy_crystal_small.hpp"
 #include "enemies/enemy_grunt.hpp"
 #include "game_interface.hpp"
@@ -12,6 +13,7 @@
 #include "shape.hpp"
 #include "sprite.hpp"
 #include "state_menu.hpp"
+#include "strutils.hpp"
 #include "tilemap/tileson_loader.hpp"
 
 namespace {
@@ -22,8 +24,8 @@ void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
     auto const camPos = cam.getCamOffset();
     auto const dif = objPos - camPos;
 
-    float const margin = 80.0f;
-    float const moveSpeed = GP::PlayerBaseMovementSpeed() * 0.8f;
+    float const margin = 100.0f;
+    float const moveSpeed = GP::PlayerBaseMovementSpeed() * 1.0f;
     jt::Vector2f const screenSize = windowSize / cam.getZoom();
     if (dif.x < margin) {
         cam.move(jt::Vector2f { -moveSpeed, 0.0f } * elapsed);
@@ -77,11 +79,10 @@ void StateGame::doInternalCreate()
     m_hud = std::make_shared<Hud>();
     add(m_hud);
 
-    loadTilemap();
-
     createPlayer();
-
     createEnemies();
+
+    loadTilemap();
 
     createExperienceOrbs();
 
@@ -90,11 +91,13 @@ void StateGame::doInternalCreate()
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
 }
+
 void StateGame::createSnipeProjectilesGroup()
 {
     m_snipeProjectiles = std::make_shared<jt::ObjectGroup<SnipeProjectile>>();
     add(m_snipeProjectiles);
 }
+
 void StateGame::createExperienceOrbs()
 {
     m_experienceOrbs = std::make_shared<jt::ObjectGroup<ExperienceOrb>>();
@@ -104,24 +107,25 @@ void StateGame::createExperienceOrbs()
 void StateGame::createEnemies()
 {
     m_enemies = std::make_shared<jt::ObjectGroup<EnemyBase>>();
+    //    add(m_enemies);
 
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(3 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
-    bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef, *this);
-    m_enemies->push_back(e);
-    add(e);
-
-    b2BodyDef bodyDef2;
-    bodyDef2.fixedRotation = true;
-    bodyDef2.type = b2_dynamicBody;
-    bodyDef2.position.Set(5 * GP::PlayerSize().x, 9 * GP::PlayerSize().y);
-    bodyDef2.linearDamping = 16.0f;
-    auto e2 = std::make_shared<EnemyCrystalMid>(m_world, &bodyDef2, *this);
-    m_enemies->push_back(e2);
-    add(e2);
+    //    b2BodyDef bodyDef;
+    //    bodyDef.fixedRotation = true;
+    //    bodyDef.type = b2_dynamicBody;
+    //    bodyDef.position.Set(3 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
+    //    bodyDef.linearDamping = 16.0f;
+    //    auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef, *this);
+    //    m_enemies->push_back(e);
+    //    add(e);
+    //
+    //    b2BodyDef bodyDef2;
+    //    bodyDef2.fixedRotation = true;
+    //    bodyDef2.type = b2_dynamicBody;
+    //    bodyDef2.position.Set(5 * GP::PlayerSize().x, 9 * GP::PlayerSize().y);
+    //    bodyDef2.linearDamping = 16.0f;
+    //    auto e2 = std::make_shared<EnemyCrystalMid>(m_world, &bodyDef2, *this);
+    //    m_enemies->push_back(e2);
+    //    add(e2);
 }
 
 void StateGame::createPlayer()
@@ -227,30 +231,107 @@ std::string StateGame::getName() const { return "Game"; }
 void StateGame::loadTilemap()
 {
     jt::tilemap::TilesonLoader loader { "assets/cakeworld.json" };
-    std::cout << "wat" << std::endl;
     m_tileLayerGround1 = std::make_shared<jt::tilemap::TileLayer>(
         loader.loadTilesFromLayer("ground1", getGame()->gfx().textureManager()));
-    std::cout << "bat" << std::endl;
     m_tileLayerGround1->setScreenSizeHint(jt::Vector2f { 400, 300 });
     m_tileLayerOverlay = std::make_shared<jt::tilemap::TileLayer>(
         loader.loadTilesFromLayer("overlay", getGame()->gfx().textureManager()));
-    std::cout << "vat" << std::endl;
     m_tileLayerOverlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
-    std::cout << "hat" << std::endl;
     m_nodeLayer = std::make_shared<jt::tilemap::NodeLayer>(
         loader.loadNodesFromLayer("ground1", getGame()->gfx().textureManager()));
-    std::cout << "what" << std::endl;
+
+    loadTileColliders(loader);
+
+    loadObjects(loader);
+}
+void StateGame::loadObjects(jt::tilemap::TilesonLoader& loader)
+{
+    auto objects = loader.loadObjectsFromLayer("objects");
+    loadPlayerSpawn(objects);
+
+    loadEnemies(objects);
+}
+void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
+{
+    for (auto const& o : objects) {
+        if (strutil::contains(o.name, "enemy")) {
+
+            loadSingleEnemy(o);
+        }
+    }
+    getGame()->getLogger().debug("parsed N =" + std::to_string(m_enemies->size()) + " enemies");
+}
+
+void StateGame::loadSingleEnemy(jt::tilemap::InfoRect const& info)
+{
+    auto const position = info.position;
+    auto const type = info.properties.strings.at("enemyType");
+    if (type == "crystal_small") {
+        loadSingleEnemySmallCrystal(position);
+    } else if (type == "crystal_medium") {
+        loadSingleEnemyMediumCrystal(position);
+    } else if (type == "crystal_large") {
+        loadSingleEnemyLargeCrystal(position);
+    }
+}
+
+void StateGame::loadSingleEnemySmallCrystal(jt::Vector2f const& position)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(position.x, position.y);
+    bodyDef.linearDamping = 16.0f;
+    auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef, *this);
+    m_enemies->push_back(e);
+    add(e);
+}
+
+void StateGame::loadSingleEnemyMediumCrystal(jt::Vector2f const& position)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(position.x, position.y);
+    bodyDef.linearDamping = 16.0f;
+    auto e = std::make_shared<EnemyCrystalMedium>(m_world, &bodyDef, *this);
+    m_enemies->push_back(e);
+    add(e);
+}
+
+void StateGame::loadSingleEnemyLargeCrystal(jt::Vector2f const& position)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(position.x, position.y);
+    bodyDef.linearDamping = 16.0f;
+    auto e = std::make_shared<EnemyCrystalLarge>(m_world, &bodyDef, *this);
+    m_enemies->push_back(e);
+    add(e);
+}
+
+void StateGame::loadPlayerSpawn(std::vector<jt::tilemap::InfoRect>& objects)
+{
+    for (auto const& o : objects) {
+        if (o.name == "player_spawn") {
+            m_player->setPosition(o.position);
+            getGame()->gfx().camera().setCamOffset(o.position - GP::GetScreenSize() / 2.0f);
+        }
+    }
+}
+
+void StateGame::loadTileColliders(jt::tilemap::TilesonLoader& loader)
+{
     auto tileCollisions = loader.loadCollisionsFromLayer("ground1");
-    std::cout << "bwat" << std::endl;
     auto const levelColliderCountInitial = tileCollisions.getRects().size();
-    std::cout << "mwat" << std::endl;
     tileCollisions.refineColliders();
-    std::cout << "wwat" << std::endl;
     auto const levelColliderCountOptimized = tileCollisions.getRects().size();
     getGame()->getLogger().debug(
         "Level colliders initial: " + std::to_string(levelColliderCountInitial)
             + " and optimized: " + std::to_string(levelColliderCountOptimized),
         { "level" });
+
     for (auto const& r : tileCollisions.getRects()) {
         b2BodyDef bodyDef;
         bodyDef.fixedRotation = true;

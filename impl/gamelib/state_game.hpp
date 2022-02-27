@@ -12,6 +12,7 @@
 #include "tilemap/node_layer.hpp"
 #include "tilemap/object_layer.hpp"
 #include "tilemap/tile_layer.hpp"
+#include "tilemap/tileson_loader.hpp"
 #include <memory>
 #include <string>
 #include <vector>
@@ -84,6 +85,14 @@ private:
     void updateTileNodes(float const elapsed);
     void updateExperience() const;
     void createSnipeProjectilesGroup();
+    void loadTileColliders(jt::tilemap::TilesonLoader& loader);
+    void loadPlayerSpawn(std::vector<jt::tilemap::InfoRect>& objects);
+    void loadObjects(jt::tilemap::TilesonLoader& loader);
+    void loadEnemies(std::vector<jt::tilemap::InfoRect>& objects);
+    void loadSingleEnemy(jt::tilemap::InfoRect const& info);
+    void loadSingleEnemySmallCrystal(jt::Vector2f const& position);
+    void loadSingleEnemyMediumCrystal(jt::Vector2f const& position);
+    void loadSingleEnemyLargeCrystal(jt::Vector2f const& position);
 };
 
 #endif

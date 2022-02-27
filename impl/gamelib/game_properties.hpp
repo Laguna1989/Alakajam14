@@ -45,6 +45,9 @@ public:
     static int SpellSnipeExpCosts();
     static float SpellBroadProjectileSpeed();
     static int SpellBroadExpCosts();
+    static float EnemyCrystallSmallHitPoints();
+    static float EnemyCrystallMediumHitPoints();
+    static float EnemyCrystallLargeHitPoints();
 };
 
 #endif

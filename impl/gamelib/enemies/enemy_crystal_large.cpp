@@ -6,7 +6,8 @@ EnemyCrystalLarge::EnemyCrystalLarge(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
     : EnemyBase(world, def, state)
 {
-    m_experience = 50;
+    m_experience = 200;
+    m_hitpoints = GP::EnemyCrystallLargeHitPoints();
 }
 
 void EnemyCrystalLarge::doCreate()
@@ -30,3 +31,5 @@ void EnemyCrystalLarge::doCreate()
     fixtureDef.friction = 0.0f;
     getB2Body()->CreateFixture(&fixtureDef);
 }
+
+void EnemyCrystalLarge::doAI(float elapsed) { }
