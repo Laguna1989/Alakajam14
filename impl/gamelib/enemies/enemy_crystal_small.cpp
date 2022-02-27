@@ -49,7 +49,7 @@ void EnemyCrystalSmall::doAI(float elapsed)
     auto const distanceSquared = jt::MathHelper::lengthSquared(diff);
 
     if (m_followingPlayer) {
-        auto const forgetRange = 200;
+        auto const forgetRange = 180;
         if (distanceSquared > forgetRange * forgetRange) {
             m_followingPlayer = false;
             return;

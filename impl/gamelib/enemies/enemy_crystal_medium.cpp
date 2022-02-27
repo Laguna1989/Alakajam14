@@ -1,6 +1,8 @@
 #include "enemy_crystal_medium.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "math_helper.hpp"
+#include "state_game.hpp"
 
 EnemyCrystalMedium::EnemyCrystalMedium(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
@@ -10,7 +12,25 @@ EnemyCrystalMedium::EnemyCrystalMedium(
     m_hitpoints = GP::EnemyCrystallMediumHitPoints();
 }
 
-void EnemyCrystalMedium::doAI(float elapsed) { }
+void EnemyCrystalMedium::doAI(float elapsed)
+{
+    m_shootTimer -= elapsed;
+    auto const playerPosition = m_state.getPlayer()->getPosition();
+    auto const enemyPosition = getPosition();
+
+    auto diff = playerPosition - enemyPosition;
+
+    auto const distanceSquared = jt::MathHelper::lengthSquared(diff);
+
+    auto const shootRange = GP::EnemyShotRange();
+    if (distanceSquared < shootRange * shootRange) {
+        if (m_shootTimer <= 0) {
+            jt::MathHelper::normalizeMe(diff);
+            m_state.spawnCrystalProjectile(enemyPosition + diff * 10, diff * GP::EnemyShotSpeed());
+            m_shootTimer = GP::EnemyShotTimer();
+        }
+    }
+}
 
 void EnemyCrystalMedium::doCreate()
 {

@@ -11,6 +11,8 @@ public:
 private:
     void doAI(float elapsed) override;
     void doCreate() override;
+
+    float m_shootTimer { -1.0f };
 };
 
 #endif // ALAKAJAM14_ENEMY_CRYSTAL_MEDIUM_HPP

@@ -51,6 +51,11 @@ public:
     static int LootExperienceMediumAmount();
     static int LootExperienceSmallAmount();
     static int LootExperienceLargeAmount();
+
+    static float EnemyShotSpeed();
+    static float EnemyShotTimer();
+    static float EnemyShotRange();
+    static float EnemyShotDamage();
 };
 
 #endif
