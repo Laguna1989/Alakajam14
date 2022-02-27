@@ -7,10 +7,12 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
+#include "key.hpp"
 #include "math_helper.hpp"
 #include "random/random.hpp"
 #include "shape.hpp"
 #include "sprite.hpp"
+#include "stairs.hpp"
 #include "state_menu.hpp"
 #include "strutils.hpp"
 #include "tilemap/tileson_loader.hpp"
@@ -214,6 +216,8 @@ void StateGame::doInternalDraw() const
     //    drawTileNodeOverlay();
     m_snipeProjectiles->draw();
     m_crystalProjectiles->draw();
+    m_stairs->draw();
+    m_key->draw();
     m_tileLayerOveroverlay->draw(getGame()->gfx().target());
     m_vignette->draw(getGame()->gfx().target());
     m_hud->draw();
@@ -282,6 +286,11 @@ void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
             loadSingleEnemy(o);
         } else if (strutil::contains(o.name, "loot")) {
             loadSingleLoot(o);
+        } else if (o.type == "stairs") {
+            loadStairs(o.position);
+        } else if (o.type == "key") {
+            std::cout << o.position.x << ", " << o.position.y << std::endl;
+            loadKey(o.position);
         }
     }
     getGame()->getLogger().debug("parsed N =" + std::to_string(m_enemies->size()) + " enemies");
@@ -486,4 +495,15 @@ void StateGame::spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f 
 
     m_snipeProjectiles->push_back(projectile);
     add(projectile);
+}
+void StateGame::loadStairs(jt::Vector2f f)
+{
+    m_stairs = std::make_shared<Stairs>(f);
+    add(m_stairs);
+}
+std::shared_ptr<Stairs> StateGame::getStairs() const { return m_stairs; }
+void StateGame::loadKey(jt::Vector2f f)
+{
+    m_key = std::make_shared<Key>(f, *this);
+    add(m_key);
 }
