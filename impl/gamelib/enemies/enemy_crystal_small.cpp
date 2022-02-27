@@ -10,7 +10,7 @@ EnemyCrystalSmall::EnemyCrystalSmall(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
     : EnemyBase(world, def, state)
 {
-    m_experience = 50;
+    m_experience = 7;
     m_hitpoints = GP::EnemyCrystallSmallHitPoints();
 }
 
@@ -29,7 +29,7 @@ void EnemyCrystalSmall::doCreate()
 
     b2FixtureDef fixtureDef;
     b2CircleShape circle {};
-    circle.m_radius = GP::PlayerSize().x / 2.0f;
+    circle.m_radius = GP::PlayerSize().x / 2.0f - 4.0f;
 
     fixtureDef.shape = &circle;
     fixtureDef.friction = 0.0f;
@@ -44,20 +44,41 @@ void EnemyCrystalSmall::doAI(float elapsed)
 
     auto diff = playerPosition - enemyPosition;
 
-    auto const distance = jt::MathHelper::length(diff);
+    auto const distanceSquared = jt::MathHelper::lengthSquared(diff);
 
     if (m_followingPlayer) {
         auto const forgetRange = 200;
-        if (distance > forgetRange) {
+        if (distanceSquared > forgetRange * forgetRange) {
             m_followingPlayer = false;
             return;
         }
 
         walkTowardsPlayer(diff);
 
+        if (m_timeSinceTriggeredAttack < 0) {
+            if (distanceSquared < 18 * 18) {
+                if (canAttack()) {
+                    m_animation->play("shoot");
+
+                    m_timeSinceTriggeredAttack = m_animation->getCurrentAnimTotalTime();
+                }
+            }
+        } else {
+            m_timeSinceTriggeredAttack -= elapsed;
+            setVelocity(jt::Vector2f { 0.0f, 0.0f });
+            if (m_timeSinceTriggeredAttack <= 0) {
+                // TODO Visual candy
+                if (distanceSquared < 22 * 22) {
+                    m_state.getPlayer()->receiveDamage(Damage { 30.0f });
+                    m_attackCooldown = 1.0f;
+                }
+                m_animation->play("idle");
+            }
+        }
+
     } else {
         int detectRange = 100;
-        if (distance < detectRange) {
+        if (distanceSquared < detectRange * detectRange) {
             m_followingPlayer = true;
             // TODO render exclamation mark
         }

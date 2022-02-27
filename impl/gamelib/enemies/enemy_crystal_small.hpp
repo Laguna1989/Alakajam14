@@ -12,6 +12,7 @@ public:
 private:
     bool m_followingPlayer { false };
     float m_timeToPathfind { -1.0f };
+    float m_timeSinceTriggeredAttack { -1.0f };
     std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> m_path;
 
     void doAI(float elapsed) override;

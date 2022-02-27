@@ -373,3 +373,10 @@ void PlayerCharacter::doDraw() const
 std::shared_ptr<CharacterSheetImgui> PlayerCharacter::getCharSheet() { return m_charsheet; }
 
 void PlayerCharacter::gainExperience(int value) { m_charsheet->changeExperiencePoints(value); }
+
+void PlayerCharacter::receiveDamage(Damage const& dmg)
+{
+    m_charsheet->changeHitpoints(dmg.value);
+    m_animation->flash(0.2f, jt::colors::Red);
+    m_animation->play("hurt");
+}
