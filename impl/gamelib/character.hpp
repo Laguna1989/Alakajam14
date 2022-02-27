@@ -4,6 +4,7 @@
 #include "animation.hpp"
 #include "box2dwrapper/box2d_object.hpp"
 #include "character_sheet_imgui.hpp"
+#include "damage.hpp"
 #include "game_object.hpp"
 #include "input/key_codes.hpp"
 #include "spells/spell_attack_snipe.hpp"
@@ -22,6 +23,8 @@ public:
     void updateAnimation(float const elapsed);
 
     void gainExperience(int value);
+
+    void receiveDamage(Damage const& dmg);
 
 private:
     StateGame& m_state;
