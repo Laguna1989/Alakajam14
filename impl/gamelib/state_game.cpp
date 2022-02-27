@@ -23,7 +23,7 @@ void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
     auto const camPos = cam.getCamOffset();
     auto const dif = objPos - camPos;
 
-    float const margin = 100.0f;
+    float const margin = 150.0f;
     float const moveSpeed = GP::PlayerBaseMovementSpeed() * 1.0f;
     jt::Vector2f const screenSize = windowSize / cam.getZoom();
     if (dif.x < margin) {
@@ -103,29 +103,7 @@ void StateGame::createExperienceOrbs()
     add(m_experienceOrbs);
 }
 
-void StateGame::createEnemies()
-{
-    m_enemies = std::make_shared<jt::ObjectGroup<EnemyBase>>();
-    //    add(m_enemies);
-
-    //    b2BodyDef bodyDef;
-    //    bodyDef.fixedRotation = true;
-    //    bodyDef.type = b2_dynamicBody;
-    //    bodyDef.position.Set(3 * GP::PlayerSize().x, 7 * GP::PlayerSize().y);
-    //    bodyDef.linearDamping = 16.0f;
-    //    auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef, *this);
-    //    m_enemies->push_back(e);
-    //    add(e);
-    //
-    //    b2BodyDef bodyDef2;
-    //    bodyDef2.fixedRotation = true;
-    //    bodyDef2.type = b2_dynamicBody;
-    //    bodyDef2.position.Set(5 * GP::PlayerSize().x, 9 * GP::PlayerSize().y);
-    //    bodyDef2.linearDamping = 16.0f;
-    //    auto e2 = std::make_shared<EnemyCrystalMid>(m_world, &bodyDef2, *this);
-    //    m_enemies->push_back(e2);
-    //    add(e2);
-}
+void StateGame::createEnemies() { m_enemies = std::make_shared<jt::ObjectGroup<EnemyBase>>(); }
 
 void StateGame::createPlayer()
 {
@@ -194,11 +172,12 @@ void StateGame::updateTileNodes(float const elapsed)
 void StateGame::doInternalDraw() const
 {
     m_tileLayerGround1->draw(getGame()->gfx().target());
-    m_tileLayerOverlay->draw(getGame()->gfx().target());
+
     drawObjects();
     m_experienceOrbs->draw();
     m_enemies->draw();
     //    drawTileNodeOverlay();
+    m_tileLayerOverlay->draw(getGame()->gfx().target());
     m_snipeProjectiles->draw();
     m_vignette->draw(getGame()->gfx().target());
     m_hud->draw();

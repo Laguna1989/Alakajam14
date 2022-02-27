@@ -1,6 +1,7 @@
 #include "snipe_projectile.hpp"
 #include "drawable_helpers.hpp"
 #include "game_interface.hpp"
+#include "game_properties.hpp"
 #include "shape.hpp"
 
 SnipeProjectile::SnipeProjectile(
@@ -17,7 +18,7 @@ void SnipeProjectile::doCreate()
         { 0, 1, 2, 3, 4 }, 0.1f, getGame()->gfx().textureManager());
     m_animation->play("idle");
     m_animation->setRotation(m_rotation);
-
+    m_animation->setScreenSizeHint(GP::GetScreenSize());
     b2FixtureDef fixtureDef;
     b2PolygonShape boxCollider {};
     boxCollider.SetAsBox(8.0f, 8.0f);
@@ -31,6 +32,9 @@ void SnipeProjectile::doUpdate(float const elapsed)
         - jt::Vector2f { m_animation->getLocalBounds().width, m_animation->getLocalBounds().height }
             / 2.0f);
     m_animation->update(elapsed);
+    if (!m_animation->isVisible()) {
+        kill();
+    }
 }
 
 void SnipeProjectile::doDraw() const { m_animation->draw(getGame()->gfx().target()); }

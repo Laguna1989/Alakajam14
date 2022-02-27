@@ -10,6 +10,7 @@ ExperienceOrb::ExperienceOrb(std::shared_ptr<jt::Box2DWorldInterface> world, b2B
     m_value = value;
     m_animation = std::make_shared<jt::Animation>();
     m_animation->setPosition(pos);
+    m_animation->setScreenSizeHint(GP::GetScreenSize());
 }
 
 void ExperienceOrb::doCreate()

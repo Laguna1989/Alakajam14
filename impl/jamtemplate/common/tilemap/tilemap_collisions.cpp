@@ -1,5 +1,6 @@
 #include "tilemap_collisions.hpp"
 #include <algorithm>
+#include <set>
 namespace jt {
 
 void TilemapCollisions::add(jt::Rectf const& r) { m_rects.push_back(r); }
@@ -16,14 +17,20 @@ void TilemapCollisions::refineColliders()
     }
 }
 
+namespace {
+
+} // namespace
+
 bool TilemapCollisions::refineCollidersOneStep()
 {
     std::vector<jt::Rectf> rects;
     // Note if this becomes a performance bottleneck, make treated a set instead of a vector.
     std::vector<jt::Rectf> treated;
 
+    rects.reserve(m_rects.size());
+
     for (auto it1 = m_rects.cbegin(); it1 != m_rects.cend(); ++it1) {
-        if (std::find(treated.cbegin(), treated.cend(), *it1) != treated.cend()) {
+        if (std::count(treated.cbegin(), treated.cend(), *it1) != 0) {
             continue;
         }
         for (auto it2 = it1; it2 != m_rects.cend(); ++it2) {
@@ -31,7 +38,7 @@ bool TilemapCollisions::refineCollidersOneStep()
                 continue;
             }
 
-            if (std::find(treated.cbegin(), treated.cend(), *it2) != treated.cend()) {
+            if (std::count(treated.cbegin(), treated.cend(), *it2) != 0) {
                 continue;
             }
 
@@ -54,7 +61,7 @@ bool TilemapCollisions::refineCollidersOneStep()
     }
 
     for (auto it1 = m_rects.cbegin(); it1 != m_rects.cend(); ++it1) {
-        if (std::find(treated.cbegin(), treated.cend(), *it1) != treated.cend()) {
+        if (std::count(treated.cbegin(), treated.cend(), *it1) != 0) {
             continue;
         }
         rects.push_back(*it1);
