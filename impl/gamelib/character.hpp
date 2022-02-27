@@ -35,6 +35,7 @@ private:
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
 
     std::shared_ptr<jt::Sound> m_soundDash;
+    std::shared_ptr<jt::Sound> m_soundStomp;
 
     std::shared_ptr<SpellBook> m_spellBook;
 

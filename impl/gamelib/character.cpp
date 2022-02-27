@@ -34,6 +34,8 @@ void PlayerCharacter::doCreate()
 
     m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
     m_soundDash->setVolume(0.4f);
+    m_soundStomp = std::make_shared<jt::Sound>("assets/sound/attack_stomp.ogg");
+    m_soundStomp->setVolume(0.4f);
 }
 
 void PlayerCharacter::createAnimation()
@@ -170,6 +172,7 @@ void PlayerCharacter::doUpdate(float const elapsed)
     m_spellBook->update(elapsed);
 
     m_soundDash->update();
+    m_soundStomp->update();
 }
 
 void PlayerCharacter::updateSpells(const float elapsed)
@@ -236,6 +239,9 @@ void PlayerCharacter::updateAnimation(float const elapsed)
 
     } else if (m_attackCooldown > 0.0f) {
         if (setAnimationIfNotSet("attack_down")) {
+            m_soundStomp->stop();
+            m_soundStomp->play();
+
             m_attackUnderlay->play("attack", 0, true);
             // TODO: Spore particle effects or whatev
 
