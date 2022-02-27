@@ -2,6 +2,7 @@
 #include "game_interface.hpp"
 #include "imgui.h"
 #include "math_helper.hpp"
+#include <iostream>
 
 CharacterSheetImgui::CharacterSheetImgui(std::shared_ptr<ObserverInterface<int>> experienceObserver,
     std::shared_ptr<ObserverInterface<float>> healthObserver)
@@ -99,4 +100,9 @@ void CharacterSheetImgui::setAttackSpeedFactor(std::string const& identifier, fl
 void CharacterSheetImgui::setDashFactor(std::string const& identifier, float value)
 {
     m_dashFactorsAdditive[identifier] = value;
+}
+void CharacterSheetImgui::doCreate()
+{
+    m_healthObserver->notify(m_hitpoints);
+    std::cout << "charsheet create\n";
 }

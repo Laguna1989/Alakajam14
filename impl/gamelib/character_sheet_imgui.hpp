@@ -10,6 +10,7 @@ class CharacterSheetImgui : public jt::GameObject {
 public:
     CharacterSheetImgui(std::shared_ptr<ObserverInterface<int>> experienceObserver,
         std::shared_ptr<ObserverInterface<float>> healthObserver);
+    void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
 

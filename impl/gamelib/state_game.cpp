@@ -138,6 +138,10 @@ void StateGame::doInternalUpdate(float const elapsed)
 
         updateExperience();
 
+        if (m_player->getCharSheet()->getHitpoints() < 0) {
+            endGame();
+        }
+
         if (m_musicIntro->isPlaying()) {
             m_musicIntro->update();
         } else {

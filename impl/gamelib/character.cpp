@@ -27,6 +27,7 @@ void PlayerCharacter::doCreate()
     createAnimation();
 
     m_charsheet->setGameInstance(getGame());
+    m_charsheet->create();
 
     m_spellBook = std::make_shared<SpellBook>(m_state);
     m_spellBook->setGameInstance(getGame());
