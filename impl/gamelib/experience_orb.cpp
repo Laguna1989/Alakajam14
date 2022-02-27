@@ -27,6 +27,7 @@ void ExperienceOrb::doCreate()
     m_animation->setScreenSizeHint(GP::GetScreenSize());
 
     m_soundBling = std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg");
+    m_soundBling->setVolume(0.7f);
     m_soundBling->setLoop(false);
 }
 
