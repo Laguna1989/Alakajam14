@@ -12,7 +12,6 @@
 #include "object_group.hpp"
 #include "shroom_game_contact_listener.hpp"
 #include "snipe_projectile.hpp"
-#include "stairs.hpp"
 #include "tilemap/node_layer.hpp"
 #include "tilemap/object_layer.hpp"
 #include "tilemap/tile_layer.hpp"
@@ -28,7 +27,7 @@ class Sprite;
 } // namespace jt
 
 class Hud;
-
+class Stairs;
 class StateGame : public jt::GameState {
 public:
     std::string getName() const override;
@@ -54,6 +53,7 @@ public:
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> getSnipeProjectiles() const;
     std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> getCrystalProjectiles() const;
     std::shared_ptr<Stairs> getStairs() const;
+    jt::Vector2f& getStairsDest();
 
 private:
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
@@ -80,6 +80,8 @@ private:
 
     std::shared_ptr<jt::Sound> m_musicIntro;
     std::shared_ptr<jt::Sound> m_musicLoop;
+    std::shared_ptr<Stairs> m_stairs;
+    std::shared_ptr<Key> m_key;
     bool m_isIntroMusicPlaying { true };
     std::chrono::time_point<std::chrono::steady_clock> m_musicLoopStartTime;
 
@@ -114,9 +116,8 @@ private:
     void loadSingleLoot(jt::tilemap::InfoRect const& o);
     void createCrystalProjectilesGroup();
     void loadStairs(jt::Vector2f f);
-    std::shared_ptr<Stairs> m_stairs;
     void loadKey(jt::Vector2f f);
-    std::shared_ptr<Key> m_key;
+    jt::Vector2f m_stairsDest;
 };
 
 #endif
