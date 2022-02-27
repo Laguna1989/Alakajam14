@@ -60,7 +60,7 @@ void EnemyCrystalBoss::doAI(float elapsed)
                 auto aim = jt::Random::getRandomPointIn(jt::Rectf { -1.0f, -1.0f, 2.0f, 2.0f });
                 jt::MathHelper::normalizeMe(aim);
                 m_state.spawnCrystalProjectile(
-                    enemyPosition + aim * 10, aim * GP::EnemyShotSpeed());
+                    enemyPosition + aim * 10, aim * GP::EnemyShotSpeed(), true);
             }
             m_shootTimer = GP::EnemyShotTimer();
         }

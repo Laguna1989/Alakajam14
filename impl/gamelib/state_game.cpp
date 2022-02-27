@@ -512,7 +512,8 @@ void StateGame::spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f 
     add(projectile);
 }
 
-void StateGame::spawnCrystalProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity)
+void StateGame::spawnCrystalProjectile(
+    jt::Vector2f const& position, jt::Vector2f const& velocity, bool isBoss)
 {
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
@@ -520,7 +521,7 @@ void StateGame::spawnCrystalProjectile(jt::Vector2f const& position, jt::Vector2
 
     bodyDef.position.Set(position.x, position.y);
 
-    auto projectile = std::make_shared<CrystalProjectile>(m_world, &bodyDef);
+    auto projectile = std::make_shared<CrystalProjectile>(m_world, &bodyDef, isBoss);
     projectile->setVelocity(velocity);
 
     m_crystalProjectiles->push_back(projectile);
