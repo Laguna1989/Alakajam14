@@ -5,8 +5,6 @@
 #include "enemy_base.hpp"
 #include <memory>
 
-class StateGame;
-
 class EnemyCrystalMedium : public EnemyBase {
 public:
     EnemyCrystalMedium(
