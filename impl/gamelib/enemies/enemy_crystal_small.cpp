@@ -7,6 +7,7 @@ EnemyCrystalSmall::EnemyCrystalSmall(
     : EnemyBase(world, def, state)
 {
     m_experience = 50;
+    m_hitpoints = GP::EnemyCrystallSmallHitPoints();
 }
 
 void EnemyCrystalSmall::doAI(float elapsed) { }

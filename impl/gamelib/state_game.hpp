@@ -91,6 +91,8 @@ private:
     void loadEnemies(std::vector<jt::tilemap::InfoRect>& objects);
     void loadSingleEnemy(jt::tilemap::InfoRect const& info);
     void loadSingleEnemySmallCrystal(jt::Vector2f const& position);
+    void loadSingleEnemyMediumCrystal(jt::Vector2f const& position);
+    void loadSingleEnemyLargeCrystal(jt::Vector2f const& position);
 };
 
 #endif

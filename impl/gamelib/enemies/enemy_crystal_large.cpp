@@ -7,6 +7,7 @@ EnemyCrystalLarge::EnemyCrystalLarge(
     : EnemyBase(world, def, state)
 {
     m_experience = 50;
+    m_hitpoints = GP::EnemyCrystallLargeHitPoints();
 }
 
 void EnemyCrystalLarge::doCreate()
@@ -30,3 +31,5 @@ void EnemyCrystalLarge::doCreate()
     fixtureDef.friction = 0.0f;
     getB2Body()->CreateFixture(&fixtureDef);
 }
+
+void EnemyCrystalLarge::doAI(float elapsed) { }

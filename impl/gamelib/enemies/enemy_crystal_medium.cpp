@@ -1,17 +1,18 @@
-#include "enemy_crystal_mid.hpp"
+#include "enemy_crystal_medium.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 
-EnemyCrystalMid::EnemyCrystalMid(
+EnemyCrystalMedium::EnemyCrystalMedium(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
     : EnemyBase(world, def, state)
 {
     m_experience = 50;
+    m_hitpoints = GP::EnemyCrystallMediumHitPoints();
 }
 
-void EnemyCrystalMid::doAI(float elapsed) { }
+void EnemyCrystalMedium::doAI(float elapsed) { }
 
-void EnemyCrystalMid::doCreate()
+void EnemyCrystalMedium::doCreate()
 {
     m_animation = std::make_shared<jt::Animation>();
 

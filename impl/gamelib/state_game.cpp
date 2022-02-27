@@ -1,7 +1,8 @@
 ﻿#include "state_game.hpp"
 #include "box2dwrapper/box2d_world_impl.hpp"
 #include "color.hpp"
-#include "enemies/enemy_crystal_mid.hpp"
+#include "enemies/enemy_crystal_large.hpp"
+#include "enemies/enemy_crystal_medium.hpp"
 #include "enemies/enemy_crystal_small.hpp"
 #include "enemies/enemy_grunt.hpp"
 #include "game_interface.hpp"
@@ -23,8 +24,8 @@ void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
     auto const camPos = cam.getCamOffset();
     auto const dif = objPos - camPos;
 
-    float const margin = 80.0f;
-    float const moveSpeed = GP::PlayerBaseMovementSpeed() * 0.8f;
+    float const margin = 100.0f;
+    float const moveSpeed = GP::PlayerBaseMovementSpeed() * 1.0f;
     jt::Vector2f const screenSize = windowSize / cam.getZoom();
     if (dif.x < margin) {
         cam.move(jt::Vector2f { -moveSpeed, 0.0f } * elapsed);
@@ -267,6 +268,10 @@ void StateGame::loadSingleEnemy(jt::tilemap::InfoRect const& info)
     auto const type = info.properties.strings.at("enemyType");
     if (type == "crystal_small") {
         loadSingleEnemySmallCrystal(position);
+    } else if (type == "crystal_medium") {
+        loadSingleEnemyMediumCrystal(position);
+    } else if (type == "crystal_large") {
+        loadSingleEnemyLargeCrystal(position);
     }
 }
 
@@ -278,6 +283,30 @@ void StateGame::loadSingleEnemySmallCrystal(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef, *this);
+    m_enemies->push_back(e);
+    add(e);
+}
+
+void StateGame::loadSingleEnemyMediumCrystal(jt::Vector2f const& position)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(position.x, position.y);
+    bodyDef.linearDamping = 16.0f;
+    auto e = std::make_shared<EnemyCrystalMedium>(m_world, &bodyDef, *this);
+    m_enemies->push_back(e);
+    add(e);
+}
+
+void StateGame::loadSingleEnemyLargeCrystal(jt::Vector2f const& position)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(position.x, position.y);
+    bodyDef.linearDamping = 16.0f;
+    auto e = std::make_shared<EnemyCrystalLarge>(m_world, &bodyDef, *this);
     m_enemies->push_back(e);
     add(e);
 }

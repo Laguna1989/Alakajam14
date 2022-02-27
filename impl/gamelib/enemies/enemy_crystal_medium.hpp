@@ -1,5 +1,5 @@
-#ifndef ALAKAJAM14_ENEMY_CRYSTAL_MID_HPP
-#define ALAKAJAM14_ENEMY_CRYSTAL_MID_HPP
+#ifndef ALAKAJAM14_ENEMY_CRYSTAL_MEDIUM_HPP
+#define ALAKAJAM14_ENEMY_CRYSTAL_MEDIUM_HPP
 
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "enemy_base.hpp"
@@ -7,9 +7,9 @@
 
 class StateGame;
 
-class EnemyCrystalMid : public EnemyBase {
+class EnemyCrystalMedium : public EnemyBase {
 public:
-    EnemyCrystalMid(
+    EnemyCrystalMedium(
         std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
 
 private:
@@ -17,4 +17,4 @@ private:
     void doCreate() override;
 };
 
-#endif // ALAKAJAM14_ENEMY_CRYSTAL_MID_HPP
+#endif // ALAKAJAM14_ENEMY_CRYSTAL_MEDIUM_HPP
