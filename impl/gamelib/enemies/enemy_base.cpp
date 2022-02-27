@@ -14,6 +14,9 @@ EnemyBase::EnemyBase(
 
 void EnemyBase::doUpdate(const float elapsed)
 {
+    if (!m_animation->isVisible()) {
+        return;
+    }
     m_attackCooldown -= elapsed;
     if (!m_isInDieAnimation) {
         doAI(elapsed);
