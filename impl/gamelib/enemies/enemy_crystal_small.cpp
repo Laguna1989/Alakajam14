@@ -93,15 +93,15 @@ void EnemyCrystalSmall::walkTowardsPlayer(jt::Vector2f diff)
     if (m_timeToPathfind <= 0) {
         auto const tileForEnemy = m_state.getTileAtPosition(getPosition());
         auto const tileForPlayer = m_state.getTileAtPosition(m_state.getPlayer()->getPosition());
-        m_path = jt::pathfinder::calculatePath(tileForEnemy, tileForPlayer);
+        m_cachedPath = jt::pathfinder::calculatePath(tileForEnemy, tileForPlayer);
         m_timeToPathfind = jt::Random::getFloat(0.4f, 0.5f);
     }
 
-    if (m_path.size() < 2) {
+    if (m_cachedPath.size() < 2) {
         return;
     }
 
-    auto const& nextTilePosition = m_path.at(1)->getTilePosition();
+    auto const& nextTilePosition = m_cachedPath.at(1)->getTilePosition();
 
     // TODO move to GP
     jt::Vector2f const nextTilePositionFloat { nextTilePosition.x * 16.0f + 8,
