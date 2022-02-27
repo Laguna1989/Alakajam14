@@ -10,6 +10,7 @@ class Guile : public jt::Box2DObject {
 public:
     Guile(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
         std::weak_ptr<PlayerCharacter> player);
+
     void doCreate() override;
     void doUpdate(float const elapsed) override;
     void doDraw() const override;

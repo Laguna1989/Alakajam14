@@ -96,7 +96,7 @@ void CharacterSheetImgui::doDraw() const
         if (ImGui::Button(increaseAttackSpeedText.c_str())) {
             if (m_experiencePoints >= getNextLevelUpCost()) {
                 changeExperiencePoints(-getNextLevelUpCost());
-                m_baseAttackSpeed += 0.025;
+                m_baseAttackSpeed += 0.025f;
                 m_numberOfLevelUps++;
             }
         }

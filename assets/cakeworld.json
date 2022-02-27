@@ -75,17 +75,6 @@
          "name":"objects",
          "objects":[
                 {
-                 "height":12.6667,
-                 "id":1,
-                 "name":"player_spawn",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":14.3333,
-                 "x":622.333333333333,
-                 "y":1056.00333333333
-                }, 
-                {
                  "height":12,
                  "id":4,
                  "name":"enemy",
@@ -2942,23 +2931,6 @@
                  "y":674.25
                 }, 
                 {
-                 "height":15.6666666666666,
-                 "id":181,
-                 "name":"key",
-                 "properties":[
-                        {
-                         "name":"key",
-                         "type":"string",
-                         "value":"key"
-                        }],
-                 "rotation":0,
-                 "type":"key",
-                 "visible":true,
-                 "width":15.3333333333335,
-                 "x":608.66666666667,
-                 "y":1103.66666666667
-                }, 
-                {
                  "height":12,
                  "id":182,
                  "name":"enemy",
@@ -4045,6 +4017,34 @@
                  "width":0,
                  "x":185.818181818182,
                  "y":1616.54545454545
+                }, 
+                {
+                 "height":12.6667,
+                 "id":249,
+                 "name":"player_spawn",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":14.3333,
+                 "x":1664.83335,
+                 "y":977.66665
+                }, 
+                {
+                 "height":15.6667,
+                 "id":250,
+                 "name":"key",
+                 "properties":[
+                        {
+                         "name":"key",
+                         "type":"string",
+                         "value":"key"
+                        }],
+                 "rotation":0,
+                 "type":"key",
+                 "visible":true,
+                 "width":15.3333,
+                 "x":1690.08335,
+                 "y":318.04165
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -4130,7 +4130,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":249,
+ "nextobjectid":251,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

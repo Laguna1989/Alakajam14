@@ -8,6 +8,7 @@
 #include "enemies/enemy_base.hpp"
 #include "experience_orb.hpp"
 #include "game_state.hpp"
+#include "guile.hpp"
 #include "key.hpp"
 #include "object_group.hpp"
 #include "shroom_game_contact_listener.hpp"
@@ -71,6 +72,8 @@ private:
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> m_snipeProjectiles;
     std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> m_crystalProjectiles;
+
+    std::shared_ptr<jt::ObjectGroup<Guile>> m_guys;
 
     std::shared_ptr<jt::Sprite> m_vignette;
 

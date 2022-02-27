@@ -31,8 +31,6 @@ void PlayerCharacter::doCreate()
 
     m_spellBook = std::make_shared<SpellBook>(m_state);
     m_spellBook->setGameInstance(getGame());
-    m_spellBook->makeSpellAvailable("Improve Dash");
-    m_spellBook->makeSpellAvailable("Snipe");
 
     m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
     m_soundDash->setVolume(0.4f);
@@ -47,6 +45,7 @@ void PlayerCharacter::doCreate()
     auto const soundHurt3 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_03.ogg");
     auto const soundHurt4 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_04.ogg");
     auto const soundHurt5 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_05.ogg");
+
     soundHurt1->setVolume(0.6f);
     soundHurt2->setVolume(0.6f);
     soundHurt3->setVolume(0.6f);
