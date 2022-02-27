@@ -84,6 +84,7 @@ void StateGame::doInternalCreate()
     createPlayer();
     createEnemies();
     createExperienceOrbs();
+    m_guys = std::make_shared<jt::ObjectGroup<Guile>>();
     loadTilemap();
 
     createSnipeProjectilesGroup();
@@ -229,6 +230,14 @@ void StateGame::doInternalDraw() const
         }
         ob->draw();
     }
+
+    for (auto o : *m_guys) {
+        auto ob = o.lock();
+        if (ob == nullptr) {
+            continue;
+        }
+        ob->draw();
+    }
     //    drawTileNodeOverlay();
     m_snipeProjectiles->draw();
     m_crystalProjectiles->draw();
@@ -310,6 +319,19 @@ void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
             loadKey(o.position);
         } else if (o.type == "dest") {
             m_stairsDest = o.position;
+        } else if (o.type == "guile") {
+
+            b2BodyDef bodyDef;
+            bodyDef.fixedRotation = true;
+            bodyDef.type = b2_kinematicBody;
+            bodyDef.position.Set(o.position.x, o.position.y);
+            std::cout << "spawn guile: " << o.position.x << " " << o.position.y << std::endl;
+
+            auto guile = std::make_shared<Guile>(m_world, &bodyDef, m_player);
+            guile->m_spellToGive = o.properties.strings.at("spell");
+            guile->m_textString = o.properties.strings.at("text");
+            m_guys->push_back(guile);
+            add(guile);
         }
     }
     getGame()->getLogger().debug("parsed N =" + std::to_string(m_enemies->size()) + " enemies");
@@ -490,7 +512,8 @@ void StateGame::spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f 
     add(projectile);
 }
 
-void StateGame::spawnCrystalProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity)
+void StateGame::spawnCrystalProjectile(
+    jt::Vector2f const& position, jt::Vector2f const& velocity, bool isBoss)
 {
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
@@ -498,7 +521,7 @@ void StateGame::spawnCrystalProjectile(jt::Vector2f const& position, jt::Vector2
 
     bodyDef.position.Set(position.x, position.y);
 
-    auto projectile = std::make_shared<CrystalProjectile>(m_world, &bodyDef);
+    auto projectile = std::make_shared<CrystalProjectile>(m_world, &bodyDef, isBoss);
     projectile->setVelocity(velocity);
 
     m_crystalProjectiles->push_back(projectile);

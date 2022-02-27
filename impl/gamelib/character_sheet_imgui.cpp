@@ -30,7 +30,7 @@ void CharacterSheetImgui::doDraw() const
     }
     ImGui::SetNextWindowPos(ImVec2 { 0, 0 });
     ImGui::SetNextWindowSize(ImVec2 { 400, 600 });
-    ImGui::Begin("PlayerCharacter", &m_drawCharacterSheet);
+    ImGui::Begin("Fungus McShroom", &m_drawCharacterSheet);
 
     ImGui::Text("Experience: %s", std::to_string(m_experiencePoints).c_str());
     ImGui::Text("Health: %s / %s", jt::MathHelper::floatToStringWithXDigits(m_hitpoints, 1).c_str(),
@@ -47,6 +47,7 @@ void CharacterSheetImgui::doDraw() const
 
             changeExperiencePoints(-getNextLevelUpCost());
             changeHitpointsMax(GP::LevelUpHealthIncrease());
+            changeHitpoints(-GP::LevelUpHealthIncrease());
             m_numberOfLevelUps++;
         }
     }
@@ -96,7 +97,7 @@ void CharacterSheetImgui::doDraw() const
         if (ImGui::Button(increaseAttackSpeedText.c_str())) {
             if (m_experiencePoints >= getNextLevelUpCost()) {
                 changeExperiencePoints(-getNextLevelUpCost());
-                m_baseAttackSpeed += 0.025;
+                m_baseAttackSpeed += 0.025f;
                 m_numberOfLevelUps++;
             }
         }

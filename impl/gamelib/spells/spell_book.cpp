@@ -23,9 +23,13 @@ SpellBook::SpellBook(StateGame& state)
     m_spells.push_back(std::make_shared<SpellAttackBroad>(state));
     m_spells.push_back(std::make_shared<SpellHeal>(*state.getPlayer()->getCharSheet()));
 
-    m_equippedSpells.push_back(getSpellByName("Snipe"));
-    m_equippedSpells.push_back(getSpellByName("Broad Stroke"));
-    m_equippedSpells.push_back(getSpellByName("Heal"));
+    //    m_equippedSpells.push_back(getSpellByName("Snipe"));
+    //    m_equippedSpells.push_back(getSpellByName("Broad Stroke"));
+    //    m_equippedSpells.push_back(getSpellByName("Heal"));
+
+    m_equippedSpells.push_back(getSpellByName("None"));
+    m_equippedSpells.push_back(getSpellByName("None"));
+    m_equippedSpells.push_back(getSpellByName("None"));
 
     m_selectSound = std::make_shared<jt::Sound>("assets/sound/spellbook_click.ogg");
     m_selectSound->setVolume(0.5f);

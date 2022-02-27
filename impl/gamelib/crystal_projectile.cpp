@@ -4,8 +4,9 @@
 #include "game_properties.hpp"
 
 CrystalProjectile::CrystalProjectile(
-    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def)
+    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, bool boss)
     : Box2DObject(world, def)
+    , m_isBoss(boss)
 {
 }
 
@@ -18,8 +19,14 @@ Damage CrystalProjectile::getDamage() const { return m_damage; }
 void CrystalProjectile::doCreate()
 {
     m_animation = std::make_shared<jt::Animation>();
-    m_animation->add("assets/crystal_shot.png", "idle", jt::Vector2u { 16u, 16u }, { 0, 1, 2, 3 },
-        0.1f, getGame()->gfx().textureManager());
+    if (m_isBoss) {
+        m_animation->add("assets/pinky_shot.png", "idle", jt::Vector2u { 16u, 16u }, { 0, 1, 2, 3 },
+            0.1f, getGame()->gfx().textureManager());
+    } else {
+        m_animation->add("assets/crystal_shot.png", "idle", jt::Vector2u { 16u, 16u },
+            { 0, 1, 2, 3 }, 0.1f, getGame()->gfx().textureManager());
+    }
+
     m_animation->play("idle");
 
     b2FixtureDef fixtureDef;

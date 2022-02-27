@@ -32,5 +32,6 @@ private:
 
     virtual void doAI(float elapsed) = 0;
     void die();
+    virtual void doDie() {};
 };
 #endif

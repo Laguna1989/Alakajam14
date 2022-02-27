@@ -31,8 +31,6 @@ void PlayerCharacter::doCreate()
 
     m_spellBook = std::make_shared<SpellBook>(m_state);
     m_spellBook->setGameInstance(getGame());
-    m_spellBook->makeSpellAvailable("Improve Dash");
-    m_spellBook->makeSpellAvailable("Snipe");
 
     m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
     m_soundDash->setVolume(0.4f);
@@ -47,6 +45,7 @@ void PlayerCharacter::doCreate()
     auto const soundHurt3 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_03.ogg");
     auto const soundHurt4 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_04.ogg");
     auto const soundHurt5 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_05.ogg");
+
     soundHurt1->setVolume(0.6f);
     soundHurt2->setVolume(0.6f);
     soundHurt3->setVolume(0.6f);
@@ -209,8 +208,14 @@ void PlayerCharacter::updateSpells(const float elapsed)
     auto const& equippedSpells = m_spellBook->getEquippedSpells();
 
     updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Q);
+    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Num1);
+    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Numpad1);
     updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::E);
+    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::Num2);
+    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::Numpad2);
     updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Tab);
+    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Num3);
+    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Numpad3);
 }
 
 void PlayerCharacter::updateOneSpell(
@@ -236,7 +241,8 @@ void PlayerCharacter::handleInputAttack()
     if (m_dashTimer > 0.0f) {
         return;
     }
-    if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Space)) {
+    if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Space)
+        || getGame()->input().keyboard()->justPressed(jt::KeyCode::Numpad0)) {
         m_attackCooldown = GP::PlayerAttackCooldown();
     }
 }
@@ -384,22 +390,22 @@ void PlayerCharacter::handleInputMovement()
         setVelocity(jt::Vector2f { 0.0f, 0.0f });
         float const speed = GP::PlayerBaseMovementSpeed() * m_charsheet->getMovementSpeedFactor();
 
-        if (keyboard->pressed(jt::KeyCode::D)) {
+        if (keyboard->pressed(jt::KeyCode::D) || keyboard->pressed(jt::KeyCode::Right)) {
             addVelocity(jt::Vector2f { speed, 0.0f });
         }
-        if (keyboard->pressed(jt::KeyCode::A)) {
+        if (keyboard->pressed(jt::KeyCode::A) || keyboard->pressed(jt::KeyCode::Left)) {
             addVelocity(jt::Vector2f { -speed, 0.0f });
         }
 
-        if (keyboard->pressed(jt::KeyCode::W)) {
+        if (keyboard->pressed(jt::KeyCode::W) || keyboard->pressed(jt::KeyCode::Up)) {
             addVelocity(jt::Vector2f { 0.0f, -speed });
         }
-        if (keyboard->pressed(jt::KeyCode::S)) {
+        if (keyboard->pressed(jt::KeyCode::S) || keyboard->pressed(jt::KeyCode::Down)) {
             addVelocity(jt::Vector2f { 0.0f, speed });
         }
     }
 
-    if (keyboard->justPressed(jt::KeyCode::LShift)) {
+    if (keyboard->justPressed(jt::KeyCode::LShift) || keyboard->pressed(jt::KeyCode::RShift)) {
         handleDashInput();
     }
 }
@@ -442,3 +448,4 @@ void PlayerCharacter::die()
         setAnimationIfNotSet("die");
     }
 }
+std::shared_ptr<SpellBook> PlayerCharacter::getSpellBook() { return m_spellBook; }

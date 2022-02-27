@@ -8,6 +8,7 @@
 #include "enemies/enemy_base.hpp"
 #include "experience_orb.hpp"
 #include "game_state.hpp"
+#include "guile.hpp"
 #include "key.hpp"
 #include "object_group.hpp"
 #include "shroom_game_contact_listener.hpp"
@@ -46,7 +47,8 @@ public:
     void spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
     void spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
 
-    void spawnCrystalProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
+    void spawnCrystalProjectile(
+        jt::Vector2f const& position, jt::Vector2f const& velocity, bool isBoss = false);
 
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
 
@@ -71,6 +73,8 @@ private:
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> m_snipeProjectiles;
     std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> m_crystalProjectiles;
+
+    std::shared_ptr<jt::ObjectGroup<Guile>> m_guys;
 
     std::shared_ptr<jt::Sprite> m_vignette;
 
