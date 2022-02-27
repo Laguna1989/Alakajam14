@@ -28,7 +28,9 @@ void Hud::doCreate()
     m_healthBar->setMaxValue(100.0f);
     m_healthBar->setFrontColor(jt::Color { 200, 0, 0 });
     m_healthBar->setBackColor(jt::Color { 20, 20, 20 });
+
     m_displayHealth = std::make_shared<HealthDisplay>(m_healthBar);
+    m_displayHealthMax = std::make_shared<HealthMaxDisplay>(m_healthBar);
 }
 
 void Hud::doUpdate(float const elapsed)
@@ -41,4 +43,8 @@ void Hud::doDraw() const
 {
     m_TextExperience->draw(getGame()->gfx().target());
     m_healthBar->draw(getGame()->gfx().target());
+}
+std::shared_ptr<ObserverInterface<float>> Hud::getObserverHealthMax() const
+{
+    return m_displayHealthMax;
 }

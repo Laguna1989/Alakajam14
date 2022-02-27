@@ -14,4 +14,13 @@ private:
     std::shared_ptr<jt::Bar> m_bar { nullptr };
 };
 
+class HealthMaxDisplay : public ObserverInterface<float> {
+public:
+    HealthMaxDisplay(std::shared_ptr<jt::Bar> bar);
+    void notify(float value) override;
+
+private:
+    std::shared_ptr<jt::Bar> m_bar { nullptr };
+};
+
 #endif // ALAKAJAM14_HEALTH_DISPLAY_HPP

@@ -12,8 +12,8 @@ PlayerCharacter::PlayerCharacter(
     : jt::Box2DObject { world, def }
     , m_state { state }
 {
-    m_charsheet = std::make_shared<CharacterSheetImgui>(
-        m_state.m_hud->getObserverExperience(), m_state.m_hud->getObserverHealth());
+    m_charsheet = std::make_shared<CharacterSheetImgui>(m_state.m_hud->getObserverExperience(),
+        m_state.m_hud->getObserverHealth(), m_state.m_hud->getObserverHealthMax());
 }
 
 void PlayerCharacter::doCreate()
@@ -39,6 +39,8 @@ void PlayerCharacter::doCreate()
 
     m_soundStomp = std::make_shared<jt::Sound>("assets/sound/attack_stomp.ogg");
     m_soundStomp->setVolume(0.4f);
+
+    m_soundDeath = std::make_shared<jt::Sound>("assets/sound/GAME_OVER.ogg");
 
     auto const soundHurt1 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_01.ogg");
     auto const soundHurt2 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_02.ogg");
@@ -195,6 +197,11 @@ void PlayerCharacter::doUpdate(float const elapsed)
     m_soundDash->update();
     m_soundStomp->update();
     m_soundGroupHurt->update();
+    m_soundDeath->update();
+
+    if (getCharSheet()->getHitpoints() <= 0 && !m_soundDeath->isPlaying()) {
+        m_hasFinishedDying = true;
+    }
 }
 
 void PlayerCharacter::updateSpells(const float elapsed)
@@ -280,27 +287,25 @@ void PlayerCharacter::updateAnimation(float const elapsed)
                 float circularHurtboxRange = 20.0f;
                 float directedHurtboxRange = 45.0f;
 
-                if (dist < circularHurtboxRange) {
+                if (dist < directedHurtboxRange) {
+                    // Forward-facing hurtbox with medium range
+                    jt::Vector2f look = getVelocity();
+                    if (jt::MathHelper::length(look) < 0.1f) {
+                        // Look down if not moving
+                        look = { 0.0f, 1.0f };
+                    }
+                    jt::MathHelper::normalizeMe(look);
+                    jt::MathHelper::normalizeMe(delta);
+                    float sc = jt::MathHelper::dot(look, delta);
+                    if (sc > 0.5f) {
+                        // TODO: Derive Damage from stats & gear
+                        enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() });
+                    }
+                    continue;
+                } else if (dist < circularHurtboxRange) {
                     // Circular hurtbox with short range
                     // TODO: Derive Damage from stats & gear
-                    enemy->receiveDamage(Damage { 20.0f });
-                    continue;
-                } else {
-                    if (dist < directedHurtboxRange) {
-                        // Forward-facing hurtbox with medium range
-                        jt::Vector2f look = getVelocity();
-                        if (jt::MathHelper::length(look) < 0.1f) {
-                            // Look down if not moving
-                            look = { 0.0f, 1.0f };
-                        }
-                        jt::MathHelper::normalizeMe(look);
-                        jt::MathHelper::normalizeMe(delta);
-                        float sc = jt::MathHelper::dot(look, delta);
-                        if (sc > 0.5f) {
-                            // TODO: Derive Damage from stats & gear
-                            enemy->receiveDamage(Damage { 50.0f });
-                        }
-                    }
+                    enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() / 3.0f });
                 }
             }
         }
@@ -355,6 +360,10 @@ std::string PlayerCharacter::selectDashAnimation(jt::Vector2f const& velocity) c
 bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
 {
     std::string const& currentAnimationName = m_animation->getCurrentAnimationName();
+
+    if (currentAnimationName == "die") {
+        return true;
+    }
 
     if (currentAnimationName == "hurt" && newAnimationName == "idle") {
         return true;
@@ -422,4 +431,14 @@ void PlayerCharacter::receiveDamage(Damage const& dmg)
     m_charsheet->changeHitpoints(dmg.value);
     m_animation->play("hurt");
     m_soundGroupHurt->play();
+}
+
+void PlayerCharacter::die()
+{
+    if (!m_isDying) {
+        m_isDying = true;
+        m_soundDeath->play();
+        m_animation->setLooping(false);
+        setAnimationIfNotSet("die");
+    }
 }

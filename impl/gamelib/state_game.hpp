@@ -16,6 +16,7 @@
 #include "tilemap/object_layer.hpp"
 #include "tilemap/tile_layer.hpp"
 #include "tilemap/tileson_loader.hpp"
+#include <chrono>
 #include <memory>
 #include <string>
 #include <vector>
@@ -82,8 +83,7 @@ private:
     std::shared_ptr<Stairs> m_stairs;
     std::shared_ptr<Key> m_key;
     bool m_isIntroMusicPlaying { true };
-
-    std::shared_ptr<jt::Sound> m_soundDeath;
+    std::chrono::time_point<std::chrono::steady_clock> m_musicLoopStartTime;
 
     bool m_running { true };
 

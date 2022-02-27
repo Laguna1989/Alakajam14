@@ -97,8 +97,6 @@ void StateGame::doInternalCreate()
 
     m_musicLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_loop.ogg");
     m_musicLoop->setLoop(true);
-
-    m_soundDeath = std::make_shared<jt::Sound>("assets/sound/GAME_OVER.ogg");
 }
 
 void StateGame::createSnipeProjectilesGroup()
@@ -151,6 +149,8 @@ void StateGame::doInternalUpdate(float const elapsed)
         updateExperience();
 
         if (m_player->getCharSheet()->getHitpoints() < 0) {
+            m_player->die();
+
             endGame();
         }
 
@@ -160,8 +160,17 @@ void StateGame::doInternalUpdate(float const elapsed)
             if (m_isIntroMusicPlaying) {
                 m_isIntroMusicPlaying = false;
                 m_musicLoop->play();
+                m_musicLoopStartTime = std::chrono::steady_clock::now();
             }
 
+            // Yay, ugly hack to make sure looping sound is being looped
+            auto const now = std::chrono::steady_clock::now();
+            if (std::chrono::duration_cast<std::chrono::seconds>(now - m_musicLoopStartTime).count()
+                >= 32) {
+                m_musicLoopStartTime = now;
+                m_musicLoop->stop();
+                m_musicLoop->play();
+            }
             m_musicLoop->update();
         }
     }
@@ -238,14 +247,16 @@ void StateGame::endGame()
 {
     if (m_hasEnded) {
         // trigger this function only once
-        m_soundDeath->play();
         return;
     }
-    m_hasEnded = true;
-    m_running = false;
 
-    getGame()->getStateManager().switchState(std::make_shared<StateMenu>());
+    if (m_player->m_hasFinishedDying) {
+        m_hasEnded = true;
+        m_running = false;
+        getGame()->getStateManager().switchState(std::make_shared<StateMenu>());
+    }
 }
+
 std::string StateGame::getName() const { return "Game"; }
 
 void StateGame::loadTilemap()

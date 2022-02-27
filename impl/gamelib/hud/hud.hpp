@@ -14,10 +14,12 @@ class Hud : public jt::GameObject {
 public:
     std::shared_ptr<ObserverInterface<int>> getObserverExperience() const;
     std::shared_ptr<ObserverInterface<float>> getObserverHealth() const;
+    std::shared_ptr<ObserverInterface<float>> getObserverHealthMax() const;
 
 private:
     std::shared_ptr<ScoreDisplay> m_displayExperience;
     std::shared_ptr<HealthDisplay> m_displayHealth;
+    std::shared_ptr<HealthMaxDisplay> m_displayHealthMax;
 
     jt::Text::Sptr m_TextExperience;
     jt::Bar::Sptr m_healthBar;
