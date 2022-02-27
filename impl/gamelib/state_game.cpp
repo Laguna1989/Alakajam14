@@ -329,6 +329,7 @@ void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
 
             auto guile = std::make_shared<Guile>(m_world, &bodyDef, m_player);
             guile->m_spellToGive = o.properties.strings.at("spell");
+            guile->m_textString = o.properties.strings.at("text");
             m_guys->push_back(guile);
             add(guile);
         }

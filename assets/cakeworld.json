@@ -88,25 +88,8 @@
                  "type":"",
                  "visible":true,
                  "width":12,
-                 "x":1666,
-                 "y":1186.33
-                }, 
-                {
-                 "height":12,
-                 "id":5,
-                 "name":"enemy",
-                 "properties":[
-                        {
-                         "name":"enemyType",
-                         "type":"string",
-                         "value":"crystal_small"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":12,
-                 "x":1632.67,
-                 "y":1218.67
+                 "x":1664.75,
+                 "y":1224.83
                 }, 
                 {
                  "height":12,
@@ -1875,23 +1858,6 @@
                  "width":16.6667,
                  "x":671.667,
                  "y":1056
-                }, 
-                {
-                 "height":12,
-                 "id":116,
-                 "name":"enemy",
-                 "properties":[
-                        {
-                         "name":"enemyType",
-                         "type":"string",
-                         "value":"crystal_small"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":12,
-                 "x":1715,
-                 "y":1249.33333333333
                 }, 
                 {
                  "height":12,
@@ -3891,6 +3857,11 @@
                          "name":"spell",
                          "type":"string",
                          "value":"Heal"
+                        }, 
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"You will kill the crystals, will you?"
                         }],
                  "rotation":0,
                  "type":"guile",
@@ -3908,6 +3879,11 @@
                          "name":"spell",
                          "type":"string",
                          "value":"Snipe"
+                        }, 
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"I am more of a long distance fighter"
                         }],
                  "rotation":0,
                  "type":"guile",
@@ -3942,6 +3918,11 @@
                          "name":"spell",
                          "type":"string",
                          "value":"Broad Stroke"
+                        }, 
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"I like to kill two birds with one stone"
                         }],
                  "rotation":0,
                  "type":"guile",
@@ -3976,6 +3957,11 @@
                          "name":"spell",
                          "type":"string",
                          "value":"Increased Speed"
+                        }, 
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"How did I get lost here?"
                         }],
                  "rotation":0,
                  "type":"guile",
@@ -3993,6 +3979,11 @@
                          "name":"spell",
                          "type":"string",
                          "value":"Improve Dash"
+                        }, 
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"A precise dash can save your live"
                         }],
                  "rotation":0,
                  "type":"guile",
@@ -4010,6 +4001,11 @@
                          "name":"spell",
                          "type":"string",
                          "value":"Increased Attack Speed"
+                        }, 
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"I had some great time at the beach"
                         }],
                  "rotation":0,
                  "type":"guile",

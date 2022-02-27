@@ -4,6 +4,7 @@
 #include "animation.hpp"
 #include "box2dwrapper/box2d_object.hpp"
 #include "character.hpp"
+#include "text.hpp"
 #include <memory>
 
 class Guile : public jt::Box2DObject {
@@ -21,6 +22,9 @@ public:
 
     bool m_hasGivenSpell { false };
     std::string m_spellToGive { "" };
+
+    std::shared_ptr<jt::Text> m_text;
+    std::string m_textString;
 };
 
 #endif // ALAKAJAM14_GUILE_HPP

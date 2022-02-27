@@ -1,4 +1,5 @@
 #include "guile.hpp"
+#include "drawable_helpers.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
@@ -23,6 +24,8 @@ void Guile::doCreate()
     m_animation->add("assets/guile-sheet.png", "idle", { 16, 16 }, { 0, 1, 2, 3, 4, 5, 6, 7 }, 0.2f,
         getGame()->gfx().textureManager());
     m_animation->play("idle");
+
+    m_text = jt::dh::createText(getGame()->gfx().target(), m_textString, 12);
 }
 
 void Guile::doUpdate(float const elapsed)
@@ -30,16 +33,20 @@ void Guile::doUpdate(float const elapsed)
     //    std::cout << "guile update\n";
     m_animation->setPosition(getPosition() - jt::Vector2f { 8.0f, 8.0f });
     m_animation->update(elapsed);
+    m_text->setPosition(
+        getPosition() - jt::Vector2f { 0, 32 } + jt::Vector2f { 0.0f, sin(m_age) * 5 });
+    m_text->update(elapsed);
+    auto player = m_player.lock();
+    if (!player) {
+        return;
+    }
+    auto const playerPos = player->getPosition();
+    auto const guilePos = getPosition();
+
+    float const distance = jt::MathHelper::lengthSquared(playerPos - guilePos);
 
     if (!m_hasGivenSpell) {
-        auto player = m_player.lock();
-        if (!player) {
-            return;
-        }
-        auto const playerPos = player->getPosition();
-        auto const guilePos = getPosition();
 
-        float const distance = jt::MathHelper::lengthSquared(playerPos - guilePos);
         if (distance < 32 * 32) {
             player->getSpellBook()->makeSpellAvailable(m_spellToGive);
             m_hasGivenSpell = true;
@@ -51,5 +58,5 @@ void Guile::doUpdate(float const elapsed)
 void Guile::doDraw() const
 {
     m_animation->draw(getGame()->gfx().target());
-    //    std::cout << "guile draw\n";
+    m_text->draw(getGame()->gfx().target());
 }
