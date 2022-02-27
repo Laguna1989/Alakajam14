@@ -239,10 +239,10 @@ void PlayerCharacter::updateAnimation(float const elapsed)
     if (m_dashTimer > 0.0f) {
         auto const dashAnimationName = selectDashAnimation(v);
 
-        m_soundDash->stop();
-        m_soundDash->play();
-
         if (setAnimationIfNotSet(dashAnimationName)) {
+            m_soundDash->stop();
+            m_soundDash->play();
+
             m_animation->flash(0.3f);
             auto p = getPosition();
             auto vn = v;
