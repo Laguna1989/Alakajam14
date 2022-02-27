@@ -74,13 +74,13 @@ void PlayerCharacter::createAnimation()
         m_animation->add("assets/player.png", "attack_down",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
                 static_cast<unsigned int>(GP::PlayerSize().y) },
-            { 78, 79, 80, 81, 82, 83, 84, 85, 86, 87 }, frameTimeAttack,
+            { 78, 79, 80, /*81, 82,*/ 83, 84, 85, 86, 87 }, frameTimeAttack,
             getGame()->gfx().textureManager());
 
         m_animation->add("assets/player.png", "attack_up",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
                 static_cast<unsigned int>(GP::PlayerSize().y) },
-            { 88, 89, 90, 91, 92, 93, 94, 95, 96 }, frameTimeAttack,
+            { 88, 89, 90, /*91, 92,*/ 93, 94, 95, 96 }, frameTimeAttack,
             getGame()->gfx().textureManager());
 
         m_animation->add("assets/player.png", "hurt",
@@ -419,7 +419,6 @@ void PlayerCharacter::gainExperience(int value) { m_charsheet->changeExperienceP
 void PlayerCharacter::receiveDamage(Damage const& dmg)
 {
     m_charsheet->changeHitpoints(dmg.value);
-    //    m_animation->flash(0.2f, jt::colors::Red);
     m_animation->play("hurt");
     m_soundGroupHurt->play();
 }
