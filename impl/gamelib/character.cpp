@@ -19,7 +19,7 @@ void PlayerCharacter::doCreate()
 {
     b2FixtureDef fixtureDef;
     b2PolygonShape boxCollider {};
-    boxCollider.SetAsBox(GP::PlayerSize().x / 2.0f, GP::PlayerSize().y / 2.0f);
+    boxCollider.SetAsBox(GP::PlayerSize().x / 2.1f, GP::PlayerSize().y / 2.1f);
     fixtureDef.shape = &boxCollider;
     getB2Body()->CreateFixture(&fixtureDef);
 
