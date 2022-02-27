@@ -35,7 +35,7 @@ public:
 
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> getEnemies();
 
-    void spawnExperience(int amount, jt::Vector2f const& pos);
+    void spawnExperience(int amount, jt::Vector2f const& pos, bool single = true);
 
     std::shared_ptr<Hud> m_hud;
 
