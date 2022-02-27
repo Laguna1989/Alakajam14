@@ -14,7 +14,7 @@ EnemyBase::EnemyBase(
 
 void EnemyBase::doUpdate(const float elapsed)
 {
-
+    m_attackCooldown -= elapsed;
     if (!m_isInDieAnimation) {
         doAI(elapsed);
         m_animation->setPosition(getPosition()
@@ -62,3 +62,4 @@ void EnemyBase::die()
         m_state.add(t);
     }
 }
+bool EnemyBase::canAttack() const { return m_attackCooldown <= 0.0f; }

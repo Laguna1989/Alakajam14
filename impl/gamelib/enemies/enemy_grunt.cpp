@@ -52,7 +52,7 @@ void EnemyGrunt::walkTowardsPlayer(jt::Vector2f diff)
         return;
     }
 
-    auto const nextTilePosition = path.at(1)->getTilePosition();
+    auto const& nextTilePosition = path.at(1)->getTilePosition();
 
     // TODO move to GP
     jt::Vector2f const nextTilePositionFloat { nextTilePosition.x * 16.0f + 8,

@@ -15,11 +15,14 @@ public:
 protected:
     float m_hitpoints;
     int m_experience;
+    float m_attackCooldown { -1.0f };
     std::shared_ptr<jt::Animation> m_animation;
     StateGame& m_state;
 
     bool m_isInDieAnimation { false };
     jt::Vector2f m_deathPosition { 0.0f, 0.0f };
+
+    bool canAttack() const;
 
 private:
     void doUpdate(float const /*elapsed*/) override;
