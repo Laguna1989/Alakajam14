@@ -31,6 +31,9 @@ void StateMenu::doInternalCreate()
     getGame()->getStateManager().setTransition(
         std::make_shared<jt::StateManagerTransitionFadeToBlack>(
             GP::GetScreenSize(), getGame()->gfx().textureManager()));
+
+    m_startSound = std::make_shared<jt::Sound>("assets/sound/main_menu_press_space.ogg");
+    m_startSound->setVolume(0.4f);
 }
 
 void StateMenu::createVignette()
@@ -153,6 +156,7 @@ void StateMenu::createTweenCreditsPosition()
 
 void StateMenu::doInternalUpdate(float const elapsed)
 {
+    m_startSound->update();
     updateDrawables(elapsed);
     checkForTransitionToStateGame();
 }
@@ -181,6 +185,8 @@ void StateMenu::startTransitionToStateGame()
 {
     if (!m_started) {
         m_started = true;
+
+        m_startSound->play();
 
         getGame()->getStateManager().switchState(std::make_shared<StateGame>());
     }
