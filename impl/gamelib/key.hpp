@@ -3,7 +3,6 @@
 
 #include "game_object.hpp"
 #include "sprite.hpp"
-#include "stairs.hpp"
 class StateGame;
 class Key : public jt::GameObject {
 

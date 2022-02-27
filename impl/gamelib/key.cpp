@@ -1,6 +1,8 @@
 #include "key.hpp"
 #include "game_interface.hpp"
+#include "game_properties.hpp"
 #include "math_helper.hpp"
+#include "stairs.hpp"
 #include "state_game.hpp"
 Key::Key(jt::Vector2f const& pos, StateGame& state)
     : m_pos(pos)
@@ -18,8 +20,13 @@ void Key::doUpdate(const float elapsed)
     m_sprite->update(elapsed);
     auto player = m_state.getPlayer();
     auto door = m_state.getStairs();
-    float d = jt::MathHelper::length(m_pos - player->getPosition());
-    if (d < 8.0f) {
+
+    float d = jt::MathHelper::length(m_pos
+        + jt::Vector2f { m_sprite->getLocalBounds().height / 2.0f,
+            m_sprite->getLocalBounds().width / 2.0f }
+        - player->getPosition() + GP::PlayerSize() / 2.0f);
+
+    if (d < 20.0f) {
         door->unlock();
         // TODO: Play sound
         m_sprite->setColor(jt::colors::Transparent);
