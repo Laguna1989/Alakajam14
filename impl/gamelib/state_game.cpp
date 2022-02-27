@@ -413,6 +413,7 @@ void StateGame::spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f 
 
     auto projectile = std::make_shared<SnipeProjectile>(m_world, &bodyDef);
     projectile->setVelocity(velocity * GP::SpellSnipeProjectileSpeed());
+    projectile->setRotation(atan2(-velocity.y, velocity.x) * 180 / 3.1415f);
 
     m_snipeProjectiles->push_back(projectile);
     add(projectile);
