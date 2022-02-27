@@ -34,8 +34,28 @@ void PlayerCharacter::doCreate()
 
     m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
     m_soundDash->setVolume(0.4f);
+
     m_soundStomp = std::make_shared<jt::Sound>("assets/sound/attack_stomp.ogg");
     m_soundStomp->setVolume(0.4f);
+
+    auto const soundHurt1
+        = std::make_shared<jt::Sound>("assets/sound/Grunting-from-Being-Hit-A1.ogg");
+    auto const soundHurt2
+        = std::make_shared<jt::Sound>("assets/sound/Grunting-from-Being-Hit-A2.ogg");
+    auto const soundHurt3
+        = std::make_shared<jt::Sound>("assets/sound/Grunting-from-Being-Hit-A3.ogg");
+    auto const soundHurt4
+        = std::make_shared<jt::Sound>("assets/sound/Grunting-from-Being-Hit-A10.ogg");
+    soundHurt1->setVolume(0.6f);
+    soundHurt2->setVolume(0.6f);
+    soundHurt3->setVolume(0.6f);
+    soundHurt4->setVolume(0.6f);
+
+    m_soundGroupHurt = std::make_shared<jt::SoundGroup>();
+    m_soundGroupHurt->add(soundHurt1);
+    m_soundGroupHurt->add(soundHurt2);
+    m_soundGroupHurt->add(soundHurt3);
+    m_soundGroupHurt->add(soundHurt4);
 }
 
 void PlayerCharacter::createAnimation()
@@ -173,6 +193,7 @@ void PlayerCharacter::doUpdate(float const elapsed)
 
     m_soundDash->update();
     m_soundStomp->update();
+    m_soundGroupHurt->update();
 }
 
 void PlayerCharacter::updateSpells(const float elapsed)
@@ -394,4 +415,5 @@ void PlayerCharacter::receiveDamage(Damage const& dmg)
     m_charsheet->changeHitpoints(dmg.value);
     m_animation->flash(0.2f, jt::colors::Red);
     m_animation->play("hurt");
+    m_soundGroupHurt->play();
 }

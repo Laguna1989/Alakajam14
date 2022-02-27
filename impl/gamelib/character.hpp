@@ -12,6 +12,7 @@
 #include <memory>
 #include <string>
 #include "audio/sound.hpp"
+#include "audio/sound_group.hpp"
 
 class StateGame;
 class PlayerCharacter : public jt::Box2DObject {
@@ -36,6 +37,8 @@ private:
 
     std::shared_ptr<jt::Sound> m_soundDash;
     std::shared_ptr<jt::Sound> m_soundStomp;
+
+    std::shared_ptr<jt::SoundGroup> m_soundGroupHurt;
 
     std::shared_ptr<SpellBook> m_spellBook;
 
