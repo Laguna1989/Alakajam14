@@ -83,8 +83,6 @@ private:
     bool m_isIntroMusicPlaying { true };
     std::chrono::time_point<std::chrono::steady_clock> m_musicLoopStartTime;
 
-    std::shared_ptr<jt::Sound> m_soundDeath;
-
     bool m_running { true };
 
     bool m_hasEnded { false };

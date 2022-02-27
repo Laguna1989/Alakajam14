@@ -28,6 +28,9 @@ public:
 
     void receiveDamage(Damage const& dmg);
 
+    void die();
+    bool m_hasFinishedDying { false };
+
 private:
     StateGame& m_state;
 
@@ -37,6 +40,7 @@ private:
 
     std::shared_ptr<jt::Sound> m_soundDash;
     std::shared_ptr<jt::Sound> m_soundStomp;
+    std::shared_ptr<jt::Sound> m_soundDeath;
 
     std::shared_ptr<jt::SoundGroup> m_soundGroupHurt;
 
@@ -61,6 +65,7 @@ private:
         float const elapsed, std::shared_ptr<SpellInterface> spell, jt::KeyCode key);
 
     bool setAnimationIfNotSet(std::string const& newAnimationName);
+    bool m_isDying { false };
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP

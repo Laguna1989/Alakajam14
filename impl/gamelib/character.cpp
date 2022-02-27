@@ -40,6 +40,8 @@ void PlayerCharacter::doCreate()
     m_soundStomp = std::make_shared<jt::Sound>("assets/sound/attack_stomp.ogg");
     m_soundStomp->setVolume(0.4f);
 
+    m_soundDeath = std::make_shared<jt::Sound>("assets/sound/GAME_OVER.ogg");
+
     auto const soundHurt1 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_01.ogg");
     auto const soundHurt2 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_02.ogg");
     auto const soundHurt3 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_03.ogg");
@@ -195,6 +197,11 @@ void PlayerCharacter::doUpdate(float const elapsed)
     m_soundDash->update();
     m_soundStomp->update();
     m_soundGroupHurt->update();
+    m_soundDeath->update();
+
+    if (getCharSheet()->getHitpoints() <= 0 && !m_soundDeath->isPlaying()) {
+        m_hasFinishedDying = true;
+    }
 }
 
 void PlayerCharacter::updateSpells(const float elapsed)
@@ -356,6 +363,10 @@ bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
 {
     std::string const& currentAnimationName = m_animation->getCurrentAnimationName();
 
+    if (currentAnimationName == "die") {
+        return true;
+    }
+
     if (currentAnimationName == "hurt" && newAnimationName == "idle") {
         return true;
     }
@@ -422,4 +433,14 @@ void PlayerCharacter::receiveDamage(Damage const& dmg)
     m_charsheet->changeHitpoints(dmg.value);
     m_animation->play("hurt");
     m_soundGroupHurt->play();
+}
+
+void PlayerCharacter::die()
+{
+    if (!m_isDying) {
+        m_isDying = true;
+        m_soundDeath->play();
+        m_animation->setLooping(false);
+        setAnimationIfNotSet("die");
+    }
 }
