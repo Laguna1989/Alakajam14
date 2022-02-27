@@ -49,6 +49,9 @@ public:
 private:
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerOverlay;
+    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerOveroverlay;
+    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerUnderlay;
+    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerUnderunderlay;
 
     std::shared_ptr<jt::tilemap::NodeLayer> m_nodeLayer;
 

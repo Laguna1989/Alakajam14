@@ -23,7 +23,7 @@ void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
     auto const camPos = cam.getCamOffset();
     auto const dif = objPos - camPos;
 
-    float const margin = 150.0f;
+    float const margin = 140.0f;
     float const moveSpeed = GP::PlayerBaseMovementSpeed() * 1.0f;
     jt::Vector2f const screenSize = windowSize / cam.getZoom();
     if (dif.x < margin) {
@@ -119,8 +119,11 @@ void StateGame::doInternalUpdate(float const elapsed)
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
 
+        m_tileLayerUnderlay->update(elapsed);
+        m_tileLayerUnderunderlay->update(elapsed);
         m_tileLayerGround1->update(elapsed);
         m_tileLayerOverlay->update(elapsed);
+        m_tileLayerOveroverlay->update(elapsed);
 
         updateTileNodes(elapsed);
 
@@ -169,14 +172,17 @@ void StateGame::updateTileNodes(float const elapsed)
 
 void StateGame::doInternalDraw() const
 {
+    m_tileLayerUnderunderlay->draw(getGame()->gfx().target());
+    m_tileLayerUnderlay->draw(getGame()->gfx().target());
     m_tileLayerGround1->draw(getGame()->gfx().target());
+    m_tileLayerOverlay->draw(getGame()->gfx().target());
 
     drawObjects();
     m_experienceOrbs->draw();
     m_enemies->draw();
     //    drawTileNodeOverlay();
-    m_tileLayerOverlay->draw(getGame()->gfx().target());
     m_snipeProjectiles->draw();
+    m_tileLayerOveroverlay->draw(getGame()->gfx().target());
     m_vignette->draw(getGame()->gfx().target());
     m_hud->draw();
 }
@@ -213,6 +219,15 @@ void StateGame::loadTilemap()
     m_tileLayerOverlay = std::make_shared<jt::tilemap::TileLayer>(
         loader.loadTilesFromLayer("overlay", getGame()->gfx().textureManager()));
     m_tileLayerOverlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
+    m_tileLayerUnderlay = std::make_shared<jt::tilemap::TileLayer>(
+        loader.loadTilesFromLayer("underlay", getGame()->gfx().textureManager()));
+    m_tileLayerUnderlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
+    m_tileLayerUnderunderlay = std::make_shared<jt::tilemap::TileLayer>(
+        loader.loadTilesFromLayer("underunderlay", getGame()->gfx().textureManager()));
+    m_tileLayerUnderunderlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
+    m_tileLayerOveroverlay = std::make_shared<jt::tilemap::TileLayer>(
+        loader.loadTilesFromLayer("overoverlay", getGame()->gfx().textureManager()));
+    m_tileLayerOveroverlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
     m_nodeLayer = std::make_shared<jt::tilemap::NodeLayer>(
         loader.loadNodesFromLayer("ground1", getGame()->gfx().textureManager()));
 
