@@ -16,6 +16,7 @@ void SnipeProjectile::doCreate()
     m_animation->add("assets/player_projectile.png", "idle", jt::Vector2u { 16u, 16u },
         { 0, 1, 2, 3, 4 }, 0.1f, getGame()->gfx().textureManager());
     m_animation->play("idle");
+    m_animation->setRotation(m_rotation);
 
     b2FixtureDef fixtureDef;
     b2PolygonShape boxCollider {};
@@ -36,3 +37,4 @@ void SnipeProjectile::doDraw() const { m_animation->draw(getGame()->gfx().target
 Damage SnipeProjectile::getDamage() const { return m_damage; }
 
 void SnipeProjectile::setDamage(Damage const& d) { m_damage = d; }
+void SnipeProjectile::setRotation(float rotation) { m_rotation = rotation; }

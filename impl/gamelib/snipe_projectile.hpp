@@ -11,6 +11,7 @@ public:
     SnipeProjectile(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
 
     void setDamage(Damage const& d);
+    void setRotation(float rotation);
     Damage getDamage() const;
 
     virtual void doCreate();
@@ -19,6 +20,7 @@ public:
 
 private:
     std::shared_ptr<jt::Animation> m_animation;
+    float m_rotation { 0.0f };
     Damage m_damage;
 };
 
