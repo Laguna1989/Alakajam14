@@ -5,6 +5,7 @@
 #include "pathfinder/pathfinder.hpp"
 #include "random/random.hpp"
 #include "state_game.hpp"
+#include "state_menu.hpp"
 
 EnemyCrystalBoss::EnemyCrystalBoss(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
@@ -54,6 +55,7 @@ void EnemyCrystalBoss::doAI(float elapsed)
     if (distanceSquared < shootRange * shootRange) {
         if (m_shootTimer <= 0) {
             int shots = m_hitpoints > GP::BossHitPoints() / 3 ? 8 : 12;
+            // FIXME: Shooting animation
             for (int i = 0; i < shots; ++i) {
                 auto aim = jt::Random::getRandomPointIn(jt::Rectf { -1.0f, -1.0f, 2.0f, 2.0f });
                 jt::MathHelper::normalizeMe(aim);
@@ -63,7 +65,6 @@ void EnemyCrystalBoss::doAI(float elapsed)
             m_shootTimer = GP::EnemyShotTimer();
         }
     }
-
     // Move
     m_timeToPathfind -= elapsed;
     if (m_followingPlayer) {
@@ -131,4 +132,8 @@ void EnemyCrystalBoss::walkTowardsPlayer(jt::Vector2f diff)
     jt::MathHelper::normalizeMe(diffToTile);
 
     setVelocity(diffToTile * 15.0f);
+}
+void EnemyCrystalBoss::doDie()
+{
+    getGame()->getStateManager().switchState(std::make_shared<StateMenu>());
 }

@@ -11,8 +11,7 @@ public:
 
 private:
     void doAI(float elapsed) override;
-
-private:
+    void doDie() override;
     void doCreate() override;
     float m_shootTimer { -1.0f };
     StateGame& m_state;
