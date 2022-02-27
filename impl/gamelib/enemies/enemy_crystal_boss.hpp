@@ -1,16 +1,18 @@
-#ifndef ALAKAJAM14_ENEMY_CRYSTAL_MEDIUM_HPP
-#define ALAKAJAM14_ENEMY_CRYSTAL_MEDIUM_HPP
+#ifndef ALAKAJAM14_ENEMY_CRYSTAL_BOSS_HPP
+#define ALAKAJAM14_ENEMY_CRYSTAL_BOSS_HPP
 
 #include "enemy_base.hpp"
 
-class EnemyCrystalMedium : public EnemyBase {
+class EnemyCrystalBoss : public EnemyBase {
 public:
-    EnemyCrystalMedium(
+    EnemyCrystalBoss(
         std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
 
 private:
     void doAI(float elapsed) override;
+
+private:
     void doCreate() override;
 };
 
-#endif // ALAKAJAM14_ENEMY_CRYSTAL_MEDIUM_HPP
+#endif // ALAKAJAM14_ENEMY_CRYSTAL_BOSS_HPP
