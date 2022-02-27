@@ -22,7 +22,8 @@ public:
 private:
     std::shared_ptr<jt::Shape> m_background;
 
-    std::shared_ptr<jt::Text> m_text_Title;
+    std::shared_ptr<jt::Animation> m_title;
+
     std::shared_ptr<jt::Text> m_text_Explanation;
     std::shared_ptr<jt::Text> m_text_Credits;
 
@@ -47,7 +48,6 @@ private:
     void createTweens();
     void createInstructionTweenScaleUp();
     void createInstructionTweenScaleDown();
-    void createTweenTitleAlpha();
     void createTweenOverlayAlpha();
     void createTweenCreditsPosition();
     void createTweenExplanationScale();

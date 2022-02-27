@@ -8,8 +8,6 @@
 #include "lerp.hpp"
 #include "logging/license_info.hpp"
 #include "math_helper.hpp"
-#include "shape.hpp"
-#include "sprite.hpp"
 #include "state_game.hpp"
 #include "state_manager/state_manager_transition_fade_to_black.hpp"
 #include "text.hpp"
@@ -64,11 +62,11 @@ void StateMenu::createMenuText()
 void StateMenu::createTextCredits()
 {
     m_text_Credits = jt::dh::createText(getGame()->gfx().target(),
-        "Created by " + GP::AuthorName() + " for " + GP::JamName() + "\n" + GP::JamDate()
+        "Created by " + GP::AuthorName() + "for " + GP::JamName() + "\n" + GP::JamDate()
             + "\n\nF9 for License Information",
         10U, GP::getPalette().getColor(4));
     m_text_Credits->setTextAlign(jt::Text::TextAlign::LEFT);
-    m_text_Credits->setPosition({ 10, GP::GetScreenSize().y - 70 });
+    m_text_Credits->setPosition({ 10, GP::GetScreenSize().y - 100 });
     m_text_Credits->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 1, 1 });
 }
 
@@ -77,23 +75,24 @@ void StateMenu::createTextExplanation()
     float half_width = GP::GetScreenSize().x / 2;
     m_text_Explanation = jt::dh::createText(getGame()->gfx().target(),
         "Press Space to start the game", 16U, GP::getPalette().getColor(7));
-    m_text_Explanation->setPosition({ half_width, 150 });
+    m_text_Explanation->setPosition({ half_width, 100 });
     m_text_Explanation->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 3, 3 });
 }
 
 void StateMenu::createTextTitle()
 {
     float half_width = GP::GetScreenSize().x / 2;
-    m_text_Title = jt::dh::createText(
-        getGame()->gfx().target(), GP::GameName(), 32U, GP::PaletteFontFront());
-    m_text_Title->setPosition({ half_width, 20 });
-    m_text_Title->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 3, 3 });
+
+    m_title = std::make_shared<jt::Animation>();
+    m_title->add("assets/menu.png", "idle", { 224u, 32u }, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+        0.2f, getGame()->gfx().textureManager());
+    m_title->setPosition({ half_width - 224.0f / 2.0f, 20 });
+    m_title->play("idle");
 }
 
 void StateMenu::createTweens()
 {
     createTweenOverlayAlpha();
-    createTweenTitleAlpha();
     createTweenCreditsPosition();
     createTweenExplanationScale();
 }
@@ -132,14 +131,6 @@ void StateMenu::createTweenExplanationScale()
     add(tween);
 }
 
-void StateMenu::createTweenTitleAlpha()
-{
-    auto tween = jt::TweenAlpha::create(m_text_Title, 0.55f, 0, 255);
-    tween->setStartDelay(0.2f);
-    tween->setSkipFrames();
-    add(tween);
-}
-
 void StateMenu::createTweenOverlayAlpha()
 {
     auto tween = jt::TweenAlpha::create(m_overlay, 0.5f, std::uint8_t { 255 }, std::uint8_t { 0 });
@@ -174,7 +165,7 @@ void StateMenu::doInternalUpdate(float const elapsed)
 void StateMenu::updateDrawables(const float& elapsed)
 {
     m_background->update(elapsed);
-    m_text_Title->update(elapsed);
+    m_title->update(elapsed);
     m_text_Explanation->update(elapsed);
     m_text_Credits->update(elapsed);
     m_overlay->update(elapsed);
@@ -206,11 +197,12 @@ void StateMenu::doInternalDraw() const
 {
     m_background->draw(getGame()->gfx().target());
 
-    m_text_Title->draw(getGame()->gfx().target());
+    m_title->draw(getGame()->gfx().target());
     m_text_Explanation->draw(getGame()->gfx().target());
     m_text_Credits->draw(getGame()->gfx().target());
 
     m_overlay->draw(getGame()->gfx().target());
     m_vignette->draw(getGame()->gfx().target());
 }
+
 std::string StateMenu::getName() const { return "Menu"; }
