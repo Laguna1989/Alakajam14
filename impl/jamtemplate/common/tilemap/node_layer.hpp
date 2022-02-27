@@ -4,8 +4,8 @@
 #include "texture_manager_interface.hpp"
 #include "tile_node.hpp"
 #include "tileson.h"
-#include <map>
 #include <memory>
+#include <unordered_map>>
 #include <vector>
 
 namespace jt {

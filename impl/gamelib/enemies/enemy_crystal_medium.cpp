@@ -24,6 +24,7 @@ void EnemyCrystalMedium::doCreate()
         { 0, 1, 2, 3, 4, 5 }, 0.1f, getGame()->gfx().textureManager());
 
     m_animation->play("idle");
+    m_animation->setScreenSizeHint(GP::GetScreenSize());
 
     b2FixtureDef fixtureDef;
     b2CircleShape circle {};

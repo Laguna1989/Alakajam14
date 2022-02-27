@@ -4,7 +4,6 @@
 #include "enemies/enemy_crystal_large.hpp"
 #include "enemies/enemy_crystal_medium.hpp"
 #include "enemies/enemy_crystal_small.hpp"
-#include "enemies/enemy_grunt.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
@@ -255,11 +254,23 @@ void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
 {
     for (auto const& o : objects) {
         if (strutil::contains(o.name, "enemy")) {
-
             loadSingleEnemy(o);
+        } else if (o.type == "loot") {
+            loadSingleLoot(o);
         }
     }
     getGame()->getLogger().debug("parsed N =" + std::to_string(m_enemies->size()) + " enemies");
+}
+
+void StateGame::loadSingleLoot(jt::tilemap::InfoRect const& o)
+{
+    if (o.properties.strings.at("lootType") == "xp_small") {
+        spawnExperience(GP::LootExperienceSmallAmount(), o.position);
+    } else if (o.properties.strings.at("lootType") == "xp_medium") {
+        spawnExperience(GP::LootExperienceMediumAmount(), o.position);
+    } else if (o.properties.strings.at("lootType") == "xp_large") {
+        spawnExperience(GP::LootExperienceLargeAmount(), o.position);
+    }
 }
 
 void StateGame::loadSingleEnemy(jt::tilemap::InfoRect const& info)
