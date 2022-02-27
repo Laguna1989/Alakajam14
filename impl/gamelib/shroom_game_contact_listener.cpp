@@ -1,4 +1,5 @@
 #include "shroom_game_contact_listener.hpp"
+#include "game_properties.hpp"
 #include "state_game.hpp"
 #include "timer.hpp"
 
@@ -18,7 +19,23 @@ void ShroomGameContactListener::BeginContact(b2Contact* contact)
      }*/
 
     handleSnipeProjectiles(bodyA, bodyB);
+
+    for (auto cp : *m_state.getCrystalProjectiles()) {
+        auto crystalProjectile = cp.lock();
+        if (crystalProjectile == nullptr) {
+            continue;
+        }
+        auto crystalBody = crystalProjectile->getB2Body();
+        if (bodyA == crystalBody || bodyB == crystalBody) {
+            auto const playerBody = m_state.getPlayer()->getB2Body();
+            if (bodyA == playerBody || bodyB == playerBody) {
+                crystalProjectile->kill();
+                m_state.getPlayer()->receiveDamage(Damage { GP::EnemyShotDamage() });
+            }
+        }
+    }
 }
+
 void ShroomGameContactListener::handleSnipeProjectiles(const b2Body* bodyA, const b2Body* bodyB)
 {
     for (auto sn : *m_state.getSnipeProjectiles()) {
@@ -38,10 +55,7 @@ void ShroomGameContactListener::handleSnipeProjectiles(const b2Body* bodyA, cons
                 if (bodyA == enemyBody || bodyB == enemyBody) {
                     auto deferredAction = std::make_shared<jt::Timer>(
                         0.0f,
-                        [enemy, snipeProj]() {
-                            enemy->receiveDamage(snipeProj->getDamage());
-                        },
-                        1);
+                        [enemy, snipeProj]() { enemy->receiveDamage(snipeProj->getDamage()); }, 1);
                     m_state.add(deferredAction);
                 }
             }

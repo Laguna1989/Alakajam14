@@ -84,6 +84,7 @@ void StateGame::doInternalCreate()
     loadTilemap();
 
     createSnipeProjectilesGroup();
+    createCrystalProjectilesGroup();
 
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
@@ -99,6 +100,12 @@ void StateGame::createSnipeProjectilesGroup()
 {
     m_snipeProjectiles = std::make_shared<jt::ObjectGroup<SnipeProjectile>>();
     add(m_snipeProjectiles);
+}
+
+void StateGame::createCrystalProjectilesGroup()
+{
+    m_crystalProjectiles = std::make_shared<jt::ObjectGroup<CrystalProjectile>>();
+    add(m_crystalProjectiles);
 }
 
 void StateGame::createExperienceOrbs()
@@ -204,6 +211,7 @@ void StateGame::doInternalDraw() const
     m_enemies->draw();
     //    drawTileNodeOverlay();
     m_snipeProjectiles->draw();
+    m_crystalProjectiles->draw();
     m_tileLayerOveroverlay->draw(getGame()->gfx().target());
     m_vignette->draw(getGame()->gfx().target());
     m_hud->draw();
@@ -437,9 +445,29 @@ void StateGame::spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f 
     add(projectile);
 }
 
+void StateGame::spawnCrystalProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+
+    bodyDef.position.Set(position.x, position.y);
+
+    auto projectile = std::make_shared<CrystalProjectile>(m_world, &bodyDef);
+    projectile->setVelocity(velocity);
+
+    m_crystalProjectiles->push_back(projectile);
+    add(projectile);
+}
+
 std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> StateGame::getSnipeProjectiles() const
 {
     return m_snipeProjectiles;
+}
+
+std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> StateGame::getCrystalProjectiles() const
+{
+    return m_crystalProjectiles;
 }
 
 void StateGame::spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity)

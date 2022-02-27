@@ -4,6 +4,7 @@
 #include "audio/sound.hpp"
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "character.hpp"
+#include "crystal_projectile.hpp"
 #include "enemies/enemy_base.hpp"
 #include "experience_orb.hpp"
 #include "game_state.hpp"
@@ -43,9 +44,12 @@ public:
     void spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
     void spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
 
+    void spawnCrystalProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
+
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> getSnipeProjectiles() const;
+    std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> getCrystalProjectiles() const;
 
 private:
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
@@ -62,6 +66,7 @@ private:
     std::shared_ptr<jt::ObjectGroup<ExperienceOrb>> m_experienceOrbs;
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> m_snipeProjectiles;
+    std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> m_crystalProjectiles;
 
     std::shared_ptr<jt::Sprite> m_vignette;
 
@@ -102,6 +107,7 @@ private:
     void loadSingleEnemyMediumCrystal(jt::Vector2f const& position);
     void loadSingleEnemyLargeCrystal(jt::Vector2f const& position);
     void loadSingleLoot(jt::tilemap::InfoRect const& o);
+    void createCrystalProjectilesGroup();
 };
 
 #endif
