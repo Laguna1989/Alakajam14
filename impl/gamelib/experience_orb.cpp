@@ -30,14 +30,30 @@ void ExperienceOrb::doCreate()
     }
 
     m_animation->setScreenSizeHint(GP::GetScreenSize());
+
+    m_soundBling = std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg");
+    m_soundBling->setVolume(0.7f);
+    m_soundBling->setLoop(false);
 }
 
 void ExperienceOrb::doUpdate(float const elapsed)
 {
     m_animation->setPosition(getPosition() - GP::PlayerSize() * 0.5f);
     m_animation->update(elapsed);
+
+    m_soundBling->update();
+
+    if (!m_soundBling->isPlaying() && m_pickedUp) {
+        kill();
+    }
 }
 
 void ExperienceOrb::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
 
 void ExperienceOrb::doKill() { }
+
+void ExperienceOrb::pickUp()
+{
+    m_soundBling->play();
+    m_pickedUp = true;
+}
