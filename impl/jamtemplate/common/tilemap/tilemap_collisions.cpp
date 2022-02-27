@@ -39,6 +39,7 @@ bool TilemapCollisions::refineCollidersOneStep()
             }
 
             if (std::count(treated.cbegin(), treated.cend(), *it2) != 0) {
+
                 continue;
             }
 
