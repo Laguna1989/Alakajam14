@@ -89,6 +89,12 @@ void StateGame::doInternalCreate()
 
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
+
+    m_musicIntro = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_intro.ogg");
+    m_musicIntro->play();
+
+    m_musicLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_loop.ogg");
+    m_musicLoop->setLoop(true);
 }
 
 void StateGame::createSnipeProjectilesGroup()
@@ -133,6 +139,17 @@ void StateGame::doInternalUpdate(float const elapsed)
             getGame()->gfx().camera(), getGame()->gfx().window().getSize(), m_player, elapsed);
 
         updateExperience();
+
+        if (m_musicIntro->isPlaying()) {
+            m_musicIntro->update();
+        } else {
+            if (m_isIntroMusicPlaying) {
+                m_isIntroMusicPlaying = false;
+                m_musicLoop->play();
+            }
+
+            m_musicLoop->update();
+        }
     }
 
     m_vignette->update(elapsed);

@@ -30,6 +30,7 @@ private:
     std::shared_ptr<jt::Sprite> m_vignette;
 
     std::shared_ptr<jt::Sound> m_startSound;
+    std::shared_ptr<jt::Sound> m_menuMusic;
 
     bool m_started { false };
 

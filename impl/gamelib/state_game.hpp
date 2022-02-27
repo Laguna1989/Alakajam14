@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_STATE_GAME_HPP_INCLUDEGUARD
 #define GAME_STATE_GAME_HPP_INCLUDEGUARD
 
+#include "audio/sound.hpp"
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "character.hpp"
 #include "enemies/enemy_base.hpp"
@@ -67,6 +68,10 @@ private:
     std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders {};
 
     std::shared_ptr<b2ContactListener> m_contactListener;
+
+    std::shared_ptr<jt::Sound> m_musicIntro;
+    std::shared_ptr<jt::Sound> m_musicLoop;
+    bool m_isIntroMusicPlaying { true };
 
     bool m_running { true };
 

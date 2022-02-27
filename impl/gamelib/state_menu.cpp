@@ -34,6 +34,10 @@ void StateMenu::doInternalCreate()
 
     m_startSound = std::make_shared<jt::Sound>("assets/sound/main_menu_press_space.ogg");
     m_startSound->setVolume(0.4f);
+
+    m_menuMusic = std::make_shared<jt::Sound>("assets/sound/alaka2022_title_menu_v1_loop.ogg");
+    m_menuMusic->setLoop(true);
+    m_menuMusic->play();
 }
 
 void StateMenu::createVignette()
@@ -157,8 +161,14 @@ void StateMenu::createTweenCreditsPosition()
 void StateMenu::doInternalUpdate(float const elapsed)
 {
     m_startSound->update();
+    m_menuMusic->update();
     updateDrawables(elapsed);
     checkForTransitionToStateGame();
+
+    if (m_started) {
+        // cheapo fade-out
+        m_menuMusic->setVolume(m_menuMusic->getVolume() * 0.95f);
+    }
 }
 
 void StateMenu::updateDrawables(const float& elapsed)
