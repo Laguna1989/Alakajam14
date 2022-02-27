@@ -5,7 +5,7 @@
 #include "tile_node.hpp"
 #include "tileson.h"
 #include <memory>
-#include <unordered_map>>
+#include <unordered_map>
 #include <vector>
 
 namespace jt {
@@ -16,9 +16,9 @@ public:
     /// Constructor
     /// \param nodeTiles node tiles, either create them yourself or use TilesonLoader
     NodeLayer(std::vector<std::shared_ptr<TileNode>> nodeTiles);
-
     using Sptr = std::shared_ptr<NodeLayer>;
     std::shared_ptr<TileNode> getTileAt(jt::Vector2u const& pos);
+
     std::vector<std::shared_ptr<TileNode>> getAllTiles();
 
     void reset();
