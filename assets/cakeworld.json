@@ -3346,8 +3346,8 @@
                  "type":"",
                  "visible":true,
                  "width":12,
-                 "x":1492,
-                 "y":2050.5
+                 "x":1517.66666666667,
+                 "y":1973.83333333333
                 }, 
                 {
                  "height":12,
@@ -3771,8 +3771,8 @@
                  "type":"",
                  "visible":true,
                  "width":12,
-                 "x":2191.33333333333,
-                 "y":339.333333333333
+                 "x":2192.60606060606,
+                 "y":426.969696969697
                 }, 
                 {
                  "height":15.5,
@@ -3909,6 +3909,142 @@
                  "width":16,
                  "x":2232,
                  "y":2279.33333333333
+                }, 
+                {
+                 "height":0,
+                 "id":241,
+                 "name":"Guile_Heal",
+                 "properties":[
+                        {
+                         "name":"spell",
+                         "type":"string",
+                         "value":"Heal"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":1670,
+                 "y":1045.33333333333
+                }, 
+                {
+                 "height":0,
+                 "id":242,
+                 "name":"Guile_Snipe",
+                 "properties":[
+                        {
+                         "name":"spell",
+                         "type":"string",
+                         "value":"Snipe"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":1484,
+                 "y":2091.33333333333
+                }, 
+                {
+                 "height":12,
+                 "id":243,
+                 "name":"enemy",
+                 "properties":[
+                        {
+                         "name":"enemyType",
+                         "type":"string",
+                         "value":"crystal_small"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":12,
+                 "x":1544.33333333333,
+                 "y":1973.66666666667
+                }, 
+                {
+                 "height":0,
+                 "id":244,
+                 "name":"Guile_Broad",
+                 "properties":[
+                        {
+                         "name":"spell",
+                         "type":"string",
+                         "value":"Broad Stroke"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":2240.18181818182,
+                 "y":319.818181818182
+                }, 
+                {
+                 "height":12,
+                 "id":245,
+                 "name":"enemy",
+                 "properties":[
+                        {
+                         "name":"enemyType",
+                         "type":"string",
+                         "value":"crystal_small"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":12,
+                 "x":2179.63636363636,
+                 "y":409.090909090909
+                }, 
+                {
+                 "height":0,
+                 "id":246,
+                 "name":"Guile_Speed",
+                 "properties":[
+                        {
+                         "name":"spell",
+                         "type":"string",
+                         "value":"Increased Speed"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":30.3333333333335,
+                 "y":1803.66666666667
+                }, 
+                {
+                 "height":0,
+                 "id":247,
+                 "name":"Guile_Dash",
+                 "properties":[
+                        {
+                         "name":"spell",
+                         "type":"string",
+                         "value":"Improve Dash"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":1532.5,
+                 "y":775
+                }, 
+                {
+                 "height":0,
+                 "id":248,
+                 "name":"Guile_Attack",
+                 "properties":[
+                        {
+                         "name":"spell",
+                         "type":"string",
+                         "value":"Increased Attack Speed"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":185.818181818182,
+                 "y":1616.54545454545
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3994,10 +4130,10 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":241,
+ "nextobjectid":249,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.8.2",
+ "tiledversion":"1.7.2",
  "tileheight":16,
  "tilesets":[
         {
@@ -4526,6 +4662,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":"1.8",
+ "version":"1.6",
  "width":150
 }

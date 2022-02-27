@@ -442,3 +442,4 @@ void PlayerCharacter::die()
         setAnimationIfNotSet("die");
     }
 }
+std::shared_ptr<SpellBook> PlayerCharacter::getSpellBook() { return m_spellBook; }

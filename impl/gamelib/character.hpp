@@ -21,6 +21,8 @@ public:
         std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
 
     std::shared_ptr<CharacterSheetImgui> getCharSheet();
+    std::shared_ptr<SpellBook> getSpellBook();
+
     void handleInputMovement();
     void updateAnimation(float const elapsed);
 
