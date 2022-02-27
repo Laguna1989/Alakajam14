@@ -1,6 +1,6 @@
 file(GLOB_RECURSE GAMELIBFILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*)
 
-add_library(GameLib STATIC ${GAMELIBFILES})
+add_library(GameLib STATIC ${GAMELIBFILES} stairs.cpp stairs.hpp key.cpp key.hpp)
 if (JT_ENABLE_WEB)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif ()

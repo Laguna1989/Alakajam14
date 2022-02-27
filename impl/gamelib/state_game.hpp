@@ -8,9 +8,11 @@
 #include "enemies/enemy_base.hpp"
 #include "experience_orb.hpp"
 #include "game_state.hpp"
+#include "key.hpp"
 #include "object_group.hpp"
 #include "shroom_game_contact_listener.hpp"
 #include "snipe_projectile.hpp"
+#include "stairs.hpp"
 #include "tilemap/node_layer.hpp"
 #include "tilemap/object_layer.hpp"
 #include "tilemap/tile_layer.hpp"
@@ -50,6 +52,7 @@ public:
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> getSnipeProjectiles() const;
     std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> getCrystalProjectiles() const;
+    std::shared_ptr<Stairs> getStairs() const;
 
 private:
     std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
@@ -110,6 +113,10 @@ private:
     void loadSingleEnemyLargeCrystal(jt::Vector2f const& position);
     void loadSingleLoot(jt::tilemap::InfoRect const& o);
     void createCrystalProjectilesGroup();
+    void loadStairs(jt::Vector2f f);
+    std::shared_ptr<Stairs> m_stairs;
+    void loadKey(jt::Vector2f f);
+    std::shared_ptr<Key> m_key;
 };
 
 #endif
