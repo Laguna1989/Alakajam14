@@ -11,7 +11,7 @@ void SpellHeal::trigger()
 {
     m_cooldown += 0.5f;
     float amountToHeal
-        = -std::max(m_charSheet.getHitpointsMax() - m_charSheet.getHitpoints(), 15.0f);
+        = -std::min(m_charSheet.getHitpointsMax() - m_charSheet.getHitpoints(), 30.0f);
     m_charSheet.changeHitpoints(amountToHeal);
 }
 bool SpellHeal::canTrigger() const { return m_cooldown <= 0.0f; }
