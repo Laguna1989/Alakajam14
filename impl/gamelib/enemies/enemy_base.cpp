@@ -1,5 +1,4 @@
 #include "enemy_base.hpp"
-#include "character.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "state_game.hpp"

@@ -1,6 +1,8 @@
 #ifndef GUARD_JAMTEMPLATE_ENEMY_GUARD_HPP
 #define GUARD_JAMTEMPLATE_ENEMY_GUARD_HPP
+
 #include "animation.hpp"
+#include "audio/sound.hpp"
 #include "box2dwrapper/box2d_object.hpp"
 #include "damage.hpp"
 
@@ -13,8 +15,8 @@ public:
     void receiveDamage(Damage const& dmg);
 
 protected:
-    float m_hitpoints;
-    int m_experience;
+    float m_hitpoints { 1.0f };
+    int m_experience { 0 };
     float m_attackCooldown { -1.0f };
     std::shared_ptr<jt::Animation> m_animation;
     StateGame& m_state;
