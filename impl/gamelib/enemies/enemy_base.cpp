@@ -63,6 +63,7 @@ void EnemyBase::die()
             },
             1);
         m_state.add(t);
+        doDie();
     }
 }
 bool EnemyBase::canAttack() const { return m_attackCooldown <= 0.0f; }
