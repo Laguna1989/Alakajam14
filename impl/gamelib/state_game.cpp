@@ -425,7 +425,7 @@ void StateGame::loadTileColliders(jt::tilemap::TilesonLoader& loader)
 {
     auto tileCollisions = loader.loadCollisionsFromLayer("ground1");
     auto const levelColliderCountInitial = tileCollisions.getRects().size();
-    tileCollisions.refineColliders();
+    tileCollisions.refineColliders(16.0f);
     auto const levelColliderCountOptimized = tileCollisions.getRects().size();
     getGame()->getLogger().debug(
         "Level colliders initial: " + std::to_string(levelColliderCountInitial)
