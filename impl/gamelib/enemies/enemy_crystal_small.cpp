@@ -5,7 +5,6 @@
 #include "pathfinder/pathfinder.hpp"
 #include "random/random.hpp"
 #include "state_game.hpp"
-#include "system_helper.hpp"
 
 EnemyCrystalSmall::EnemyCrystalSmall(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
@@ -37,13 +36,8 @@ void EnemyCrystalSmall::doCreate()
     getB2Body()->CreateFixture(&fixtureDef);
 }
 
-void EnemyCrystalSmall::doAI(float elapsed)
+void EnemyCrystalSmall::doPerformAI(float elapsed)
 {
-    // TODO move into base class
-    if (jt::SystemHelper::is_uninitialized_weak_ptr(m_target) || m_target.expired()) {
-        return;
-    }
-
     m_timeToPathfind -= elapsed;
     auto const targetPosition = m_target.lock()->getTargetPosition();
     auto const enemyPosition = getPosition();

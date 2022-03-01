@@ -2,6 +2,7 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "state_game.hpp"
+#include "system_helper.hpp"
 #include "timer.hpp"
 
 EnemyBase::EnemyBase(
@@ -18,7 +19,7 @@ void EnemyBase::doUpdate(const float elapsed)
     }
     m_attackCooldown -= elapsed;
     if (!m_isInDieAnimation) {
-        doAI(elapsed);
+        performAI(elapsed);
         m_animation->setPosition(getPosition()
             - jt::Vector2f { m_animation->getLocalBounds().width,
                   m_animation->getLocalBounds().height }
@@ -71,4 +72,12 @@ void EnemyBase::setTarget(std::weak_ptr<TargetInterface> target) { m_target = ta
 void EnemyBase::setPathCalculator(WorldPathCalculatorInterface* calculator)
 {
     m_pathCalculator = calculator;
+}
+
+void EnemyBase::performAI(float elapsed)
+{
+    if (jt::SystemHelper::is_uninitialized_weak_ptr(m_target) || m_target.expired()) {
+        return;
+    }
+    doPerformAI(elapsed);
 }

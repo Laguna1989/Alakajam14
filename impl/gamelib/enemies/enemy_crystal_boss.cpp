@@ -39,7 +39,7 @@ void EnemyCrystalBoss::doCreate()
     getB2Body()->CreateFixture(&fixtureDef);
 }
 
-void EnemyCrystalBoss::doAI(float elapsed)
+void EnemyCrystalBoss::doPerformAI(float elapsed)
 {
     // sry this is copypasted
     // Shoot

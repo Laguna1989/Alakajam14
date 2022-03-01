@@ -39,7 +39,8 @@ private:
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
 
-    virtual void doAI(float elapsed) = 0;
+    void performAI(float elapsed);
+    virtual void doPerformAI(float elapsed) = 0;
     void die();
     virtual void doDie() {};
 };

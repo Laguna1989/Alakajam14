@@ -38,12 +38,8 @@ void EnemyCrystalLarge::doCreate()
     getB2Body()->CreateFixture(&fixtureDef);
 }
 
-void EnemyCrystalLarge::doAI(float elapsed)
+void EnemyCrystalLarge::doPerformAI(float elapsed)
 {
-    // TODO move into base class
-    if (jt::SystemHelper::is_uninitialized_weak_ptr(m_target) || m_target.expired()) {
-        return;
-    }
     m_timeToPathfind -= elapsed;
     auto const playerPosition = m_target.lock()->getTargetPosition();
     auto const enemyPosition = getPosition();

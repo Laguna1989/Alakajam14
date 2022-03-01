@@ -12,7 +12,7 @@ EnemyCrystalMedium::EnemyCrystalMedium(
     m_hitpoints = GP::EnemyCrystallMediumHitPoints();
 }
 
-void EnemyCrystalMedium::doAI(float elapsed)
+void EnemyCrystalMedium::doPerformAI(float elapsed)
 {
     m_shootTimer -= elapsed;
     auto const playerPosition = m_state.getPlayer()->getPosition();

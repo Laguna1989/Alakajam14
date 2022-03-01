@@ -15,7 +15,7 @@ private:
     float m_timeSinceTriggeredAttack { -1.0f };
     std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> m_cachedPath;
 
-    void doAI(float elapsed) override;
+    void doPerformAI(float elapsed) override;
     void doCreate() override;
     void walkTowardsTarget();
 };
