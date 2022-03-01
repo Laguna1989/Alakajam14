@@ -4,13 +4,16 @@
 #include "audio/sound.hpp"
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "crystal_projectile.hpp"
+#include "deferred_action_interface.hpp"
 #include "enemies/enemy_base.hpp"
 #include "experience_orb.hpp"
+#include "experience_spawner_interface.hpp"
 #include "game_state.hpp"
 #include "guile.hpp"
 #include "key.hpp"
 #include "object_group.hpp"
 #include "player.hpp"
+#include "projectile_spawner_interface.hpp"
 #include "shroom_game_contact_listener.hpp"
 #include "snipe_projectile.hpp"
 #include "tilemap/node_layer.hpp"
@@ -30,7 +33,11 @@ class Sprite;
 
 class Hud;
 class Stairs;
-class StateGame : public jt::GameState, public WorldPathCalculatorInterface {
+class StateGame : public jt::GameState,
+                  public WorldPathCalculatorInterface,
+                  public ProjectileSpawnerInterface,
+                  public DeferredActionInterface,
+                  public ExperienceSpawnerInterface {
 public:
     std::string getName() const override;
 
@@ -43,7 +50,7 @@ public:
 
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> getEnemies();
 
-    void spawnExperience(int amount, jt::Vector2f const& pos, bool single = true);
+    void spawnExperience(int amount, jt::Vector2f const& pos, bool single) override;
 
     std::shared_ptr<Hud> m_hud;
 
@@ -51,7 +58,9 @@ public:
     void spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
 
     void spawnCrystalProjectile(
-        jt::Vector2f const& position, jt::Vector2f const& velocity, bool isBoss = false);
+        jt::Vector2f const& position, jt::Vector2f const& velocity, bool isBoss) override;
+
+    void queueDeferredAction(float time, std::function<void(void)> const& action) override;
 
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
 

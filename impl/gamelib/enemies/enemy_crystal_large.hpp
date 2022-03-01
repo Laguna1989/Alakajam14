@@ -6,8 +6,7 @@
 
 class EnemyCrystalLarge : public EnemyBase {
 public:
-    EnemyCrystalLarge(
-        std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
+    EnemyCrystalLarge(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
 
 private:
     void doPerformAI(float elapsed) override;

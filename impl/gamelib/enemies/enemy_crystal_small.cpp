@@ -7,8 +7,8 @@
 #include "state_game.hpp"
 
 EnemyCrystalSmall::EnemyCrystalSmall(
-    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
-    : EnemyBase(world, def, state)
+    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def)
+    : EnemyBase(world, def)
 {
     m_experience = 7;
     m_hitpoints = GP::EnemyCrystallSmallHitPoints();

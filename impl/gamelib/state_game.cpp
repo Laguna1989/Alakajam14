@@ -18,6 +18,7 @@
 #include "state_menu.hpp"
 #include "strutils.hpp"
 #include "tilemap/tileson_loader.hpp"
+#include "timer.hpp"
 
 namespace {
 void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
@@ -341,11 +342,11 @@ void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
 void StateGame::loadSingleLoot(jt::tilemap::InfoRect const& o)
 {
     if (o.properties.strings.at("lootType") == "xp_small") {
-        spawnExperience(GP::LootExperienceSmallAmount(), o.position);
+        spawnExperience(GP::LootExperienceSmallAmount(), o.position, true);
     } else if (o.properties.strings.at("lootType") == "xp_medium") {
-        spawnExperience(GP::LootExperienceMediumAmount(), o.position);
+        spawnExperience(GP::LootExperienceMediumAmount(), o.position, true);
     } else if (o.properties.strings.at("lootType") == "xp_large") {
-        spawnExperience(GP::LootExperienceLargeAmount(), o.position);
+        spawnExperience(GP::LootExperienceLargeAmount(), o.position, true);
     }
 }
 
@@ -371,9 +372,12 @@ void StateGame::loadSingleEnemySmallCrystal(jt::Vector2f const& position)
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef, *this);
+    auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef);
     e->setTarget(m_player);
+    e->setProjectileSpawner(this);
+    e->setExperienceSpawner(this);
     e->setPathCalculator(this);
+    e->setDeferredActionHandler(this);
     m_enemies->push_back(e);
     add(e);
 }
@@ -385,9 +389,12 @@ void StateGame::loadSingleEnemyMediumCrystal(jt::Vector2f const& position)
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalMedium>(m_world, &bodyDef, *this);
+    auto e = std::make_shared<EnemyCrystalMedium>(m_world, &bodyDef);
     e->setTarget(m_player);
+    e->setProjectileSpawner(this);
+    e->setExperienceSpawner(this);
     e->setPathCalculator(this);
+    e->setDeferredActionHandler(this);
     m_enemies->push_back(e);
     add(e);
 }
@@ -399,9 +406,12 @@ void StateGame::loadSingleEnemyLargeCrystal(jt::Vector2f const& position)
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalLarge>(m_world, &bodyDef, *this);
+    auto e = std::make_shared<EnemyCrystalLarge>(m_world, &bodyDef);
     e->setTarget(m_player);
+    e->setProjectileSpawner(this);
+    e->setExperienceSpawner(this);
     e->setPathCalculator(this);
+    e->setDeferredActionHandler(this);
     m_enemies->push_back(e);
     add(e);
 }
@@ -413,9 +423,12 @@ void StateGame::loadSingleEnemyBoss(jt::Vector2f const& position)
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalBoss>(m_world, &bodyDef, *this);
+    auto e = std::make_shared<EnemyCrystalBoss>(m_world, &bodyDef);
     e->setTarget(m_player);
+    e->setProjectileSpawner(this);
+    e->setExperienceSpawner(this);
     e->setPathCalculator(this);
+    e->setDeferredActionHandler(this);
     m_enemies->push_back(e);
     add(e);
 }
@@ -535,6 +548,12 @@ void StateGame::spawnCrystalProjectile(
 
     m_crystalProjectiles->push_back(projectile);
     add(projectile);
+}
+
+void StateGame::queueDeferredAction(float time, std::function<void(void)> const& action)
+{
+    auto const t = std::make_shared<jt::Timer>(time, action, 1);
+    add(t);
 }
 
 std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> StateGame::getSnipeProjectiles() const

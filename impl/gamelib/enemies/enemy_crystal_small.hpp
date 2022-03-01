@@ -6,8 +6,7 @@
 
 class EnemyCrystalSmall : public EnemyBase {
 public:
-    EnemyCrystalSmall(
-        std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
+    EnemyCrystalSmall(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
 
 private:
     bool m_followingTarget { false };

@@ -8,8 +8,8 @@
 #include "system_helper.hpp"
 
 EnemyCrystalLarge::EnemyCrystalLarge(
-    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
-    : EnemyBase(world, def, state)
+    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def)
+    : EnemyBase(world, def)
 {
     m_experience = 200;
     m_hitpoints = GP::EnemyCrystallLargeHitPoints();

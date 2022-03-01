@@ -6,16 +6,14 @@
 
 class EnemyCrystalBoss : public EnemyBase {
 public:
-    EnemyCrystalBoss(
-        std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
+    EnemyCrystalBoss(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
 
 private:
     void doPerformAI(float elapsed) override;
     void doDie() override;
     void doCreate() override;
     float m_shootTimer { -1.0f };
-    StateGame& m_state;
-    void walkTowardsPlayer(jt::Vector2f diff);
+    void walkTowardsPlayer();
     bool m_followingPlayer { false };
     float m_timeSinceTriggeredAttack { 0.0f };
     float m_timeToPathfind { 0.0f };

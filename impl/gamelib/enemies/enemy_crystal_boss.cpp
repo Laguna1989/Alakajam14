@@ -3,14 +3,14 @@
 #include "game_properties.hpp"
 #include "math_helper.hpp"
 #include "pathfinder/pathfinder.hpp"
+#include "projectile_spawner_interface.hpp"
 #include "random/random.hpp"
 #include "state_game.hpp"
 #include "state_menu.hpp"
 
 EnemyCrystalBoss::EnemyCrystalBoss(
-    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
-    : EnemyBase(world, def, state)
-    , m_state(state)
+    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def)
+    : EnemyBase(world, def)
 {
     m_experience = 5000; // has no effect anyway -- said the dev ignoring glitch% speedrunners
     m_hitpoints = GP::BossHitPoints();
@@ -44,7 +44,7 @@ void EnemyCrystalBoss::doPerformAI(float elapsed)
     // sry this is copypasted
     // Shoot
     m_shootTimer -= elapsed;
-    auto const playerPosition = m_state.getPlayer()->getPosition();
+    auto const playerPosition = m_target.lock()->getTargetPosition();
     auto const enemyPosition = getPosition();
 
     auto diff = playerPosition - enemyPosition;
@@ -59,7 +59,7 @@ void EnemyCrystalBoss::doPerformAI(float elapsed)
             for (int i = 0; i < shots; ++i) {
                 auto aim = jt::Random::getRandomPointIn(jt::Rectf { -1.0f, -1.0f, 2.0f, 2.0f });
                 jt::MathHelper::normalizeMe(aim);
-                m_state.spawnCrystalProjectile(
+                m_projectileSpawner->spawnCrystalProjectile(
                     enemyPosition + aim * 10, aim * GP::EnemyShotSpeed(), true);
             }
             m_shootTimer = GP::EnemyShotTimer();
@@ -74,7 +74,7 @@ void EnemyCrystalBoss::doPerformAI(float elapsed)
             return;
         }
 
-        walkTowardsPlayer(diff);
+        walkTowardsPlayer();
 
         if (m_timeSinceTriggeredAttack < 0) {
             if (distanceSquared < 18 * 18) {
@@ -90,7 +90,7 @@ void EnemyCrystalBoss::doPerformAI(float elapsed)
             if (m_timeSinceTriggeredAttack <= 0) {
                 // TODO Visual candy
                 if (distanceSquared < 24 * 24) {
-                    m_state.getPlayer()->receiveDamage(Damage { 80.0f });
+                    m_target.lock()->applyDamageToTarget(Damage { 80.0f });
                     m_attackCooldown = 1.0f;
                 }
                 m_animation->play("idle");
@@ -106,14 +106,14 @@ void EnemyCrystalBoss::doPerformAI(float elapsed)
         // idle
     }
 }
-void EnemyCrystalBoss::walkTowardsPlayer(jt::Vector2f diff)
+void EnemyCrystalBoss::walkTowardsPlayer()
 {
-    jt::MathHelper::normalizeMe(diff);
-
+    if (m_pathCalculator == nullptr) {
+        return;
+    }
     if (m_timeToPathfind <= 0) {
-        auto const tileForEnemy = m_state.getTileAtPosition(getPosition());
-        auto const tileForPlayer = m_state.getTileAtPosition(m_state.getPlayer()->getPosition());
-        m_cachedPath = jt::pathfinder::calculatePath(tileForEnemy, tileForPlayer);
+        m_cachedPath
+            = m_pathCalculator->calculatePath(getPosition(), m_target.lock()->getTargetPosition());
         m_timeToPathfind = jt::Random::getFloat(0.4f, 0.5f);
     }
 
