@@ -10,14 +10,14 @@ public:
         std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
 
 private:
-    bool m_followingPlayer { false };
+    bool m_followingTarget { false };
     float m_timeToPathfind { -1.0f };
     float m_timeSinceTriggeredAttack { -1.0f };
     std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> m_cachedPath;
 
     void doAI(float elapsed) override;
     void doCreate() override;
-    void walkTowardsPlayer(jt::Vector2f diff);
+    void walkTowardsTarget();
 };
 
 #endif // ALAKAJAM14_ENEMY_CRYSTAL_SMALL_HPP

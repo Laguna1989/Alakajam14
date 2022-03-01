@@ -5,7 +5,7 @@
 #include "math_helper.hpp"
 
 Guile::Guile(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
-    std::weak_ptr<PlayerCharacter> player)
+    std::weak_ptr<Player> player)
     : Box2DObject(world, def)
     , m_player { player }
 {

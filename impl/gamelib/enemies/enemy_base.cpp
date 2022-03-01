@@ -66,3 +66,9 @@ void EnemyBase::die()
     }
 }
 bool EnemyBase::canAttack() const { return m_attackCooldown <= 0.0f; }
+
+void EnemyBase::setTarget(std::weak_ptr<TargetInterface> target) { m_target = target; }
+void EnemyBase::setPathCalculator(WorldPathCalculatorInterface* calculator)
+{
+    m_pathCalculator = calculator;
+}

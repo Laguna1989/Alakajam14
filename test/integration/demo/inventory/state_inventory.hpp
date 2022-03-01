@@ -2,7 +2,7 @@
 #define GUARD_JAMTEMPLATE_STATE_INVENTORY_HPP
 
 #include "audio/sound.hpp"
-#include "character.hpp"
+#include "player.hpp"
 #include "character_sheet_imgui.hpp"
 #include "game_state.hpp"
 #include "inventory_interface.hpp"

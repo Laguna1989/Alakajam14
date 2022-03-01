@@ -11,14 +11,14 @@
 #include "input/key_codes.hpp"
 #include "spells/spell_attack_snipe.hpp"
 #include "spells/spell_book.hpp"
+#include "target_interface.hpp"
 #include <memory>
 #include <string>
 
 class StateGame;
-class PlayerCharacter : public jt::Box2DObject {
+class Player : public jt::Box2DObject, public TargetInterface {
 public:
-    PlayerCharacter(
-        std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
+    Player(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
 
     std::shared_ptr<CharacterSheetImgui> getCharSheet();
     std::shared_ptr<SpellBook> getSpellBook();
@@ -32,6 +32,9 @@ public:
 
     void die();
     bool m_hasFinishedDying { false };
+
+    jt::Vector2f getTargetPosition() override;
+    void applyDamageToTarget(Damage const& dmg) override;
 
 private:
     StateGame& m_state;

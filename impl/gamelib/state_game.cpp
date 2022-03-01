@@ -10,6 +10,7 @@
 #include "hud/hud.hpp"
 #include "key.hpp"
 #include "math_helper.hpp"
+#include "pathfinder/pathfinder.hpp"
 #include "random/random.hpp"
 #include "shape.hpp"
 #include "sprite.hpp"
@@ -126,7 +127,7 @@ void StateGame::createPlayer()
     bodyDef.fixedRotation = true;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(104 * GP::PlayerSize().x, 64 * GP::PlayerSize().y);
-    m_player = std::make_shared<PlayerCharacter>(m_world, &bodyDef, *this);
+    m_player = std::make_shared<Player>(m_world, &bodyDef, *this);
     add(m_player);
 }
 
@@ -371,6 +372,8 @@ void StateGame::loadSingleEnemySmallCrystal(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef, *this);
+    e->setTarget(m_player);
+    e->setPathCalculator(this);
     m_enemies->push_back(e);
     add(e);
 }
@@ -383,6 +386,8 @@ void StateGame::loadSingleEnemyMediumCrystal(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalMedium>(m_world, &bodyDef, *this);
+    e->setTarget(m_player);
+    e->setPathCalculator(this);
     m_enemies->push_back(e);
     add(e);
 }
@@ -395,6 +400,8 @@ void StateGame::loadSingleEnemyLargeCrystal(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalLarge>(m_world, &bodyDef, *this);
+    e->setTarget(m_player);
+    e->setPathCalculator(this);
     m_enemies->push_back(e);
     add(e);
 }
@@ -407,6 +414,8 @@ void StateGame::loadSingleEnemyBoss(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalBoss>(m_world, &bodyDef, *this);
+    e->setTarget(m_player);
+    e->setPathCalculator(this);
     m_enemies->push_back(e);
     add(e);
 }
@@ -450,7 +459,7 @@ void StateGame::loadTileColliders(jt::tilemap::TilesonLoader& loader)
     }
 }
 
-std::shared_ptr<PlayerCharacter> StateGame::getPlayer() { return m_player; }
+std::shared_ptr<Player> StateGame::getPlayer() { return m_player; }
 
 std::shared_ptr<jt::pathfinder::NodeInterface> StateGame::getTileAtPosition(
     jt::Vector2f const& actorPosInFloat)
@@ -564,3 +573,11 @@ void StateGame::loadKey(jt::Vector2f f)
     add(m_key);
 }
 jt::Vector2f& StateGame::getStairsDest() { return m_stairsDest; }
+
+std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> StateGame::calculatePath(
+    jt::Vector2f const& startPos, jt::Vector2f const& endPos)
+{
+    auto const tileForEnemy = getTileAtPosition(startPos);
+    auto const tileForTarget = getTileAtPosition(endPos);
+    return jt::pathfinder::calculatePath(tileForEnemy, tileForTarget);
+}

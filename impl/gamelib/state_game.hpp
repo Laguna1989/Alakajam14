@@ -3,7 +3,6 @@
 
 #include "audio/sound.hpp"
 #include "box2dwrapper/box2d_world_interface.hpp"
-#include "character.hpp"
 #include "crystal_projectile.hpp"
 #include "enemies/enemy_base.hpp"
 #include "experience_orb.hpp"
@@ -11,12 +10,14 @@
 #include "guile.hpp"
 #include "key.hpp"
 #include "object_group.hpp"
+#include "player.hpp"
 #include "shroom_game_contact_listener.hpp"
 #include "snipe_projectile.hpp"
 #include "tilemap/node_layer.hpp"
 #include "tilemap/object_layer.hpp"
 #include "tilemap/tile_layer.hpp"
 #include "tilemap/tileson_loader.hpp"
+#include "world_path_calculator_interface.hpp"
 #include <chrono>
 #include <memory>
 #include <string>
@@ -29,14 +30,16 @@ class Sprite;
 
 class Hud;
 class Stairs;
-class StateGame : public jt::GameState {
+class StateGame : public jt::GameState, public WorldPathCalculatorInterface {
 public:
     std::string getName() const override;
 
-    std::shared_ptr<PlayerCharacter> getPlayer();
+    std::shared_ptr<Player> getPlayer();
 
     std::shared_ptr<jt::pathfinder::NodeInterface> getTileAtPosition(
         jt::Vector2f const& actorPosInFloat);
+    std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> calculatePath(
+        jt::Vector2f const& startPos, jt::Vector2f const& endPos) override;
 
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> getEnemies();
 
@@ -66,7 +69,7 @@ private:
 
     std::shared_ptr<jt::tilemap::NodeLayer> m_nodeLayer;
 
-    std::shared_ptr<PlayerCharacter> m_player;
+    std::shared_ptr<Player> m_player;
 
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> m_enemies;
     std::shared_ptr<jt::ObjectGroup<ExperienceOrb>> m_experienceOrbs;

@@ -5,6 +5,7 @@
 #include "pathfinder/pathfinder.hpp"
 #include "random/random.hpp"
 #include "state_game.hpp"
+#include "system_helper.hpp"
 
 EnemyCrystalSmall::EnemyCrystalSmall(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
@@ -38,22 +39,26 @@ void EnemyCrystalSmall::doCreate()
 
 void EnemyCrystalSmall::doAI(float elapsed)
 {
+    if (jt::SystemHelper::is_uninitialized_weak_ptr(m_target) || m_target.expired()) {
+        return;
+    }
+
     m_timeToPathfind -= elapsed;
-    auto const playerPosition = m_state.getPlayer()->getPosition();
+    auto const targetPosition = m_target.lock()->getTargetPosition();
     auto const enemyPosition = getPosition();
 
-    auto diff = playerPosition - enemyPosition;
+    auto diff = targetPosition - enemyPosition;
 
     auto const distanceSquared = jt::MathHelper::lengthSquared(diff);
 
-    if (m_followingPlayer) {
+    if (m_followingTarget) {
         auto const forgetRange = 180;
         if (distanceSquared > forgetRange * forgetRange) {
-            m_followingPlayer = false;
+            m_followingTarget = false;
             return;
         }
 
-        walkTowardsPlayer(diff);
+        walkTowardsTarget();
 
         if (m_timeSinceTriggeredAttack < 0) {
             if (distanceSquared < 18 * 18) {
@@ -69,7 +74,7 @@ void EnemyCrystalSmall::doAI(float elapsed)
             if (m_timeSinceTriggeredAttack <= 0) {
                 // TODO Visual candy
                 if (distanceSquared < 22 * 22) {
-                    m_state.getPlayer()->receiveDamage(Damage { 30.0f });
+                    m_target.lock()->applyDamageToTarget(Damage { 30.0f });
                     m_attackCooldown = 1.0f;
                 }
                 m_animation->play("idle");
@@ -79,21 +84,21 @@ void EnemyCrystalSmall::doAI(float elapsed)
     } else {
         int detectRange = 100;
         if (distanceSquared < detectRange * detectRange) {
-            m_followingPlayer = true;
+            m_followingTarget = true;
             // TODO render exclamation mark
         }
         // idle
     }
 }
 
-void EnemyCrystalSmall::walkTowardsPlayer(jt::Vector2f diff)
+void EnemyCrystalSmall::walkTowardsTarget()
 {
-    jt::MathHelper::normalizeMe(diff);
-
+    if (m_pathCalculator == nullptr) {
+        return;
+    }
     if (m_timeToPathfind <= 0) {
-        auto const tileForEnemy = m_state.getTileAtPosition(getPosition());
-        auto const tileForPlayer = m_state.getTileAtPosition(m_state.getPlayer()->getPosition());
-        m_cachedPath = jt::pathfinder::calculatePath(tileForEnemy, tileForPlayer);
+        m_cachedPath
+            = m_pathCalculator->calculatePath(getPosition(), m_target.lock()->getTargetPosition());
         m_timeToPathfind = jt::Random::getFloat(0.4f, 0.5f);
     }
 

@@ -1,4 +1,4 @@
-#include "character.hpp"
+#include "player.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
@@ -7,7 +7,7 @@
 #include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
 
-PlayerCharacter::PlayerCharacter(
+Player::Player(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
     : jt::Box2DObject { world, def }
     , m_state { state }
@@ -16,7 +16,7 @@ PlayerCharacter::PlayerCharacter(
         m_state.m_hud->getObserverHealth(), m_state.m_hud->getObserverHealthMax());
 }
 
-void PlayerCharacter::doCreate()
+void Player::doCreate()
 {
     b2FixtureDef fixtureDef;
     b2PolygonShape boxCollider {};
@@ -60,7 +60,7 @@ void PlayerCharacter::doCreate()
     m_soundGroupHurt->add(soundHurt5);
 }
 
-void PlayerCharacter::createAnimation()
+void Player::createAnimation()
 {
     auto const frameTimeAttack = 0.05f;
 
@@ -178,7 +178,7 @@ void PlayerCharacter::createAnimation()
     m_attackUnderlay->play("initial");
 }
 
-void PlayerCharacter::doUpdate(float const elapsed)
+void Player::doUpdate(float const elapsed)
 {
     handleInputMovement();
     handleInputAttack();
@@ -203,7 +203,7 @@ void PlayerCharacter::doUpdate(float const elapsed)
     }
 }
 
-void PlayerCharacter::updateSpells(const float elapsed)
+void Player::updateSpells(const float elapsed)
 {
     auto const& equippedSpells = m_spellBook->getEquippedSpells();
 
@@ -218,7 +218,7 @@ void PlayerCharacter::updateSpells(const float elapsed)
     updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Numpad3);
 }
 
-void PlayerCharacter::updateOneSpell(
+void Player::updateOneSpell(
     float const elapsed, std::shared_ptr<SpellInterface> spell, jt::KeyCode key)
 {
     spell->update(elapsed);
@@ -233,7 +233,7 @@ void PlayerCharacter::updateOneSpell(
     }
 }
 
-void PlayerCharacter::handleInputAttack()
+void Player::handleInputAttack()
 {
     if (m_attackCooldown > 0.0f) {
         return;
@@ -247,7 +247,7 @@ void PlayerCharacter::handleInputAttack()
     }
 }
 
-void PlayerCharacter::updateAnimation(float const elapsed)
+void Player::updateAnimation(float const elapsed)
 {
     auto const v = getVelocity();
     if (m_dashTimer > 0.0f) {
@@ -346,7 +346,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
     m_attackUnderlay->update(elapsed);
 }
 
-std::string PlayerCharacter::selectDashAnimation(jt::Vector2f const& velocity) const
+std::string Player::selectDashAnimation(jt::Vector2f const& velocity) const
 {
     std::string dashAnimationName { "dash_down" };
     if (velocity.x > 0 && abs(velocity.y) >= 0 && abs(velocity.y) < 0.1f) {
@@ -363,7 +363,7 @@ std::string PlayerCharacter::selectDashAnimation(jt::Vector2f const& velocity) c
     return dashAnimationName;
 }
 
-bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
+bool Player::setAnimationIfNotSet(std::string const& newAnimationName)
 {
     std::string const& currentAnimationName = m_animation->getCurrentAnimationName();
 
@@ -382,7 +382,7 @@ bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
     return false;
 }
 
-void PlayerCharacter::handleInputMovement()
+void Player::handleInputMovement()
 {
     auto keyboard = getGame()->input().keyboard();
 
@@ -409,7 +409,7 @@ void PlayerCharacter::handleInputMovement()
         handleDashInput();
     }
 }
-void PlayerCharacter::handleDashInput()
+void Player::handleDashInput()
 {
     if (m_dashCooldown >= 0) {
         return;
@@ -420,7 +420,7 @@ void PlayerCharacter::handleDashInput()
     }
 }
 
-void PlayerCharacter::doDraw() const
+void Player::doDraw() const
 {
     m_attackUnderlay->draw(getGame()->gfx().target());
     m_animation->draw(getGame()->gfx().target());
@@ -428,18 +428,18 @@ void PlayerCharacter::doDraw() const
     m_spellBook->draw();
 }
 
-std::shared_ptr<CharacterSheetImgui> PlayerCharacter::getCharSheet() { return m_charsheet; }
+std::shared_ptr<CharacterSheetImgui> Player::getCharSheet() { return m_charsheet; }
 
-void PlayerCharacter::gainExperience(int value) { m_charsheet->changeExperiencePoints(value); }
+void Player::gainExperience(int value) { m_charsheet->changeExperiencePoints(value); }
 
-void PlayerCharacter::receiveDamage(Damage const& dmg)
+void Player::receiveDamage(Damage const& dmg)
 {
     m_charsheet->changeHitpoints(dmg.value);
     setAnimationIfNotSet("hurt");
     m_soundGroupHurt->play();
 }
 
-void PlayerCharacter::die()
+void Player::die()
 {
     if (!m_isDying) {
         m_isDying = true;
@@ -448,4 +448,7 @@ void PlayerCharacter::die()
         setAnimationIfNotSet("die");
     }
 }
-std::shared_ptr<SpellBook> PlayerCharacter::getSpellBook() { return m_spellBook; }
+std::shared_ptr<SpellBook> Player::getSpellBook() { return m_spellBook; }
+
+jt::Vector2f Player::getTargetPosition() { return getPosition(); }
+void Player::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
