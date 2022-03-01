@@ -135,6 +135,7 @@ private:
     void loadKey(jt::Vector2f f);
     jt::Vector2f m_stairsDest;
     void loadSingleEnemyBoss(const jt::Vector2f& position);
+    void setupEnemyDependencies(std::shared_ptr<EnemyBase> e);
 };
 
 #endif

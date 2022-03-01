@@ -365,6 +365,15 @@ void StateGame::loadSingleEnemy(jt::tilemap::InfoRect const& info)
     }
 }
 
+void StateGame::setupEnemyDependencies(std::shared_ptr<EnemyBase> e)
+{
+    e->setTarget(m_player);
+    e->setProjectileSpawner(this);
+    e->setExperienceSpawner(this);
+    e->setPathCalculator(this);
+    e->setDeferredActionHandler(this);
+}
+
 void StateGame::loadSingleEnemySmallCrystal(jt::Vector2f const& position)
 {
     b2BodyDef bodyDef;
@@ -373,11 +382,7 @@ void StateGame::loadSingleEnemySmallCrystal(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef);
-    e->setTarget(m_player);
-    e->setProjectileSpawner(this);
-    e->setExperienceSpawner(this);
-    e->setPathCalculator(this);
-    e->setDeferredActionHandler(this);
+    setupEnemyDependencies(e);
     m_enemies->push_back(e);
     add(e);
 }
@@ -390,11 +395,7 @@ void StateGame::loadSingleEnemyMediumCrystal(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalMedium>(m_world, &bodyDef);
-    e->setTarget(m_player);
-    e->setProjectileSpawner(this);
-    e->setExperienceSpawner(this);
-    e->setPathCalculator(this);
-    e->setDeferredActionHandler(this);
+    setupEnemyDependencies(e);
     m_enemies->push_back(e);
     add(e);
 }
@@ -407,11 +408,7 @@ void StateGame::loadSingleEnemyLargeCrystal(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalLarge>(m_world, &bodyDef);
-    e->setTarget(m_player);
-    e->setProjectileSpawner(this);
-    e->setExperienceSpawner(this);
-    e->setPathCalculator(this);
-    e->setDeferredActionHandler(this);
+    setupEnemyDependencies(e);
     m_enemies->push_back(e);
     add(e);
 }
@@ -424,11 +421,7 @@ void StateGame::loadSingleEnemyBoss(jt::Vector2f const& position)
     bodyDef.position.Set(position.x, position.y);
     bodyDef.linearDamping = 16.0f;
     auto e = std::make_shared<EnemyCrystalBoss>(m_world, &bodyDef);
-    e->setTarget(m_player);
-    e->setProjectileSpawner(this);
-    e->setExperienceSpawner(this);
-    e->setPathCalculator(this);
-    e->setDeferredActionHandler(this);
+    setupEnemyDependencies(e);
     m_enemies->push_back(e);
     add(e);
 }
