@@ -17,7 +17,7 @@ private:
     bool m_followingPlayer { false };
     float m_timeSinceTriggeredAttack { 0.0f };
     float m_timeToPathfind { 0.0f };
-    void walkTowardsPlayer(jt::Vector2f diff);
+    void walkTowardsPlayer();
     std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> m_cachedPath;
 };
 

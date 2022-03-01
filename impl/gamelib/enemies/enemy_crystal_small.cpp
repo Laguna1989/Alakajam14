@@ -39,6 +39,7 @@ void EnemyCrystalSmall::doCreate()
 
 void EnemyCrystalSmall::doAI(float elapsed)
 {
+    // TODO move into base class
     if (jt::SystemHelper::is_uninitialized_weak_ptr(m_target) || m_target.expired()) {
         return;
     }

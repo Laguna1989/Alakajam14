@@ -5,6 +5,7 @@
 #include "pathfinder/pathfinder.hpp"
 #include "random/random.hpp"
 #include "state_game.hpp"
+#include "system_helper.hpp"
 
 EnemyCrystalLarge::EnemyCrystalLarge(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
@@ -39,8 +40,12 @@ void EnemyCrystalLarge::doCreate()
 
 void EnemyCrystalLarge::doAI(float elapsed)
 {
+    // TODO move into base class
+    if (jt::SystemHelper::is_uninitialized_weak_ptr(m_target) || m_target.expired()) {
+        return;
+    }
     m_timeToPathfind -= elapsed;
-    auto const playerPosition = m_state.getPlayer()->getPosition();
+    auto const playerPosition = m_target.lock()->getTargetPosition();
     auto const enemyPosition = getPosition();
 
     auto diff = playerPosition - enemyPosition;
@@ -54,7 +59,7 @@ void EnemyCrystalLarge::doAI(float elapsed)
             return;
         }
 
-        walkTowardsPlayer(diff);
+        walkTowardsPlayer();
 
         if (m_timeSinceTriggeredAttack < 0) {
             if (distanceSquared < 18 * 18) {
@@ -70,7 +75,7 @@ void EnemyCrystalLarge::doAI(float elapsed)
             if (m_timeSinceTriggeredAttack <= 0) {
                 // TODO Visual candy
                 if (distanceSquared < 24 * 24) {
-                    m_state.getPlayer()->receiveDamage(Damage { 80.0f });
+                    m_target.lock()->applyDamageToTarget(Damage { 80.0f });
                     m_attackCooldown = 1.0f;
                 }
                 m_animation->play("idle");
@@ -87,14 +92,14 @@ void EnemyCrystalLarge::doAI(float elapsed)
     }
 }
 
-void EnemyCrystalLarge::walkTowardsPlayer(jt::Vector2f diff)
+void EnemyCrystalLarge::walkTowardsPlayer()
 {
-    jt::MathHelper::normalizeMe(diff);
-
+    if (m_pathCalculator == nullptr) {
+        return;
+    }
     if (m_timeToPathfind <= 0) {
-        auto const tileForEnemy = m_state.getTileAtPosition(getPosition());
-        auto const tileForPlayer = m_state.getTileAtPosition(m_state.getPlayer()->getPosition());
-        m_cachedPath = jt::pathfinder::calculatePath(tileForEnemy, tileForPlayer);
+        m_cachedPath
+            = m_pathCalculator->calculatePath(getPosition(), m_target.lock()->getTargetPosition());
         m_timeToPathfind = jt::Random::getFloat(0.4f, 0.5f);
     }
 
