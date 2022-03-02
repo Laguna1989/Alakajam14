@@ -63,6 +63,8 @@ public:
     static float LevelUpHealthIncrease();
     static float LevelUpMovementSpeedIncrease();
     static float LevelUpAttackDamageIncrease();
+    static float TileSizeInPixel();
+    static float BossMovementSpeed();
 };
 
 #endif

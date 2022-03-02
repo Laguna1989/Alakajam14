@@ -9,11 +9,9 @@ public:
     EnemyCrystalBoss(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
 
 private:
-    void doPerformAI(float elapsed) override;
     void doDie() override;
     void doCreate() override;
     float m_shootTimer { -1.0f };
-    void walkTowardsPlayer();
     bool m_followingPlayer { false };
     float m_timeSinceTriggeredAttack { 0.0f };
     float m_timeToPathfind { 0.0f };

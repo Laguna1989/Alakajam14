@@ -8,7 +8,6 @@ public:
     EnemyCrystalMedium(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
 
 private:
-    void doPerformAI(float elapsed) override;
     void doCreate() override;
 
     float m_shootTimer { -1.0f };

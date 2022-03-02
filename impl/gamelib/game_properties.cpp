@@ -43,8 +43,11 @@ float GP::EnemyShotSpeed() { return 175.0f; }
 float GP::EnemyShotTimer() { return 1.2f; }
 float GP::EnemyShotRange() { return 210.0f; }
 float GP::EnemyShotDamage() { return 10.0f; }
+
 float GP::BossHitPoints() { return 2000.0f; }
+float GP::BossMovementSpeed() { return 15.0f; }
 
 float GP::LevelUpHealthIncrease() { return 7.0f; }
 float GP::LevelUpMovementSpeedIncrease() { return 0.035f; }
-float GP::LevelUpAttackDamageIncrease() { return 4; }
+float GP::LevelUpAttackDamageIncrease() { return 4.0f; }
+float GP::TileSizeInPixel() { return 16.0f; }

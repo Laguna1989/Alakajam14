@@ -327,7 +327,6 @@ void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
             bodyDef.fixedRotation = true;
             bodyDef.type = b2_kinematicBody;
             bodyDef.position.Set(o.position.x, o.position.y);
-            std::cout << "spawn guile: " << o.position.x << " " << o.position.y << std::endl;
 
             auto guile = std::make_shared<Guile>(m_world, &bodyDef, m_player);
             guile->m_spellToGive = o.properties.strings.at("spell");
@@ -484,7 +483,6 @@ std::shared_ptr<jt::ObjectGroup<EnemyBase>> StateGame::getEnemies() { return m_e
 void StateGame::spawnExperience(int amount, jt::Vector2f const& pos, bool single)
 {
     if (!single) {
-        std::cout << "spawn experience" << std::endl;
         while (amount >= 5) {
             int value = jt::Random::getInt(1, 5);
             amount -= value;

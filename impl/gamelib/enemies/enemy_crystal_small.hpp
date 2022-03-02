@@ -9,14 +9,7 @@ public:
     EnemyCrystalSmall(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
 
 private:
-    bool m_followingTarget { false };
-    float m_timeToPathfind { -1.0f };
-    float m_timeSinceTriggeredAttack { -1.0f };
-    std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> m_cachedPath;
-
-    void doPerformAI(float elapsed) override;
     void doCreate() override;
-    void walkTowardsTarget();
 };
 
 #endif // ALAKAJAM14_ENEMY_CRYSTAL_SMALL_HPP

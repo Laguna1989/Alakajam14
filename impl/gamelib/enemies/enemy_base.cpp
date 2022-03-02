@@ -2,9 +2,7 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "projectile_spawner_interface.hpp"
-#include "state_game.hpp"
 #include "system_helper.hpp"
-#include "timer.hpp"
 
 EnemyBase::EnemyBase(std::shared_ptr<jt::Box2DWorldInterface> world, const b2BodyDef* def)
     : Box2DObject { world, def }
@@ -61,6 +59,7 @@ void EnemyBase::die()
     if (m_deferredActionHandler == nullptr) {
         return;
     }
+
     m_deferredActionHandler->queueDeferredAction(m_animation->getCurrentAnimTotalTime(), [this]() {
         kill();
         if (m_experienceSpawner) {
@@ -69,8 +68,6 @@ void EnemyBase::die()
     });
     doDie();
 }
-
-bool EnemyBase::canAttack() const { return m_attackCooldown <= 0.0f; }
 
 void EnemyBase::setTarget(std::weak_ptr<TargetInterface> target) { m_target = target; }
 void EnemyBase::setPathCalculator(WorldPathCalculatorInterface* calculator)
@@ -88,7 +85,15 @@ void EnemyBase::performAI(float elapsed)
     if (jt::SystemHelper::is_uninitialized_weak_ptr(m_target) || m_target.expired()) {
         return;
     }
-    doPerformAI(elapsed);
+    getAiStateManager().update();
+    if (getAiStateManager().getCurrentState() == nullptr) {
+        return;
+    }
+
+    auto currentState = getAiStateManager().getCurrentState();
+    currentState->setPosition(getPosition());
+
+    currentState->update(elapsed, this);
 }
 
 void EnemyBase::setDeferredActionHandler(DeferredActionInterface* handler)
@@ -100,3 +105,12 @@ void EnemyBase::setExperienceSpawner(ExperienceSpawnerInterface* spawner)
 {
     m_experienceSpawner = spawner;
 }
+
+AiStateManager& EnemyBase::getAiStateManager() { return m_aiStateManager; }
+void EnemyBase::moveInDirection(jt::Vector2f const& dir) { setVelocity(dir * m_movementSpeed); }
+float EnemyBase::playAnimation(std::string const& animName)
+{
+    m_animation->play(animName);
+    return m_animation->getCurrentAnimTotalTime();
+}
+float EnemyBase::getCloseCombatDamage() const { return m_closeCombatDamage; }
