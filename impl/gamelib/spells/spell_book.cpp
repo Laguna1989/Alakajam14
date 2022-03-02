@@ -1,4 +1,5 @@
 #include "spell_book.hpp"
+#include "drawable_helpers.hpp"
 #include "game_interface.hpp"
 #include "imgui.h"
 #include "spell_attack_broad.hpp"
@@ -23,16 +24,20 @@ SpellBook::SpellBook(StateGame& state)
     m_spells.push_back(std::make_shared<SpellAttackBroad>(state));
     m_spells.push_back(std::make_shared<SpellHeal>(*state.getPlayer()->getCharSheet()));
 
-    //    m_equippedSpells.push_back(getSpellByName("Snipe"));
-    //    m_equippedSpells.push_back(getSpellByName("Broad Stroke"));
-    //    m_equippedSpells.push_back(getSpellByName("Heal"));
+    m_equippedSpells.push_back(getSpellByName("None"));
+    m_equippedSpells.push_back(getSpellByName("None"));
+    m_equippedSpells.push_back(getSpellByName("None"));
+}
 
-    m_equippedSpells.push_back(getSpellByName("None"));
-    m_equippedSpells.push_back(getSpellByName("None"));
-    m_equippedSpells.push_back(getSpellByName("None"));
-
+void SpellBook::doCreate()
+{
     m_selectSound = std::make_shared<jt::Sound>("assets/sound/spellbook_click.ogg");
     m_selectSound->setVolume(0.5f);
+    getGame()->audio().addTemporarySound(m_selectSound);
+
+    m_text = jt::dh::createText(getGame()->gfx().target(), "New Spells!", 12);
+    m_text->setIgnoreCamMovement(true);
+    m_text->setPosition(jt::Vector2f { 350, 280 });
 }
 
 std::shared_ptr<SpellInterface> SpellBook::getSpellByName(std::string const& name) const
@@ -66,11 +71,15 @@ void SpellBook::makeSpellAvailable(std::string const& name)
     }
 
     m_availableSpells.push_back(name);
+    m_newSpell = true;
 }
 
-void SpellBook::doUpdate(float const /* elapsed */)
+void SpellBook::doUpdate(float const elapsed)
 {
-    m_selectSound->update();
+    float v = sin(getAge() * 2.5);
+    auto a = 100 + 155 * v * v;
+    m_text->setColor(jt::Color { 255, 255, 255, static_cast<std::uint8_t>(a) });
+    m_text->update(elapsed);
 
     if (getGame()->input().keyboard()->justPressed(jt::KeyCode::L)) {
         m_drawSpellbook = !m_drawSpellbook;
@@ -79,9 +88,14 @@ void SpellBook::doUpdate(float const /* elapsed */)
 
 void SpellBook::doDraw() const
 {
+    if (m_newSpell) {
+        m_text->draw(getGame()->gfx().target());
+    }
+
     if (!m_drawSpellbook) {
         return;
     }
+    m_newSpell = false;
     ImGui::SetNextWindowPos(ImVec2 { 400, 0 });
 
     ImGui::SetNextWindowSize(ImVec2 { 400, 600 });
@@ -109,16 +123,17 @@ void SpellBook::drawEquippedSpells() const
         }
 
         if (ImGui::BeginPopup(slotName.c_str())) {
-            if (strutil::starts_with(displayName, "None")) {
-                ImGui::Text("Nothing Equipped");
-            }
 
             auto const possibleSpells = getEquippableSpells();
-            for (auto const& spell : possibleSpells) {
-                if (ImGui::Selectable(spell.c_str())) {
-                    m_equippedSpells.at(i)->onUnEquip();
-                    m_equippedSpells.at(i) = getSpellByName(spell);
-                    m_equippedSpells.at(i)->onEquip();
+            if (possibleSpells.empty()) {
+                ImGui::Text("Nothing available");
+            } else {
+                for (auto const& spell : possibleSpells) {
+                    if (ImGui::Selectable(spell.c_str())) {
+                        m_equippedSpells.at(i)->onUnEquip();
+                        m_equippedSpells.at(i) = getSpellByName(spell);
+                        m_equippedSpells.at(i)->onEquip();
+                    }
                 }
             }
 
@@ -137,13 +152,7 @@ std::vector<std::string> SpellBook::getEquippableSpells() const
     std::vector<std::string> values;
 
     for (auto const& currentSpellName : m_availableSpells) {
-        if (std::find_if(m_equippedSpells.cbegin(), m_equippedSpells.cend(),
-                [&currentSpellName](auto const& potentialSpellToBeAdded) {
-                    return potentialSpellToBeAdded->getName() == currentSpellName;
-                })
-            == m_equippedSpells.end()) {
-            values.push_back(currentSpellName);
-        }
+        values.push_back(currentSpellName);
     }
 
     return values;

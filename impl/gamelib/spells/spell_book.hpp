@@ -1,12 +1,13 @@
 #ifndef ALAKAJAM14_SPELL_BOOK_HPP
 #define ALAKAJAM14_SPELL_BOOK_HPP
 
+#include "audio/sound.hpp"
 #include "game_object.hpp"
 #include "spell_interface.hpp"
+#include "text.hpp"
 #include <memory>
 #include <string>
 #include <vector>
-#include "audio/sound.hpp"
 
 class StateGame;
 
@@ -23,6 +24,7 @@ public:
 
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
+    void doCreate() override;
 
     mutable bool m_drawSpellbook { false };
 
@@ -31,12 +33,13 @@ public:
 private:
     std::vector<std::shared_ptr<SpellInterface>> m_spells {};
     std::vector<std::string> m_availableSpells {};
+    mutable std::vector<std::shared_ptr<SpellInterface>> m_equippedSpells {};
+    std::shared_ptr<jt::Sound> m_selectSound { nullptr };
+    mutable bool m_newSpell { false };
+    std::shared_ptr<jt::Text> m_text { nullptr };
+
     void drawEquippedSpells() const;
-
-    mutable std::vector<std::shared_ptr<SpellInterface>> m_equippedSpells;
     std::vector<std::string> getEquippableSpells() const;
-
-    std::shared_ptr<jt::Sound> m_selectSound;
 };
 
 #endif // ALAKAJAM14_SPELL_BOOK_HPP

@@ -31,6 +31,7 @@ void Player::doCreate()
 
     m_spellBook = std::make_shared<SpellBook>(m_state);
     m_spellBook->setGameInstance(getGame());
+    m_spellBook->create();
 
     m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
     m_soundDash->setVolume(0.4f);
