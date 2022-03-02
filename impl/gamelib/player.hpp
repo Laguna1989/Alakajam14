@@ -9,6 +9,8 @@
 #include "damage.hpp"
 #include "game_object.hpp"
 #include "input/key_codes.hpp"
+#include "particle_system.hpp"
+#include "shape.hpp"
 #include "spells/spell_attack_snipe.hpp"
 #include "spells/spell_book.hpp"
 #include "target_interface.hpp"
@@ -35,6 +37,8 @@ public:
 
     jt::Vector2f getTargetPosition() override;
     void applyDamageToTarget(Damage const& dmg) override;
+
+    void setHealCallback(std::function<void(void)> healCallback);
 
 private:
     StateGame& m_state;
@@ -67,10 +71,12 @@ private:
 
     void updateSpells(const float elapsed);
     void updateOneSpell(
-        float const elapsed, std::shared_ptr<SpellInterface> spell, jt::KeyCode key);
+        float const elapsed, std::shared_ptr<SpellInterface> spell, std::vector<jt::KeyCode> keys);
 
     bool setAnimationIfNotSet(std::string const& newAnimationName);
     bool m_isDying { false };
+    void createSounds();
+    std::function<void(void)> m_healCallback;
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP

@@ -76,7 +76,7 @@ void SpellBook::makeSpellAvailable(std::string const& name)
 
 void SpellBook::doUpdate(float const elapsed)
 {
-    float v = sin(getAge() * 2.5);
+    float v = sin(getAge() * 2.5f);
     auto a = 100 + 155 * v * v;
     m_text->setColor(jt::Color { 255, 255, 255, static_cast<std::uint8_t>(a) });
     m_text->update(elapsed);

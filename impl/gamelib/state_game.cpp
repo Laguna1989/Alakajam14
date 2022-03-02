@@ -19,6 +19,9 @@
 #include "strutils.hpp"
 #include "tilemap/tileson_loader.hpp"
 #include "timer.hpp"
+#include "tweens/tween_alpha.hpp"
+#include "tweens/tween_position.hpp"
+#include "tweens/tween_scale.hpp"
 
 namespace {
 void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
@@ -129,6 +132,39 @@ void StateGame::createPlayer()
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(104 * GP::PlayerSize().x, 64 * GP::PlayerSize().y);
     m_player = std::make_shared<Player>(m_world, &bodyDef, *this);
+
+    m_particlesHeal = std::make_shared<jt::ParticleSystem<jt::Shape, 50>>(
+        [this]() {
+            auto shape = std::make_shared<jt::Shape>();
+            shape->makeRect({ 1, 4 }, getGame()->gfx().textureManager());
+            shape->setPosition({ -50000, -500000 });
+            shape->setScale(jt::Vector2f { 1.0f, 1.0f });
+            shape->setColor(jt::colors::Green);
+            shape->setScale({ 1.0f, 0.1f });
+            return shape;
+        },
+        [this](std::shared_ptr<jt::Shape> shape) {
+            jt::Vector2f pos = jt::Random::getRandomPointIn(jt::Rectf {
+                m_player->getPosition().x - 12, m_player->getPosition().y - 8.0f, 24.0f, 24.0f });
+            shape->setPosition(pos);
+
+            auto twPos = jt::TweenPosition::create(shape, 0.75f, pos, pos + jt::Vector2f { 0, -8 });
+            add(twPos);
+
+            auto twAlpha = jt::TweenAlpha::create(shape, 0.7f, 250, 0);
+            add(twAlpha);
+
+            auto twScale = jt::TweenScale::create(shape, 0.75f, { 1.0f, 0.1f }, { 0.0f, 1.5f });
+            add(twScale);
+        });
+    add(m_particlesHeal);
+
+    m_player->setHealCallback([this]() {
+        auto t = std::make_shared<jt::Timer>(
+            0.15f, [this]() { m_particlesHeal->Fire(10); }, 5);
+        add(t);
+    });
+
     add(m_player);
 }
 

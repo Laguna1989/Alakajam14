@@ -3,14 +3,23 @@
 
 #include "game_object.hpp"
 #include "hud/observer_interface.hpp"
+#include "particle_system.hpp"
+#include "shape.hpp"
+#include <functional>
 #include <map>
 #include <memory>
 
+struct CharSheetObservers {
+    std::shared_ptr<ObserverInterface<int>> experienceObserver;
+    std::shared_ptr<ObserverInterface<float>> healthObserver;
+    std::shared_ptr<ObserverInterface<float>> healthMaxObserver;
+    std::function<void(void)> healCallback;
+};
+
 class CharacterSheetImgui : public jt::GameObject {
 public:
-    CharacterSheetImgui(std::shared_ptr<ObserverInterface<int>> experienceObserver,
-        std::shared_ptr<ObserverInterface<float>> healthObserver,
-        std::shared_ptr<ObserverInterface<float>> healthMaxObserver);
+    CharacterSheetImgui(CharSheetObservers observers);
+
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
@@ -35,9 +44,7 @@ public:
     void setDashFactor(std::string const& identifier, float value);
 
 private:
-    std::shared_ptr<ObserverInterface<int>> m_experienceObserver { nullptr };
-    std::shared_ptr<ObserverInterface<float>> m_healthObserver { nullptr };
-    std::shared_ptr<ObserverInterface<float>> m_healthMaxObserver { nullptr };
+    CharSheetObservers m_observers;
 
     std::map<std::string, float> m_movementSpeedFactorsAdditive;
     std::map<std::string, float> m_attackSpeedFactorsAdditive;

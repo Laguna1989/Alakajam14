@@ -3,17 +3,18 @@
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
 #include "math_helper.hpp"
+#include "random/random.hpp"
 #include "spells/spell_none.hpp"
 #include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
+#include "tweens/tween_alpha.hpp"
+#include "tweens/tween_position.hpp"
 
 Player::Player(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
     : jt::Box2DObject { world, def }
     , m_state { state }
 {
-    m_charsheet = std::make_shared<CharacterSheetImgui>(m_state.m_hud->getObserverExperience(),
-        m_state.m_hud->getObserverHealth(), m_state.m_hud->getObserverHealthMax());
 }
 
 void Player::doCreate()
@@ -26,6 +27,10 @@ void Player::doCreate()
 
     createAnimation();
 
+    CharSheetObservers charSheetObservers { m_state.m_hud->getObserverExperience(),
+        m_state.m_hud->getObserverHealth(), m_state.m_hud->getObserverHealthMax(), m_healCallback };
+
+    m_charsheet = std::make_shared<CharacterSheetImgui>(charSheetObservers);
     m_charsheet->setGameInstance(getGame());
     m_charsheet->create();
 
@@ -33,13 +38,20 @@ void Player::doCreate()
     m_spellBook->setGameInstance(getGame());
     m_spellBook->create();
 
+    createSounds();
+}
+void Player::createSounds()
+{
     m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
     m_soundDash->setVolume(0.4f);
+    getGame()->audio().addTemporarySound(m_soundDash);
 
     m_soundStomp = std::make_shared<jt::Sound>("assets/sound/attack_stomp.ogg");
     m_soundStomp->setVolume(0.4f);
+    getGame()->audio().addTemporarySound(m_soundStomp);
 
     m_soundDeath = std::make_shared<jt::Sound>("assets/sound/GAME_OVER.ogg");
+    getGame()->audio().addTemporarySound(m_soundDeath);
 
     auto const soundHurt1 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_01.ogg");
     auto const soundHurt2 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_02.ogg");
@@ -194,11 +206,6 @@ void Player::doUpdate(float const elapsed)
     m_charsheet->update(elapsed);
     m_spellBook->update(elapsed);
 
-    m_soundDash->update();
-    m_soundStomp->update();
-    m_soundGroupHurt->update();
-    m_soundDeath->update();
-
     if (getCharSheet()->getHitpoints() <= 0 && !m_soundDeath->isPlaying() && m_isDying) {
         m_hasFinishedDying = true;
     }
@@ -208,28 +215,29 @@ void Player::updateSpells(const float elapsed)
 {
     auto const& equippedSpells = m_spellBook->getEquippedSpells();
 
-    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Q);
-    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Num1);
-    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Numpad1);
-    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::E);
-    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::Num2);
-    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::Numpad2);
-    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Tab);
-    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Num3);
-    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Numpad3);
+    updateOneSpell(
+        elapsed, equippedSpells.at(0), { jt::KeyCode::Q, jt::KeyCode::Num1, jt::KeyCode::Numpad1 });
+
+    updateOneSpell(
+        elapsed, equippedSpells.at(1), { jt::KeyCode::E, jt::KeyCode::Num2, jt::KeyCode::Numpad2 });
+
+    updateOneSpell(elapsed, equippedSpells.at(2),
+        { jt::KeyCode::Tab, jt::KeyCode::Num3, jt::KeyCode::Numpad3 });
 }
 
 void Player::updateOneSpell(
-    float const elapsed, std::shared_ptr<SpellInterface> spell, jt::KeyCode key)
+    float const elapsed, std::shared_ptr<SpellInterface> spell, std::vector<jt::KeyCode> keys)
 {
     spell->update(elapsed);
-    if (getGame()->input().keyboard()->justPressed(key)) {
-        auto const cost = spell->getExperienceCost();
-        // TODO warmup for spells?
-        if (spell->canTrigger() && m_charsheet->getExperiencePoints() >= cost) {
-            getGame()->getLogger().debug("Spell triggered: " + spell->getName());
-            m_charsheet->changeExperiencePoints(-cost);
-            spell->trigger();
+    for (auto key : keys) {
+        if (getGame()->input().keyboard()->justPressed(key)) {
+            auto const cost = spell->getExperienceCost();
+            // TODO warmup for spells?
+            if (spell->canTrigger() && m_charsheet->getExperiencePoints() >= cost) {
+                getGame()->getLogger().debug("Spell triggered: " + spell->getName());
+                m_charsheet->changeExperiencePoints(-cost);
+                spell->trigger();
+            }
         }
     }
 }
@@ -305,13 +313,11 @@ void Player::updateAnimation(float const elapsed)
                     jt::MathHelper::normalizeMe(delta);
                     float sc = jt::MathHelper::dot(look, delta);
                     if (sc > 0.5f) {
-                        // TODO: Derive Damage from stats & gear
                         enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() });
                     }
                     continue;
                 } else if (dist < circularHurtboxRange) {
                     // Circular hurtbox with short range
-                    // TODO: Derive Damage from stats & gear
                     enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() / 3.0f });
                 }
             }
@@ -453,3 +459,8 @@ std::shared_ptr<SpellBook> Player::getSpellBook() { return m_spellBook; }
 
 jt::Vector2f Player::getTargetPosition() { return getPosition(); }
 void Player::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
+
+void Player::setHealCallback(std::function<void(void)> healCallback)
+{
+    m_healCallback = healCallback;
+}

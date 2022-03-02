@@ -86,6 +86,8 @@ private:
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> m_snipeProjectiles;
     std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> m_crystalProjectiles;
 
+    std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesHeal;
+
     std::shared_ptr<jt::ObjectGroup<Guile>> m_guys;
 
     std::shared_ptr<jt::Sprite> m_vignette;

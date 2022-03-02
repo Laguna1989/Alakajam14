@@ -5,14 +5,12 @@
 #include "math_helper.hpp"
 #include <iostream>
 
-CharacterSheetImgui::CharacterSheetImgui(std::shared_ptr<ObserverInterface<int>> experienceObserver,
-    std::shared_ptr<ObserverInterface<float>> healthObserver,
-    std::shared_ptr<ObserverInterface<float>> healthMaxObserver)
-    : m_experienceObserver { experienceObserver }
-    , m_healthObserver { healthObserver }
-    , m_healthMaxObserver { healthMaxObserver }
+CharacterSheetImgui::CharacterSheetImgui(CharSheetObservers observers)
+    : m_observers { observers }
 {
 }
+
+void CharacterSheetImgui::doCreate() { m_observers.healthObserver->notify(m_hitpoints); }
 
 void CharacterSheetImgui::doUpdate(float const)
 {
@@ -127,21 +125,28 @@ float CharacterSheetImgui::getHitpointsMax() const { return m_hitpointsMax; }
 
 void CharacterSheetImgui::changeHitpoints(float delta) const
 {
+    // TODO visual candy
     m_hitpoints -= delta;
-    m_healthObserver->notify(m_hitpoints);
+    m_observers.healthObserver->notify(m_hitpoints);
+    if (delta >= 0) {
+        if (m_observers.healCallback) {
+            m_observers.healCallback();
+        }
+    }
 }
 
 void CharacterSheetImgui::changeHitpointsMax(float delta) const
 {
+    // TODO visual candy
     m_hitpointsMax += delta;
-    m_healthMaxObserver->notify(m_hitpointsMax);
+    m_observers.healthMaxObserver->notify(m_hitpointsMax);
 }
 
 int CharacterSheetImgui::getExperiencePoints() const { return m_experiencePoints; }
 void CharacterSheetImgui::changeExperiencePoints(int delta) const
 {
     m_experiencePoints += delta;
-    m_experienceObserver->notify(m_experiencePoints);
+    m_observers.experienceObserver->notify(m_experiencePoints);
 }
 
 float CharacterSheetImgui::getMovementSpeedFactor() const
@@ -190,9 +195,4 @@ void CharacterSheetImgui::setAttackSpeedFactor(std::string const& identifier, fl
 void CharacterSheetImgui::setDashFactor(std::string const& identifier, float value)
 {
     m_dashFactorsAdditive[identifier] = value;
-}
-void CharacterSheetImgui::doCreate()
-{
-    m_healthObserver->notify(m_hitpoints);
-    std::cout << "charsheet create\n";
 }
