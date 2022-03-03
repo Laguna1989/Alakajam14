@@ -63,6 +63,7 @@ public:
     void queueDeferredAction(float time, std::function<void(void)> const& action) override;
 
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
+    jt::Vector2f m_particlesSnipePosition { 0.0f, 0.0f };
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> getSnipeProjectiles() const;
     std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> getCrystalProjectiles() const;
@@ -87,6 +88,7 @@ private:
     std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> m_crystalProjectiles;
 
     std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesHeal;
+    std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesSnipeProjectiles;
 
     std::shared_ptr<jt::ObjectGroup<Guile>> m_guys;
 

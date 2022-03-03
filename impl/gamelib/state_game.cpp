@@ -1,6 +1,7 @@
 ﻿#include "state_game.hpp"
 #include "box2dwrapper/box2d_world_impl.hpp"
 #include "color.hpp"
+#include "color_helpers.hpp"
 #include "enemies/enemy_crystal_boss.hpp"
 #include "enemies/enemy_crystal_large.hpp"
 #include "enemies/enemy_crystal_medium.hpp"
@@ -109,6 +110,28 @@ void StateGame::createSnipeProjectilesGroup()
 {
     m_snipeProjectiles = std::make_shared<jt::ObjectGroup<SnipeProjectile>>();
     add(m_snipeProjectiles);
+
+    m_particlesSnipeProjectiles = std::make_shared<jt::ParticleSystem<jt::Shape, 50>>(
+        [this]() {
+            auto shape = std::make_shared<jt::Shape>();
+            shape->makeRect({ 1, 1 }, getGame()->gfx().textureManager());
+            shape->setPosition({ -50000, -500000 });
+            shape->setColor(jt::MakeColor::FromHexString("6110a2"));
+            return shape;
+        },
+        [this](std::shared_ptr<jt::Shape> shape) {
+            jt::Vector2f pos = jt::Random::getRandomPointIn(jt::Rectf {
+                m_particlesSnipePosition.x - 3, m_particlesSnipePosition.y - 3, 6.0f, 6.0f });
+            shape->setPosition(pos);
+
+            auto twPos = jt::TweenPosition::create(
+                shape, 0.75f, pos, pos + jt::Vector2f { 0, jt::Random::getFloat(4.0f, 12.0f) });
+            add(twPos);
+
+            auto twAlpha = jt::TweenAlpha::create(shape, 0.7f, 250, 0);
+            add(twAlpha);
+        });
+    add(m_particlesSnipeProjectiles);
 }
 
 void StateGame::createCrystalProjectilesGroup()
@@ -138,7 +161,6 @@ void StateGame::createPlayer()
             auto shape = std::make_shared<jt::Shape>();
             shape->makeRect({ 1, 4 }, getGame()->gfx().textureManager());
             shape->setPosition({ -50000, -500000 });
-            shape->setScale(jt::Vector2f { 1.0f, 1.0f });
             shape->setColor(jt::colors::Green);
             shape->setScale({ 1.0f, 0.1f });
             return shape;
@@ -181,6 +203,15 @@ void StateGame::doInternalUpdate(float const elapsed)
         m_tileLayerOveroverlay->update(elapsed);
 
         updateTileNodes(elapsed);
+
+        for (auto sp : *m_snipeProjectiles) {
+            auto projectile = sp.lock();
+            if (!projectile) {
+                continue;
+            }
+            m_particlesSnipePosition = projectile->getPosition();
+            m_particlesSnipeProjectiles->Fire(1);
+        }
 
         camFollowObject(
             getGame()->gfx().camera(), getGame()->gfx().window().getSize(), m_player, elapsed);
