@@ -37,7 +37,10 @@ void EnemyCrystalBoss::doCreate()
     circle.m_radius = GP::PlayerSize().x * 1.5f;
 
     fixtureDef.shape = &circle;
-    fixtureDef.friction = 0.0f;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemies();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
+
     getB2Body()->CreateFixture(&fixtureDef);
 
     auto bossState = std::make_shared<AiStateBoss>();

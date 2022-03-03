@@ -491,6 +491,12 @@ void StateGame::loadTileColliders(jt::tilemap::TilesonLoader& loader)
         b2FixtureDef fixtureDef;
         b2PolygonShape boxCollider {};
         boxCollider.SetAsBox(r.width / 2.0f, r.height / 2.0f);
+        fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryWalls();
+        fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryPlayer()
+            | GP::PhysicsCollisionCategoryPlayerShots() | GP::PhysicsCollisionCategoryEnemies()
+            | GP::PhysicsCollisionCategoryEnemyShots()
+            | GP::PhysicsCollisionCategoryExperienceOrbs();
+
         fixtureDef.shape = &boxCollider;
 
         auto collider = std::make_shared<jt::Box2DObject>(m_world, &bodyDef);
@@ -538,8 +544,7 @@ void StateGame::spawnOneExperienceOrb(jt::Vector2f const& pos, int value)
     bodyDef.position.Set(pos.x, pos.y);
     bodyDef.linearDamping = 1.0f;
 
-    auto e = std::make_shared<ExperienceOrb>(
-        m_world, &bodyDef, pos + direction * jt::Random::getFloat(0.0f, 0.125f), value);
+    auto e = std::make_shared<ExperienceOrb>(m_world, &bodyDef, value);
     e->setVelocity(direction);
     add(e);
     m_experienceOrbs->push_back(e);

@@ -20,6 +20,9 @@ void Player::doCreate()
     b2PolygonShape boxCollider {};
     boxCollider.SetAsBox(GP::PlayerSize().x / 2.1f, GP::PlayerSize().y / 2.1f);
     fixtureDef.shape = &boxCollider;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryPlayer();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryEnemyShots() | GP::PhysicsCollisionCategoryEnemies();
     getB2Body()->CreateFixture(&fixtureDef);
 
     createAnimation();
@@ -36,6 +39,25 @@ void Player::doCreate()
     m_spellBook->create();
 
     createSounds();
+
+    m_commands.push_back(getGame()->getActionCommandManager().registerTemporaryCommand(
+        "learnspell", [this](std::vector<std::string> args) {
+            getGame()->cheat();
+            if (args.size() != 1) {
+                return;
+            }
+            m_spellBook->makeSpellAvailable(args.at(0));
+        }));
+
+    m_commands.push_back(getGame()->getActionCommandManager().registerTemporaryCommand(
+        "getxp", [this](std::vector<std::string> args) {
+            getGame()->cheat();
+            if (args.size() != 1) {
+                return;
+            }
+            int amount = std::stoi(args.at(0));
+            m_charsheet->changeExperiencePoints(amount);
+        }));
 }
 void Player::createSounds()
 {
@@ -459,5 +481,8 @@ void Player::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
 
 void Player::setHealCallback(std::function<void(void)> healCallback)
 {
-    m_healCallback = healCallback;
+    m_healCallback = [healCallback, this]() {
+        m_animation->flash(0.2f, jt::colors::Green);
+        healCallback();
+    };
 }

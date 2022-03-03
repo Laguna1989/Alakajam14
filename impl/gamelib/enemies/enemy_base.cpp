@@ -11,12 +11,17 @@ EnemyBase::EnemyBase(std::shared_ptr<jt::Box2DWorldInterface> world, const b2Bod
 
 void EnemyBase::doUpdate(const float elapsed)
 {
+    m_staggeredTime -= elapsed;
+    m_attackCooldown -= elapsed;
     if (!m_animation->isVisible()) {
         return;
     }
-    m_attackCooldown -= elapsed;
+
     if (!m_isInDieAnimation) {
-        performAI(elapsed);
+        if (m_staggeredTime <= 0) {
+            performAI(elapsed);
+        }
+
         m_animation->setPosition(getPosition()
             - jt::Vector2f { m_animation->getLocalBounds().width,
                   m_animation->getLocalBounds().height }
@@ -35,8 +40,13 @@ void EnemyBase::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
 
 void EnemyBase::receiveDamage(const Damage& dmg)
 {
+    // TODO visual candy
+    m_animation->flash(0.15f, jt::colors::Red);
+
     m_hitpoints -= dmg.value;
-    m_animation->flash(0.1f, jt::colors::Red);
+
+    m_staggeredTime = 0.25f;
+    setVelocity({ 0.0f, 0.0f });
     if (m_hitpoints <= 0.0f) {
         die();
     }
@@ -114,3 +124,5 @@ float EnemyBase::playAnimation(std::string const& animName)
     return m_animation->getCurrentAnimTotalTime();
 }
 float EnemyBase::getCloseCombatDamage() const { return m_closeCombatDamage; }
+jt::Vector2f EnemyBase::getTargetPosition() { return getPosition(); }
+void EnemyBase::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }

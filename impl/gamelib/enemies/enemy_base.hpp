@@ -16,7 +16,7 @@ class StateGame;
 class ProjectileSpawnerInterface;
 
 // TODO compose class via mix ins?
-class EnemyBase : public jt::Box2DObject {
+class EnemyBase : public jt::Box2DObject, public TargetInterface {
 public:
     EnemyBase(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
     void receiveDamage(Damage const& dmg);
@@ -33,6 +33,9 @@ public:
 
     float getCloseCombatDamage() const;
 
+    jt::Vector2f getTargetPosition() override;
+    void applyDamageToTarget(Damage const& dmg) override;
+
 protected:
     float m_hitpoints { 1.0f };
     int m_experience { 0 };
@@ -42,6 +45,7 @@ protected:
     std::shared_ptr<jt::Animation> m_animation;
 
     AiStateManager m_aiStateManager;
+    float m_staggeredTime { -1.0f };
 
     // non owning weak or raw pointers
     std::weak_ptr<TargetInterface> m_target;

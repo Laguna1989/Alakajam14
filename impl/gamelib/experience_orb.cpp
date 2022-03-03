@@ -3,13 +3,12 @@
 #include "game_properties.hpp"
 #include "random/random.hpp"
 
-ExperienceOrb::ExperienceOrb(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
-    jt::Vector2f const& pos, int value)
+ExperienceOrb::ExperienceOrb(
+    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, int value)
     : jt::Box2DObject { world, def }
 {
     m_value = value;
     m_animation = std::make_shared<jt::Animation>();
-    m_animation->setPosition(pos);
     m_animation->setScreenSizeHint(GP::GetScreenSize());
 }
 
@@ -31,17 +30,24 @@ void ExperienceOrb::doCreate()
 
     m_animation->setScreenSizeHint(GP::GetScreenSize());
 
+    b2FixtureDef fixtureDef;
+    b2PolygonShape boxCollider {};
+    boxCollider.SetAsBox(3.0f, 3.0f);
+    fixtureDef.shape = &boxCollider;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryExperienceOrbs();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls();
+
+    getB2Body()->CreateFixture(&fixtureDef);
+
     m_soundBling = std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg");
     m_soundBling->setVolume(0.7f);
-    m_soundBling->setLoop(false);
+    getGame()->audio().addTemporarySound(m_soundBling);
 }
 
 void ExperienceOrb::doUpdate(float const elapsed)
 {
     m_animation->setPosition(getPosition() - GP::PlayerSize() * 0.5f);
     m_animation->update(elapsed);
-
-    m_soundBling->update();
 
     if (!m_soundBling->isPlaying() && m_pickedUp) {
         kill();

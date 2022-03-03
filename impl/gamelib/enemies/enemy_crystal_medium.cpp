@@ -15,7 +15,7 @@ EnemyCrystalMedium::EnemyCrystalMedium(
 
 void EnemyCrystalMedium::doCreate()
 {
-    m_experience = 50;
+    m_experience = 40;
     m_hitpoints = GP::EnemyCrystallMediumHitPoints();
     m_closeCombatDamage = 0.0f;
 
@@ -36,7 +36,10 @@ void EnemyCrystalMedium::doCreate()
     circle.m_radius = GP::PlayerSize().x / 2.0f;
 
     fixtureDef.shape = &circle;
-    fixtureDef.friction = 0.0f;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemies();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
+
     getB2Body()->CreateFixture(&fixtureDef);
 
     auto waitState = std::make_shared<AiStateWaitForTarget>();

@@ -77,6 +77,7 @@ private:
     bool m_isDying { false };
     void createSounds();
     std::function<void(void)> m_healCallback;
+    std::vector<std::shared_ptr<bool>> m_commands;
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP

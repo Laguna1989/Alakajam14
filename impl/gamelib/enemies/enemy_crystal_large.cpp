@@ -13,9 +13,9 @@ EnemyCrystalLarge::EnemyCrystalLarge(
 
 void EnemyCrystalLarge::doCreate()
 {
-    m_experience = 200;
+    m_experience = 180;
     m_hitpoints = GP::EnemyCrystallLargeHitPoints();
-    m_movementSpeed = 35.0f;
+    m_movementSpeed = 30.0f;
     m_closeCombatDamage = 80.0f;
 
     m_animation = std::make_shared<jt::Animation>();
@@ -35,7 +35,10 @@ void EnemyCrystalLarge::doCreate()
     circle.m_radius = GP::PlayerSize().x / 2.0f;
 
     fixtureDef.shape = &circle;
-    fixtureDef.friction = 0.0f;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemies();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
+
     getB2Body()->CreateFixture(&fixtureDef);
 
     auto waitState = std::make_shared<AiStateWaitForTarget>();

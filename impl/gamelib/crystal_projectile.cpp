@@ -33,6 +33,10 @@ void CrystalProjectile::doCreate()
     b2PolygonShape boxCollider {};
     boxCollider.SetAsBox(2.0f, 2.0f);
     fixtureDef.shape = &boxCollider;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemyShots();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
+
     getB2Body()->CreateFixture(&fixtureDef);
 }
 

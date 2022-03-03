@@ -4,6 +4,7 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
+#include "random/random.hpp"
 #include "state_game.hpp"
 
 EnemyCrystalSmall::EnemyCrystalSmall(
@@ -14,7 +15,7 @@ EnemyCrystalSmall::EnemyCrystalSmall(
 
 void EnemyCrystalSmall::doCreate()
 {
-    m_experience = 7;
+    m_experience = 7 + jt::Random::getInt(0, 1);
     m_hitpoints = GP::EnemyCrystallSmallHitPoints();
     m_movementSpeed = 45.0f;
     m_closeCombatDamage = 30.0f;
@@ -35,7 +36,10 @@ void EnemyCrystalSmall::doCreate()
     circle.m_radius = GP::PlayerSize().x / 2.0f - 4.0f;
 
     fixtureDef.shape = &circle;
-    fixtureDef.friction = 0.0f;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemies();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
+
     getB2Body()->CreateFixture(&fixtureDef);
 
     auto waitState = std::make_shared<AiStateWaitForTarget>();

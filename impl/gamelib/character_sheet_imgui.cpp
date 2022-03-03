@@ -128,7 +128,7 @@ void CharacterSheetImgui::changeHitpoints(float delta) const
     // TODO visual candy
     m_hitpoints -= delta;
     m_observers.healthObserver->notify(m_hitpoints);
-    if (delta >= 0) {
+    if (delta <= 0) {
         if (m_observers.healCallback) {
             m_observers.healCallback();
         }

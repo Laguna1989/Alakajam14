@@ -30,6 +30,12 @@ public:
 
     static int PhysicVelocityIterations();
     static int PhysicPositionIterations();
+    static std::uint16_t PhysicsCollisionCategoryWalls();
+    static std::uint16_t PhysicsCollisionCategoryPlayer();
+    static std::uint16_t PhysicsCollisionCategoryEnemies();
+    static std::uint16_t PhysicsCollisionCategoryPlayerShots();
+    static std::uint16_t PhysicsCollisionCategoryEnemyShots();
+    static std::uint16_t PhysicsCollisionCategoryExperienceOrbs();
 
     static jt::Vector2f PlayerSize();
     static float PlayerBaseMovementSpeed();

@@ -17,21 +17,24 @@ void SnipeProjectile::doCreate()
     m_animation->add("assets/player_projectile.png", "idle", jt::Vector2u { 16u, 16u },
         { 0, 1, 2, 3, 4 }, 0.1f, getGame()->gfx().textureManager());
     m_animation->play("idle");
-    m_animation->setOrigin(jt::Vector2f { 16.0f, 16.0f });
+    m_animation->setOrigin(jt::Vector2f { 8.0f, 8.0f });
     m_animation->setRotation(m_rotation);
     m_animation->setScreenSizeHint(GP::GetScreenSize());
+
     b2FixtureDef fixtureDef;
     b2PolygonShape boxCollider {};
-    boxCollider.SetAsBox(8.0f, 8.0f);
+    boxCollider.SetAsBox(3.0f, 3.0f);
     fixtureDef.shape = &boxCollider;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryPlayerShots();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryEnemies() | GP::PhysicsCollisionCategoryEnemyShots();
+
     getB2Body()->CreateFixture(&fixtureDef);
 }
 
 void SnipeProjectile::doUpdate(float const elapsed)
 {
-    m_animation->setPosition(getPosition()
-        - jt::Vector2f { m_animation->getLocalBounds().width, m_animation->getLocalBounds().height }
-            / 2.0f);
+    m_animation->setPosition(getPosition());
     m_animation->update(elapsed);
 }
 

@@ -8,8 +8,7 @@
 
 class ExperienceOrb : public jt::Box2DObject {
 public:
-    ExperienceOrb(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
-        jt::Vector2f const& pos, int value);
+    ExperienceOrb(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, int value);
     int m_value { 1 };
     bool m_pickedUp { false };
 
