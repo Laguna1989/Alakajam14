@@ -1,5 +1,5 @@
 #include "drawable_helpers.hpp"
-#include "hud/score_display.hpp"
+#include "hud/experience_display.hpp"
 #include "render_target.hpp"
 #include <gtest/gtest.h>
 #include <memory>

@@ -29,6 +29,7 @@ public:
     mutable bool m_drawSpellbook { false };
 
     std::vector<std::shared_ptr<SpellInterface>> getEquippedSpells();
+    std::vector<std::shared_ptr<jt::Text>> getEquippedSpellTexts();
 
 private:
     std::vector<std::shared_ptr<SpellInterface>> m_spells {};
@@ -36,7 +37,8 @@ private:
     mutable std::vector<std::shared_ptr<SpellInterface>> m_equippedSpells {};
     std::shared_ptr<jt::Sound> m_selectSound { nullptr };
     mutable bool m_newSpell { false };
-    std::shared_ptr<jt::Text> m_text { nullptr };
+    std::shared_ptr<jt::Text> m_newSpellText { nullptr };
+    std::vector<std::shared_ptr<jt::Text>> m_spellTexts {};
 
     void drawEquippedSpells() const;
     std::vector<std::string> getEquippableSpells() const;

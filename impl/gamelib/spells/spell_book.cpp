@@ -12,6 +12,19 @@
 #include "state_game.hpp"
 #include "strutils.hpp"
 
+namespace {
+std::string getKeysForId(std::size_t id)
+{
+    if (id == 0) {
+        return "[Q, 1]";
+    } else if (id == 1) {
+        return "[E, 2]";
+    } else {
+        return "[Tab, 3]";
+    }
+}
+} // namespace
+
 SpellBook::SpellBook(StateGame& state)
 {
     m_spells.push_back(std::make_shared<SpellNone>());
@@ -35,9 +48,17 @@ void SpellBook::doCreate()
     m_selectSound->setVolume(0.5f);
     getGame()->audio().addTemporarySound(m_selectSound);
 
-    m_text = jt::dh::createText(getGame()->gfx().target(), "New Spells!", 12);
-    m_text->setIgnoreCamMovement(true);
-    m_text->setPosition(jt::Vector2f { 350, 280 });
+    m_newSpellText = jt::dh::createText(getGame()->gfx().target(), "New Spells!", 12);
+    m_newSpellText->setIgnoreCamMovement(true);
+    m_newSpellText->setPosition(jt::Vector2f { 350, 280 });
+
+    for (auto i = 0U; i != m_equippedSpells.size(); ++i) {
+        auto text = jt::dh::createText(getGame()->gfx().target(), getKeysForId(i) + " None", 12);
+        text->setIgnoreCamMovement(true);
+        text->setPosition(jt::Vector2f { 10.0f, 240.0f + i * 20.0f });
+        text->setTextAlign(jt::Text::TextAlign::LEFT);
+        m_spellTexts.push_back(text);
+    }
 }
 
 std::shared_ptr<SpellInterface> SpellBook::getSpellByName(std::string const& name) const
@@ -78,18 +99,25 @@ void SpellBook::doUpdate(float const elapsed)
 {
     float v = sin(getAge() * 2.5f);
     auto a = 100 + 155 * v * v;
-    m_text->setColor(jt::Color { 255, 255, 255, static_cast<std::uint8_t>(a) });
-    m_text->update(elapsed);
+    m_newSpellText->setColor(jt::Color { 255, 255, 255, static_cast<std::uint8_t>(a) });
+    m_newSpellText->update(elapsed);
 
     if (getGame()->input().keyboard()->justPressed(jt::KeyCode::L)) {
         m_drawSpellbook = !m_drawSpellbook;
+    }
+
+    for (auto const& t : m_spellTexts) {
+        t->update(elapsed);
     }
 }
 
 void SpellBook::doDraw() const
 {
     if (m_newSpell) {
-        m_text->draw(getGame()->gfx().target());
+        m_newSpellText->draw(getGame()->gfx().target());
+    }
+    for (auto const& t : m_spellTexts) {
+        t->draw(getGame()->gfx().target());
     }
 
     if (!m_drawSpellbook) {
@@ -133,6 +161,10 @@ void SpellBook::drawEquippedSpells() const
                         m_equippedSpells.at(i)->onUnEquip();
                         m_equippedSpells.at(i) = getSpellByName(spell);
                         m_equippedSpells.at(i)->onEquip();
+                        auto const cost = getSpellByName(spell)->getExperienceCost();
+                        auto const xpString
+                            = (cost == 0 ? "" : " - " + std::to_string(cost) + "XP");
+                        m_spellTexts.at(i)->setText(getKeysForId(i) + " " + spell + xpString);
                     }
                 }
             }
@@ -157,3 +189,4 @@ std::vector<std::string> SpellBook::getEquippableSpells() const
 
     return values;
 }
+std::vector<std::shared_ptr<jt::Text>> SpellBook::getEquippedSpellTexts() { return m_spellTexts; }
