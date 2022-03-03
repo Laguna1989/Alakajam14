@@ -3,12 +3,9 @@
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
 #include "math_helper.hpp"
-#include "random/random.hpp"
 #include "spells/spell_none.hpp"
 #include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
-#include "tweens/tween_alpha.hpp"
-#include "tweens/tween_position.hpp"
 
 Player::Player(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
