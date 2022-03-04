@@ -1,4 +1,5 @@
 #include "shroom_game_contact_listener.hpp"
+#include "enemies/enemy_base.hpp"
 #include "game_properties.hpp"
 #include "state_game.hpp"
 #include "timer.hpp"

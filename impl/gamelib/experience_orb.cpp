@@ -1,11 +1,13 @@
 #include "experience_orb.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "math_helper.hpp"
 #include "random/random.hpp"
 
-ExperienceOrb::ExperienceOrb(
-    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, int value)
+ExperienceOrb::ExperienceOrb(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
+    int value, std::weak_ptr<TargetInterface> target)
     : jt::Box2DObject { world, def }
+    , m_target { target }
 {
     m_value = value;
     m_animation = std::make_shared<jt::Animation>();
@@ -51,6 +53,24 @@ void ExperienceOrb::doUpdate(float const elapsed)
 
     if (!m_soundBling->isPlaying() && m_pickedUp) {
         kill();
+    }
+
+    if (getAge() < GP::ExperienceOrbIdleTime()) {
+        return;
+    }
+    auto const playerPosition = m_target->getTargetPosition();
+    auto const orbPosition = getPosition();
+    auto diff = playerPosition - orbPosition;
+    auto const distance = jt::MathHelper::lengthSquared(diff);
+
+    if (distance < GP::ExperienceOrbAttractDistance() * GP::ExperienceOrbAttractDistance()) {
+        jt::MathHelper::normalizeMe(diff);
+        setVelocity(diff * GP::ExperienceOrbVelocity());
+    }
+    if (distance < GP::ExperienceOrbPickupDistance() * GP::ExperienceOrbPickupDistance()
+        && !m_pickedUp) {
+        m_target->gainExperience(m_value);
+        pickUp();
     }
 }
 

@@ -11,6 +11,8 @@ public:
     virtual jt::Vector2f getTargetPosition() = 0;
 
     virtual void applyDamageToTarget(Damage const& dmg) = 0;
+
+    virtual void gainExperience(int value) = 0;
 };
 
 #endif // ALAKAJAM14_TARGET_INTERFACE_HPP

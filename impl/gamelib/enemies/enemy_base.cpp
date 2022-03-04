@@ -126,3 +126,6 @@ float EnemyBase::playAnimation(std::string const& animName)
 float EnemyBase::getCloseCombatDamage() const { return m_closeCombatDamage; }
 jt::Vector2f EnemyBase::getTargetPosition() { return getPosition(); }
 void EnemyBase::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
+void EnemyBase::gainExperience(int value)
+{ /* noting to do*/
+}

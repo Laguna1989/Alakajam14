@@ -27,6 +27,8 @@ public:
     void setDeferredActionHandler(DeferredActionInterface* handler);
     void setExperienceSpawner(ExperienceSpawnerInterface* spawner);
 
+    void gainExperience(int value) override;
+
     AiStateManager& getAiStateManager();
     void moveInDirection(jt::Vector2f const& dir);
     float playAnimation(std::string const& animName);

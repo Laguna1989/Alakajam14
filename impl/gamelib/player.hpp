@@ -28,7 +28,7 @@ public:
     void handleInputMovement();
     void updateAnimation(float const elapsed);
 
-    void gainExperience(int value);
+    void gainExperience(int value) override;
 
     void receiveDamage(Damage const& dmg);
 

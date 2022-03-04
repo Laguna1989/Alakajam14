@@ -5,7 +5,6 @@
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "crystal_projectile.hpp"
 #include "deferred_action_interface.hpp"
-#include "enemies/enemy_base.hpp"
 #include "experience_orb.hpp"
 #include "experience_spawner_interface.hpp"
 #include "game_state.hpp"
@@ -33,6 +32,9 @@ class Sprite;
 
 class Hud;
 class Stairs;
+class EnemyBase;
+class Level;
+
 class StateGame : public jt::GameState,
                   public WorldPathCalculatorInterface,
                   public ProjectileSpawnerInterface,
@@ -43,8 +45,6 @@ public:
 
     std::shared_ptr<Player> getPlayer();
 
-    std::shared_ptr<jt::pathfinder::NodeInterface> getTileAtPosition(
-        jt::Vector2f const& actorPosInFloat);
     std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> calculatePath(
         jt::Vector2f const& startPos, jt::Vector2f const& endPos) override;
 
@@ -71,13 +71,7 @@ public:
     jt::Vector2f& getStairsDest();
 
 private:
-    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround1;
-    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerOverlay;
-    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerOveroverlay;
-    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerUnderlay;
-    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerUnderunderlay;
-
-    std::shared_ptr<jt::tilemap::NodeLayer> m_nodeLayer;
+    std::shared_ptr<Level> m_level;
 
     std::shared_ptr<Player> m_player;
 
@@ -118,17 +112,12 @@ private:
     void loadTilemap();
 
     void createPlayer();
-    void drawTileNodeOverlay();
     void createEnemies();
     void createExperienceOrbs();
     void spawnOneExperienceOrb(jt::Vector2f const& pos, int value);
-    void updateTileNodes(float const elapsed);
-    void updateExperience() const;
     void createSnipeProjectilesGroup();
-    void loadTileColliders(jt::tilemap::TilesonLoader& loader);
-    void loadPlayerSpawn(std::vector<jt::tilemap::InfoRect>& objects);
-    void loadObjects(jt::tilemap::TilesonLoader& loader);
-    void loadEnemies(std::vector<jt::tilemap::InfoRect>& objects);
+    void loadTileColliders();
+    void loadEnemies();
     void loadSingleEnemy(jt::tilemap::InfoRect const& info);
     void loadSingleEnemySmallCrystal(jt::Vector2f const& position);
     void loadSingleEnemyMediumCrystal(jt::Vector2f const& position);
@@ -140,6 +129,11 @@ private:
     jt::Vector2f m_stairsDest;
     void loadSingleEnemyBoss(const jt::Vector2f& position);
     void setupEnemyDependencies(std::shared_ptr<EnemyBase> e);
+    void loadGuiles();
+    void loadLoots();
+    void loadPlayerSpawn();
+    void loadDoorObjects();
+    void loadObjects();
 };
 
 #endif
