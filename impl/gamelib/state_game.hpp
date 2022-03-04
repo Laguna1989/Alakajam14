@@ -19,7 +19,6 @@
 #include "tilemap/object_layer.hpp"
 #include "tilemap/tile_layer.hpp"
 #include "tilemap/tileson_loader.hpp"
-#include "world_path_calculator_interface.hpp"
 #include <chrono>
 #include <memory>
 #include <string>
@@ -36,7 +35,6 @@ class EnemyBase;
 class Level;
 
 class StateGame : public jt::GameState,
-                  public WorldPathCalculatorInterface,
                   public ProjectileSpawnerInterface,
                   public DeferredActionInterface,
                   public ExperienceSpawnerInterface {
@@ -44,9 +42,6 @@ public:
     std::string getName() const override;
 
     std::shared_ptr<Player> getPlayer();
-
-    std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> calculatePath(
-        jt::Vector2f const& startPos, jt::Vector2f const& endPos) override;
 
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> getEnemies();
 
@@ -67,6 +62,7 @@ public:
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> getSnipeProjectiles() const;
     std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> getCrystalProjectiles() const;
+
     std::shared_ptr<Stairs> getStairs() const;
     jt::Vector2f& getStairsDest();
 

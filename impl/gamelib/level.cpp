@@ -1,6 +1,7 @@
 #include "level.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "pathfinder/pathfinder.hpp"
 #include "strutils.hpp"
 #include "tilemap/node_layer.hpp"
 #include "tilemap/tile_layer.hpp"
@@ -147,3 +148,11 @@ std::vector<jt::tilemap::InfoRect> Level::getLootInfo()
 jt::Vector2f Level::getKeysPosition() const { return m_keyPosition; }
 jt::Vector2f Level::getStairsPosition() const { return m_stairsPosition; }
 jt::Vector2f Level::getDestPosition() const { return m_stairsDest; }
+
+std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> Level::calculatePath(
+    jt::Vector2f const& startPos, jt::Vector2f const& endPos)
+{
+    auto const tileForStart = getTileAtPosition(startPos);
+    auto const tileForEnd = getTileAtPosition(endPos);
+    return jt::pathfinder::calculatePath(tileForStart, tileForEnd);
+}

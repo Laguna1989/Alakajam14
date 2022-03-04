@@ -380,7 +380,7 @@ void StateGame::setupEnemyDependencies(std::shared_ptr<EnemyBase> e)
     e->setTarget(m_player);
     e->setProjectileSpawner(this);
     e->setExperienceSpawner(this);
-    e->setPathCalculator(this);
+    e->setPathCalculator(m_level.get());
     e->setDeferredActionHandler(this);
 }
 
@@ -556,24 +556,19 @@ void StateGame::spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f 
     m_snipeProjectiles->push_back(projectile);
     add(projectile);
 }
+
 void StateGame::loadStairs(jt::Vector2f f)
 {
     m_stairs = std::make_shared<Stairs>(f, *this);
     add(m_stairs);
 }
+
 std::shared_ptr<Stairs> StateGame::getStairs() const { return m_stairs; }
+
 void StateGame::loadKey(jt::Vector2f f)
 {
     m_key = std::make_shared<Key>(f, *this);
     add(m_key);
 }
-jt::Vector2f& StateGame::getStairsDest() { return m_stairsDest; }
 
-std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> StateGame::calculatePath(
-    jt::Vector2f const& startPos, jt::Vector2f const& endPos)
-{
-    // TODO move to level
-    auto const tileForStart = m_level->getTileAtPosition(startPos);
-    auto const tileForEnd = m_level->getTileAtPosition(endPos);
-    return jt::pathfinder::calculatePath(tileForStart, tileForEnd);
-}
+jt::Vector2f& StateGame::getStairsDest() { return m_stairsDest; }

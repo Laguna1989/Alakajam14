@@ -5,6 +5,7 @@
 #include "tilemap/info_rect.hpp"
 #include "tilemap/tilemap_collisions.hpp"
 #include "vector.hpp"
+#include "world_path_calculator_interface.hpp"
 #include <memory>
 #include <string>
 
@@ -21,7 +22,7 @@ class NodeInterface;
 }
 } // namespace jt
 
-class Level : public jt::GameObject {
+class Level : public jt::GameObject, public WorldPathCalculatorInterface {
 public:
     explicit Level(std::string const& fileName);
 
@@ -30,6 +31,9 @@ public:
 
     void drawLowerLayers();
     void drawUpperLayers();
+
+    std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> calculatePath(
+        jt::Vector2f const& startPos, jt::Vector2f const& endPos) override;
 
     std::shared_ptr<jt::pathfinder::NodeInterface> getTileAtPosition(
         jt::Vector2f const& actorPosInFloat);
