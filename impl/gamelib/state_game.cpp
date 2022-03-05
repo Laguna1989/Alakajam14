@@ -72,9 +72,6 @@ void StateGame::doInternalCreate()
     m_contactListener = std::make_shared<ShroomGameContactListener>(*this);
     m_world->setContactListener(m_contactListener);
 
-    float const w = static_cast<float>(GP::GetWindowSize().x);
-    float const h = static_cast<float>(GP::GetWindowSize().y);
-
     using jt::Shape;
 
     m_vignette = std::make_shared<jt::Sprite>("#v#"
@@ -90,12 +87,12 @@ void StateGame::doInternalCreate()
     createPlayer();
     createEnemies();
     createExperienceOrbs();
-    m_guys = std::make_shared<jt::ObjectGroup<Guile>>();
-
-    loadTilemap();
-
+    createGuiles();
     createSnipeProjectilesGroup();
     createCrystalProjectilesGroup();
+    createKey();
+
+    loadLevel("assets/cakeworld.json");
 
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
@@ -106,13 +103,44 @@ void StateGame::doInternalCreate()
     m_musicLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_loop.ogg");
     m_musicLoop->setLoop(true);
 }
+void StateGame::createGuiles() { m_guys = std::make_shared<jt::ObjectGroup<Guile>>(); }
+namespace {
+template <typename T>
+void clearGroup(std::shared_ptr<jt::ObjectGroup<T>> group)
+{
+    for (auto const& e : *group) {
+        auto entry = e.lock();
+        if (!entry) {
+            continue;
+        }
+        entry->kill();
+    }
+}
+} // namespace
+
+void StateGame::loadLevel(std::string const& fileName)
+{
+    clearGroup(m_snipeProjectiles);
+    clearGroup(m_crystalProjectiles);
+    clearGroup(m_enemies);
+    clearGroup(m_experienceOrbs);
+    clearGroup(m_guys);
+    m_colliders.clear();
+
+    if (m_level) {
+        m_level->kill();
+    }
+    basicUpdateObjects(0.1f);
+
+    loadTilemap(fileName);
+}
 
 void StateGame::createSnipeProjectilesGroup()
 {
     m_snipeProjectiles = std::make_shared<jt::ObjectGroup<SnipeProjectile>>();
     add(m_snipeProjectiles);
 
-    m_particlesSnipeProjectiles = std::make_shared<jt::ParticleSystem<jt::Shape, 50>>(
+    m_particlesSnipeParticleSystem = std::make_shared<jt::ParticleSystem<jt::Shape, 50>>(
         [this]() {
             auto shape = std::make_shared<jt::Shape>();
             shape->makeRect({ 1, 1 }, getGame()->gfx().textureManager());
@@ -132,7 +160,7 @@ void StateGame::createSnipeProjectilesGroup()
             auto twAlpha = jt::TweenAlpha::create(shape, 0.7f, 250, 0);
             add(twAlpha);
         });
-    add(m_particlesSnipeProjectiles);
+    add(m_particlesSnipeParticleSystem);
 }
 
 void StateGame::createCrystalProjectilesGroup()
@@ -205,7 +233,7 @@ void StateGame::doInternalUpdate(float const elapsed)
                 continue;
             }
             m_particlesSnipePosition = projectile->getPosition();
-            m_particlesSnipeProjectiles->Fire(1);
+            m_particlesSnipeParticleSystem->Fire(1);
         }
 
         camFollowObject(
@@ -288,9 +316,9 @@ void StateGame::endGame()
 
 std::string StateGame::getName() const { return "Game"; }
 
-void StateGame::loadTilemap()
+void StateGame::loadTilemap(std::string const& fileName)
 {
-    m_level = std::make_shared<Level>("assets/cakeworld.json");
+    m_level = std::make_shared<Level>(fileName);
     add(m_level);
 
     loadTileColliders();
@@ -308,7 +336,7 @@ void StateGame::loadObjects()
 void StateGame::loadDoorObjects()
 {
     loadStairs(m_level->getStairsPosition());
-    loadKey(m_level->getKeysPosition());
+    m_key->setPosition(m_level->getKeysPosition());
     m_stairsDest = m_level->getDestPosition();
 }
 void StateGame::loadPlayerSpawn()
@@ -565,9 +593,9 @@ void StateGame::loadStairs(jt::Vector2f f)
 
 std::shared_ptr<Stairs> StateGame::getStairs() const { return m_stairs; }
 
-void StateGame::loadKey(jt::Vector2f f)
+void StateGame::createKey()
 {
-    m_key = std::make_shared<Key>(f, *this);
+    m_key = std::make_shared<Key>(*this);
     add(m_key);
 }
 

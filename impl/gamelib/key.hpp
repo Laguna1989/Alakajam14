@@ -9,7 +9,8 @@ class StateGame;
 class Key : public jt::GameObject {
 
 public:
-    Key(jt::Vector2f const& pos, StateGame&);
+    Key(StateGame& state);
+    void setPosition(jt::Vector2f const& pos);
 
 private:
     bool m_locked { true };

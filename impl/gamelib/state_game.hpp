@@ -66,9 +66,10 @@ public:
     std::shared_ptr<Stairs> getStairs() const;
     jt::Vector2f& getStairsDest();
 
+    void loadLevel(std::string const& fileName);
+
 private:
     std::shared_ptr<Level> m_level;
-
     std::shared_ptr<Player> m_player;
 
     std::shared_ptr<jt::ObjectGroup<EnemyBase>> m_enemies;
@@ -78,16 +79,15 @@ private:
     std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> m_crystalProjectiles;
 
     std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesHeal;
-    std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesSnipeProjectiles;
+    std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesSnipeParticleSystem;
 
     std::shared_ptr<jt::ObjectGroup<Guile>> m_guys;
-
-    std::shared_ptr<jt::Sprite> m_vignette;
 
     std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders {};
 
     std::shared_ptr<b2ContactListener> m_contactListener;
 
+    std::shared_ptr<jt::Sprite> m_vignette;
     std::shared_ptr<jt::Sound> m_musicIntro;
     std::shared_ptr<jt::Sound> m_musicLoop;
     std::shared_ptr<Stairs> m_stairs;
@@ -96,7 +96,6 @@ private:
     std::chrono::time_point<std::chrono::steady_clock> m_musicLoopStartTime;
 
     bool m_running { true };
-
     bool m_hasEnded { false };
 
     void doInternalCreate() override;
@@ -105,7 +104,7 @@ private:
     void doInternalDraw() const override;
 
     void endGame();
-    void loadTilemap();
+    void loadTilemap(std::string const& fileName);
 
     void createPlayer();
     void createEnemies();
@@ -121,7 +120,7 @@ private:
     void loadSingleLoot(jt::tilemap::InfoRect const& o);
     void createCrystalProjectilesGroup();
     void loadStairs(jt::Vector2f f);
-    void loadKey(jt::Vector2f f);
+    void createKey();
     jt::Vector2f m_stairsDest;
     void loadSingleEnemyBoss(const jt::Vector2f& position);
     void setupEnemyDependencies(std::shared_ptr<EnemyBase> e);
@@ -130,6 +129,7 @@ private:
     void loadPlayerSpawn();
     void loadDoorObjects();
     void loadObjects();
+    void createGuiles();
 };
 
 #endif
