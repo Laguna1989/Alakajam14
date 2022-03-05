@@ -14,9 +14,6 @@ void EnemyBase::doUpdate(const float elapsed)
     m_staggeredTime -= elapsed;
     m_attackCooldown -= elapsed;
 
-    m_animation->setPosition(getPosition()
-        - jt::Vector2f { m_animation->getLocalBounds().width, m_animation->getLocalBounds().height }
-            * 0.5f);
     m_animation->update(elapsed);
     if (!m_animation->isVisible()) {
         return;
@@ -26,6 +23,10 @@ void EnemyBase::doUpdate(const float elapsed)
         if (m_staggeredTime <= 0) {
             performAI(elapsed);
         }
+        m_animation->setPosition(getPosition()
+            - jt::Vector2f { m_animation->getLocalBounds().width,
+                  m_animation->getLocalBounds().height }
+                * 0.5f);
 
     } else {
         m_animation->setPosition(m_deathPosition
@@ -61,7 +62,6 @@ void EnemyBase::die()
     m_isInDieAnimation = true;
     m_animation->play("dead");
     m_deathPosition = getPosition();
-
     // move collider out of the way
     setPosition(jt::Vector2f { -9999999999.0f, -999999999999999.0f });
 

@@ -17,7 +17,7 @@ class StateMenu : public jt::GameState {
 public:
     std::string getName() const override;
 
-    void setScore(int /*s*/) {};
+    void setScore(float s);
 
 private:
     std::shared_ptr<jt::Shape> m_background;
@@ -26,6 +26,7 @@ private:
 
     std::shared_ptr<jt::Text> m_text_Explanation;
     std::shared_ptr<jt::Text> m_text_Credits;
+    std::shared_ptr<jt::Text> m_text_Time;
 
     std::shared_ptr<jt::Shape> m_overlay;
     std::shared_ptr<jt::Sprite> m_vignette;
@@ -58,6 +59,7 @@ private:
     void startTransitionToStateGame();
 
     void doInternalDraw() const override;
+    float m_time { 0.0f };
 };
 
 #endif

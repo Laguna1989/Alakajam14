@@ -2,6 +2,7 @@
 #include "box2dwrapper/box2d_world_impl.hpp"
 #include "color.hpp"
 #include "color_helpers.hpp"
+#include "drawable_helpers.hpp"
 #include "enemies/enemy_crystal_boss.hpp"
 #include "enemies/enemy_crystal_large.hpp"
 #include "enemies/enemy_crystal_medium.hpp"
@@ -17,7 +18,6 @@
 #include "sprite.hpp"
 #include "stairs.hpp"
 #include "state_menu.hpp"
-#include "strutils.hpp"
 #include "tilemap/tileson_loader.hpp"
 #include "timer.hpp"
 #include "tweens/tween_alpha.hpp"
@@ -103,6 +103,11 @@ void StateGame::doInternalCreate()
 
     m_musicLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_loop.ogg");
     m_musicLoop->setLoop(true);
+
+    m_timerText = jt::dh::createText(getGame()->gfx().target(), "0.00", 8);
+    m_timerText->setPosition(jt::Vector2f { 360.0f, 30.0f });
+    m_timerText->setIgnoreCamMovement(true);
+    m_timerText->setTextAlign(jt::Text::TextAlign::LEFT);
 }
 void StateGame::createGuiles() { m_guys = std::make_shared<jt::ObjectGroup<Guile>>(); }
 namespace {
@@ -229,10 +234,19 @@ void StateGame::createPlayer()
 
 void StateGame::doInternalUpdate(float const elapsed)
 {
+    if (m_touchedInput) {
+        m_timer += elapsed;
+    }
+    m_timerText->setText(jt::MathHelper::floatToStringWithXDigits(m_timer, 2));
+    m_timerText->update(elapsed);
     if (m_running) {
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
-        // update game logic here
 
+        for (auto k : jt::getAllKeys()) {
+            if (getGame()->input().keyboard()->justPressed(k)) {
+                m_touchedInput = true;
+            }
+        }
         for (auto sp : *m_snipeProjectiles) {
             auto projectile = sp.lock();
             if (!projectile) {
@@ -249,6 +263,20 @@ void StateGame::doInternalUpdate(float const elapsed)
             m_player->die();
 
             endGame();
+        }
+
+        if (!m_hasEnded) {
+
+            if (m_boss) {
+                if (!m_boss->isAlive()) {
+                    m_hasEnded = true;
+                    auto stateMenu = std::make_shared<StateMenu>();
+                    if (!getGame()->wasCheating()) {
+                        stateMenu->setScore(m_timer);
+                    }
+                    getGame()->getStateManager().switchState(stateMenu);
+                }
+            }
         }
 
         if (m_musicIntro->isPlaying()) {
@@ -303,6 +331,7 @@ void StateGame::doInternalDraw() const
     m_key->draw();
     m_level->drawUpperLayers();
     m_vignette->draw(getGame()->gfx().target());
+    m_timerText->draw(getGame()->gfx().target());
     m_hud->draw();
 }
 
@@ -467,6 +496,7 @@ void StateGame::loadSingleEnemyBoss(jt::Vector2f const& position)
     auto e = std::make_shared<EnemyCrystalBoss>(m_world, &bodyDef);
     setupEnemyDependencies(e);
     m_enemies->push_back(e);
+    m_boss = e;
     add(e);
 }
 

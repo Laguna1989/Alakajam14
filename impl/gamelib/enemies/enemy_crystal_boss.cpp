@@ -52,7 +52,4 @@ void EnemyCrystalBoss::doCreate()
     getAiStateManager().switchToState("boss");
 }
 
-void EnemyCrystalBoss::doDie()
-{
-    getGame()->getStateManager().switchState(std::make_shared<StateMenu>());
-}
+void EnemyCrystalBoss::doDie() { }

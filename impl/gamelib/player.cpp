@@ -206,7 +206,7 @@ void Player::createAnimation()
     m_attackUnderlay->add("assets/attack_underlay.png", "initial", jt::Vector2u { 32u, 32u }, { 0 },
         0.1f, getGame()->gfx().textureManager());
     m_attackUnderlay->add("assets/attack_underlay.png", "attack", jt::Vector2u { 32u, 32u },
-        jt::MathHelper::numbersBetween(0u, 9u), frameTimeAttack * 2.0f,
+        jt::MathHelper::numbersBetween(3u, 9u), frameTimeAttack * 2.0f,
         getGame()->gfx().textureManager());
     m_attackUnderlay->play("initial");
 }

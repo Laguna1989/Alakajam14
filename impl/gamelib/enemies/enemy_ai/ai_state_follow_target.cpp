@@ -64,7 +64,7 @@ void AiStateFollowTarget::closeRangeAttack(float elapsed, EnemyBase* base)
 
     auto const distanceSquared = jt::MathHelper::lengthSquared(diff);
     if (m_timeSinceTriggeredAttack < 0.0f) {
-        if (distanceSquared < 18 * 18) {
+        if (distanceSquared < 19 * 19) {
             if (m_attackCooldown <= 0.0f) {
                 m_timeSinceTriggeredAttack = base->playAnimation("shoot");
             }

@@ -5,6 +5,7 @@
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "crystal_projectile.hpp"
 #include "deferred_action_interface.hpp"
+#include "enemies/enemy_crystal_boss.hpp"
 #include "experience_orb.hpp"
 #include "experience_spawner_interface.hpp"
 #include "game_state.hpp"
@@ -91,9 +92,14 @@ private:
     std::shared_ptr<jt::Sound> m_musicIntro;
     std::shared_ptr<jt::Sound> m_musicLoop;
     std::shared_ptr<Stairs> m_stairs;
+    std::shared_ptr<EnemyCrystalBoss> m_boss;
     std::shared_ptr<Key> m_key;
     bool m_isIntroMusicPlaying { true };
     std::chrono::time_point<std::chrono::steady_clock> m_musicLoopStartTime;
+
+    float m_timer { 0.0f };
+    bool m_touchedInput { false };
+    std::shared_ptr<jt::Text> m_timerText;
 
     bool m_running { true };
     bool m_hasEnded { false };

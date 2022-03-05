@@ -51,6 +51,7 @@ void EnemyCrystalLarge::doCreate()
     followState->setTarget(m_target);
     followState->setNextState("wait");
     followState->setForgetRange(200.0f);
+    followState->setPathCalculator(m_pathCalculator);
     getAiStateManager().registerState("follow", followState);
 
     getAiStateManager().switchToState("wait");
