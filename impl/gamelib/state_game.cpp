@@ -91,8 +91,9 @@ void StateGame::doInternalCreate()
     createSnipeProjectilesGroup();
     createCrystalProjectilesGroup();
     createKey();
+    createStairs();
 
-    loadLevel("assets/cakeworld.json");
+    loadLevel("assets/test_1.json");
 
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
@@ -120,19 +121,26 @@ void clearGroup(std::shared_ptr<jt::ObjectGroup<T>> group)
 
 void StateGame::loadLevel(std::string const& fileName)
 {
+    clearOldLevel();
+    loadTilemap(fileName);
+}
+
+void StateGame::clearOldLevel()
+{
     clearGroup(m_snipeProjectiles);
     clearGroup(m_crystalProjectiles);
     clearGroup(m_enemies);
     clearGroup(m_experienceOrbs);
     clearGroup(m_guys);
+    for (auto c : m_colliders) {
+        c->destroy();
+    }
     m_colliders.clear();
 
     if (m_level) {
         m_level->kill();
     }
     basicUpdateObjects(0.1f);
-
-    loadTilemap(fileName);
 }
 
 void StateGame::createSnipeProjectilesGroup()
@@ -225,7 +233,12 @@ void StateGame::doInternalUpdate(float const elapsed)
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
 
-        //        m_level->updateTileNodes(elapsed);
+        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::F9)) {
+            loadLevel("assets/test_2.json");
+        }
+        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::F8)) {
+            loadLevel("assets/test_1.json");
+        }
 
         for (auto sp : *m_snipeProjectiles) {
             auto projectile = sp.lock();
@@ -335,7 +348,7 @@ void StateGame::loadObjects()
 }
 void StateGame::loadDoorObjects()
 {
-    loadStairs(m_level->getStairsPosition());
+    m_stairs->setPosition(m_level->getStairsPosition());
     m_key->setPosition(m_level->getKeysPosition());
     m_stairsDest = m_level->getDestPosition();
 }
@@ -585,9 +598,9 @@ void StateGame::spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f 
     add(projectile);
 }
 
-void StateGame::loadStairs(jt::Vector2f f)
+void StateGame::createStairs()
 {
-    m_stairs = std::make_shared<Stairs>(f, *this);
+    m_stairs = std::make_shared<Stairs>(*this);
     add(m_stairs);
 }
 

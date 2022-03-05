@@ -119,7 +119,7 @@ private:
     void loadSingleEnemyLargeCrystal(jt::Vector2f const& position);
     void loadSingleLoot(jt::tilemap::InfoRect const& o);
     void createCrystalProjectilesGroup();
-    void loadStairs(jt::Vector2f f);
+    void createStairs();
     void createKey();
     jt::Vector2f m_stairsDest;
     void loadSingleEnemyBoss(const jt::Vector2f& position);
@@ -130,6 +130,7 @@ private:
     void loadDoorObjects();
     void loadObjects();
     void createGuiles();
+    void clearOldLevel();
 };
 
 #endif

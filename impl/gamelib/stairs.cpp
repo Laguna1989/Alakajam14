@@ -3,10 +3,9 @@
 #include "game_properties.hpp"
 #include "math_helper.hpp"
 void Stairs::unlock() { m_locked = false; }
-Stairs::Stairs(jt::Vector2f const& pos, StateGame& state)
+Stairs::Stairs(StateGame& state)
     : m_locked(true)
     , m_touched(false)
-    , m_pos(pos)
     , m_state(state)
 {
 }
@@ -39,3 +38,4 @@ void Stairs::doUpdate(const float elapsed)
     }
 }
 void Stairs::doDraw() const { m_sprite->draw(getGame()->gfx().target()); }
+void Stairs::setPosition(jt::Vector2f const& pos) { m_pos = pos; }
