@@ -13,6 +13,11 @@ void EnemyBase::doUpdate(const float elapsed)
 {
     m_staggeredTime -= elapsed;
     m_attackCooldown -= elapsed;
+
+    m_animation->setPosition(getPosition()
+        - jt::Vector2f { m_animation->getLocalBounds().width, m_animation->getLocalBounds().height }
+            * 0.5f);
+    m_animation->update(elapsed);
     if (!m_animation->isVisible()) {
         return;
     }
@@ -22,18 +27,12 @@ void EnemyBase::doUpdate(const float elapsed)
             performAI(elapsed);
         }
 
-        m_animation->setPosition(getPosition()
-            - jt::Vector2f { m_animation->getLocalBounds().width,
-                  m_animation->getLocalBounds().height }
-                * 0.5f);
-
     } else {
         m_animation->setPosition(m_deathPosition
             - jt::Vector2f { m_animation->getLocalBounds().width,
                   m_animation->getLocalBounds().height }
                 * 0.5f);
     }
-    m_animation->update(elapsed);
 }
 
 void EnemyBase::doDraw() const { m_animation->draw(getGame()->gfx().target()); }

@@ -29,7 +29,7 @@ void EnemyCrystalSmall::doCreate()
     m_animation->add("assets/crystal_dead_small_green.png", "dead", jt::Vector2u { 48, 48 },
         { 0, 1, 2, 3 }, 0.1f, getGame()->gfx().textureManager());
     m_animation->play("idle");
-    m_animation->setScreenSizeHint(GP::GetScreenSize());
+    //    m_animation->setScreenSizeHint(GP::GetScreenSize());
 
     b2FixtureDef fixtureDef;
     b2CircleShape circle {};

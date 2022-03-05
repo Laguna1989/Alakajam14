@@ -9,6 +9,9 @@ AiStateBoss::AiStateBoss()
 
 void AiStateBoss::update(float elapsed, EnemyBase* base)
 {
+    if (calculateDistanceToTarget() >= 73984) {
+        return;
+    }
     m_follow.setTarget(m_target);
     m_follow.setPosition(m_position);
 

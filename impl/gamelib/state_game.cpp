@@ -93,7 +93,7 @@ void StateGame::doInternalCreate()
     createKey();
     createStairs();
 
-    loadLevel("assets/test_1.json");
+    loadLevel("assets/cakeworld.json");
 
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
@@ -232,13 +232,6 @@ void StateGame::doInternalUpdate(float const elapsed)
     if (m_running) {
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
-
-        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::F9)) {
-            loadLevel("assets/test_2.json");
-        }
-        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::F8)) {
-            loadLevel("assets/test_1.json");
-        }
 
         for (auto sp : *m_snipeProjectiles) {
             auto projectile = sp.lock();
