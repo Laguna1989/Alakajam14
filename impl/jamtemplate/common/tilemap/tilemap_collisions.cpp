@@ -54,7 +54,7 @@ void TilemapCollisions::refineColliders(float size)
             / size);
 
     std::vector<int> lookup;
-    lookup.resize((xmax + 1) * (ymax + 1));
+    lookup.resize(static_cast<std::size_t>(xmax + 1) * (ymax + 1));
     for (auto const& r : m_rects) {
         setEntry(
             lookup, static_cast<int>(r.left / size), static_cast<int>(r.top / size), xmax + 1, 1);
