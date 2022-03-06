@@ -146,3 +146,32 @@ void PlayerGraphicsComponent::flash(float time, jt::Color const& color)
 {
     m_animation->flash(time, color);
 }
+
+bool PlayerGraphicsComponent::setAnimationIfNotSet(std::string const& newAnimationName)
+{
+    std::string const currentAnimationName = m_animation->getCurrentAnimationName();
+
+    if (currentAnimationName == "die") {
+        return true;
+    }
+
+    if (currentAnimationName == "hurt" && newAnimationName == "idle") {
+        return true;
+    }
+
+    if (currentAnimationName != newAnimationName) {
+        m_animation->play(newAnimationName);
+        return true;
+    }
+    return false;
+}
+
+void PlayerGraphicsComponent::setPlayerAnimationLooping(bool isLooping)
+{
+    m_animation->setLooping(isLooping);
+}
+
+void PlayerGraphicsComponent::setUnderlayAnimation(std::string const& animationName)
+{
+    m_attackUnderlay->play(animationName, 0, true);
+}

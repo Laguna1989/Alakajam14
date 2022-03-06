@@ -70,13 +70,11 @@ private:
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
-    void createAnimation();
     std::string selectDashAnimation(jt::Vector2f const& velocity) const;
     std::string selectWalkAnimation(jt::Vector2f const& velocity) const;
 
     void updateSpells(const float elapsed);
 
-    bool setAnimationIfNotSet(std::string const& newAnimationName);
     bool m_isDying { false };
     void createSounds();
     std::function<void(void)> m_healCallback;

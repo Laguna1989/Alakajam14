@@ -28,8 +28,6 @@ void Player::doCreate()
         | GP::PhysicsCollisionCategoryEnemyShots() | GP::PhysicsCollisionCategoryEnemies();
     getB2Body()->CreateFixture(&fixtureDef);
 
-    createAnimation();
-
     CharSheetObservers charSheetObservers { m_state.m_hud->getObserverExperience(),
         m_state.m_hud->getObserverHealth(), m_state.m_hud->getObserverHealthMax(), m_healCallback };
 
@@ -174,7 +172,7 @@ void Player::updateAnimation(float const elapsed)
     auto const notInDashNotInAttack = m_dashTimer <= 0.0f && m_attackCooldown <= 0.0f;
     if (notInDashNotInAttack) {
         auto const walkAnimation = selectWalkAnimation(getVelocity());
-        setAnimationIfNotSet(walkAnimation);
+        m_graphics->setAnimationIfNotSet(walkAnimation);
     }
 
     m_graphics->setPosition(getPosition());
@@ -239,25 +237,6 @@ std::string Player::selectWalkAnimation(jt::Vector2f const& velocity) const
     return walkAnimationName;
 }
 
-bool Player::setAnimationIfNotSet(std::string const& newAnimationName)
-{
-    std::string const& currentAnimationName = m_animation->getCurrentAnimationName();
-
-    if (currentAnimationName == "die") {
-        return true;
-    }
-
-    if (currentAnimationName == "hurt" && newAnimationName == "idle") {
-        return true;
-    }
-
-    if (currentAnimationName != newAnimationName) {
-        m_animation->play(newAnimationName);
-        return true;
-    }
-    return false;
-}
-
 void Player::doDraw() const
 {
     m_graphics->draw(getGame()->gfx().target());
@@ -272,7 +251,7 @@ void Player::gainExperience(int value) { m_charsheet->changeExperiencePoints(val
 void Player::receiveDamage(Damage const& dmg)
 {
     m_charsheet->changeHitpoints(dmg.value);
-    setAnimationIfNotSet("hurt");
+    m_graphics->setAnimationIfNotSet("hurt");
     m_soundGroupHurt->play();
 }
 
@@ -281,8 +260,8 @@ void Player::die()
     if (!m_isDying) {
         m_isDying = true;
         m_soundDeath->play();
-        m_animation->setLooping(false);
-        setAnimationIfNotSet("die");
+        m_graphics->setPlayerAnimationLooping(false);
+        m_graphics->setAnimationIfNotSet("die");
     }
 }
 std::shared_ptr<SpellBook> Player::getSpellBook() { return m_spellBook; }
@@ -311,7 +290,7 @@ void Player::dash()
         m_dashCooldown = GP::PlayerBaseDashCooldown();
     }
 
-    setAnimationIfNotSet(selectDashAnimation(currentPlayerVelocity));
+    m_graphics->setAnimationIfNotSet(selectDashAnimation(currentPlayerVelocity));
 
     m_soundDash->stop();
     m_soundDash->play();
@@ -328,7 +307,7 @@ void Player::dash()
 
 void Player::attack()
 {
-    if (!setAnimationIfNotSet("attack_down")) {
+    if (!m_graphics->setAnimationIfNotSet("attack_down")) {
         return;
     }
 
@@ -337,7 +316,7 @@ void Player::attack()
     m_soundStomp->stop();
     m_soundStomp->play();
 
-    m_attackUnderlay->play("attack", 0, true);
+    m_graphics->setUnderlayAnimation("attack");
     // TODO: trigger eye candy (e.g. particles)
 
     for (auto enemyWeakPtr : *m_state.getEnemies()) {

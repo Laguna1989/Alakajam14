@@ -15,6 +15,9 @@ public:
 
     void draw(std::shared_ptr<jt::RenderTarget> target) override;
     void flash(float time, jt::Color const& color) override;
+    bool setAnimationIfNotSet(std::string const& newAnimationName) override;
+    void setPlayerAnimationLooping(bool isLooping) override;
+    void setUnderlayAnimation(std::string const& animationName) override;
 
 private:
     void createAnimation(jt::TextureManagerInterface& textureManager);
