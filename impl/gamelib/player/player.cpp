@@ -4,6 +4,7 @@
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
 #include "math_helper.hpp"
+#include "player_movement_component.hpp"
 #include "spells/spell_none.hpp"
 #include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
@@ -59,6 +60,8 @@ void Player::doCreate()
             int amount = std::stoi(args.at(0));
             m_charsheet->changeExperiencePoints(amount);
         }));
+
+    m_movementInput = std::make_shared<PlayerMovementComponent>(getGame()->input().keyboard());
 }
 void Player::createSounds()
 {
@@ -420,32 +423,22 @@ bool Player::setAnimationIfNotSet(std::string const& newAnimationName)
 
 void Player::handleInputMovement()
 {
-    auto keyboard = getGame()->input().keyboard();
 
     if (m_dashTimer < 0.0f) {
-        setVelocity(jt::Vector2f { 0.0f, 0.0f });
-        float const speed = GP::PlayerBaseMovementSpeed() * m_charsheet->getMovementSpeedFactor();
-
-        if (keyboard->pressed(jt::KeyCode::D) || keyboard->pressed(jt::KeyCode::Right)) {
-            addVelocity(jt::Vector2f { speed, 0.0f });
-        }
-        if (keyboard->pressed(jt::KeyCode::A) || keyboard->pressed(jt::KeyCode::Left)) {
-            addVelocity(jt::Vector2f { -speed, 0.0f });
-        }
-
-        if (keyboard->pressed(jt::KeyCode::W) || keyboard->pressed(jt::KeyCode::Up)) {
-            addVelocity(jt::Vector2f { 0.0f, -speed });
-        }
-        if (keyboard->pressed(jt::KeyCode::S) || keyboard->pressed(jt::KeyCode::Down)) {
-            addVelocity(jt::Vector2f { 0.0f, speed });
-        }
+        m_movementInput->update(*this);
     }
 
-    if (keyboard->justPressed(jt::KeyCode::LShift) || keyboard->pressed(jt::KeyCode::RShift)) {
-        handleDashInput();
-    }
+    handleDashInput();
 }
 void Player::handleDashInput()
+{
+    auto keyboard = getGame()->input().keyboard();
+    if (keyboard->justPressed(jt::KeyCode::LShift) || keyboard->justPressed(jt::KeyCode::RShift)) {
+        dash();
+    }
+}
+
+void Player::dash()
 {
     if (m_dashCooldown >= 0) {
         return;

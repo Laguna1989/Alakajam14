@@ -9,6 +9,7 @@
 #include "damage.hpp"
 #include "game_object.hpp"
 #include "input/key_codes.hpp"
+#include "movement_component_interface.hpp"
 #include "particle_system.hpp"
 #include "shape.hpp"
 #include "spells/spell_attack_snipe.hpp"
@@ -40,6 +41,8 @@ public:
 
     void setHealCallback(std::function<void(void)> healCallback);
 
+    void dash();
+
 private:
     StateGame& m_state;
 
@@ -54,6 +57,8 @@ private:
     std::shared_ptr<jt::SoundGroup> m_soundGroupHurt;
 
     std::shared_ptr<SpellBook> m_spellBook;
+
+    std::shared_ptr<MovementComponentInterface> m_movementInput { nullptr };
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
