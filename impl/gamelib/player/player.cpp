@@ -284,30 +284,10 @@ void Player::updateOneSpell(float const elapsed, std::shared_ptr<SpellInterface>
 
 void Player::updateAnimation(float const elapsed)
 {
-    auto const v = getVelocity();
-
     auto const notInDashNotInAttack = m_dashTimer <= 0.0f && m_attackCooldown <= 0.0f;
     if (notInDashNotInAttack) {
-        // no dash, no attack
-        if (jt::MathHelper::lengthSquared(v) < 2) {
-            setAnimationIfNotSet("idle");
-        } else if (abs(v.x) > abs(v.y)) {
-            if (v.x > 0) {
-                setAnimationIfNotSet("right");
-            } else {
-                setAnimationIfNotSet("left");
-            }
-        } else {
-            if (v.y > 0 && abs(v.x) < 0.1f) {
-                setAnimationIfNotSet("down");
-            } else if (v.y > 0 && v.x > 0) {
-                setAnimationIfNotSet("down_right");
-            } else if (v.y > 0 && v.x < 0) {
-                setAnimationIfNotSet("down_left");
-            } else {
-                setAnimationIfNotSet("up");
-            }
-        }
+        auto const walkAnimation = selectWalkAnimation(getVelocity());
+        setAnimationIfNotSet(walkAnimation);
     }
 
     m_animation->setPosition(getPosition() - GP::PlayerSize() * 0.5f);
@@ -317,6 +297,7 @@ void Player::updateAnimation(float const elapsed)
     m_animation->update(elapsed);
     m_attackUnderlay->update(elapsed);
 }
+
 void Player::handleDash()
 {
     if (m_dashTimer > 0.0f) {
@@ -346,6 +327,33 @@ std::string Player::selectDashAnimation(jt::Vector2f const& velocity) const
         dashAnimationName = "dash_up";
     }
     return dashAnimationName;
+}
+
+std::string Player::selectWalkAnimation(jt::Vector2f const& velocity) const
+{
+    std::string walkAnimationName { "idle" };
+
+    if (jt::MathHelper::lengthSquared(velocity) < 2) {
+        walkAnimationName = "idle";
+    } else if (abs(velocity.x) > abs(velocity.y)) {
+        if (velocity.x > 0) {
+            walkAnimationName = "right";
+        } else {
+            walkAnimationName = "left";
+        }
+    } else {
+        if (velocity.y > 0 && abs(velocity.x) < 0.1f) {
+            walkAnimationName = "down";
+        } else if (velocity.y > 0 && velocity.x > 0) {
+            walkAnimationName = "down_right";
+        } else if (velocity.y > 0 && velocity.x < 0) {
+            walkAnimationName = "down_left";
+        } else {
+            walkAnimationName = "up";
+        }
+    }
+
+    return walkAnimationName;
 }
 
 bool Player::setAnimationIfNotSet(std::string const& newAnimationName)

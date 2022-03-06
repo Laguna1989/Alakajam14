@@ -71,6 +71,7 @@ private:
     void doDraw() const override;
     void createAnimation();
     std::string selectDashAnimation(jt::Vector2f const& velocity) const;
+    std::string selectWalkAnimation(jt::Vector2f const& velocity) const;
 
     void updateSpells(const float elapsed);
     void updateOneSpell(float const elapsed, std::shared_ptr<SpellInterface> spell,
