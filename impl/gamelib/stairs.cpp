@@ -13,14 +13,13 @@ Stairs::Stairs(StateGame& state)
 void Stairs::doCreate()
 {
     m_sprite = std::make_shared<jt::Sprite>("assets/door.png", getGame()->gfx().textureManager());
-    m_sprite->setPosition(m_pos);
 }
 
 void Stairs::doUpdate(const float elapsed)
 {
     m_sprite->update(elapsed);
     auto player = m_state.getPlayer();
-    float d = jt::MathHelper::lengthSquared(m_pos
+    float d = jt::MathHelper::lengthSquared(m_sprite->getPosition()
         + jt::Vector2f { m_sprite->getLocalBounds().height / 2.0f,
             m_sprite->getLocalBounds().width / 2.0f }
         - player->getPosition());
@@ -38,4 +37,4 @@ void Stairs::doUpdate(const float elapsed)
     }
 }
 void Stairs::doDraw() const { m_sprite->draw(getGame()->gfx().target()); }
-void Stairs::setPosition(jt::Vector2f const& pos) { m_pos = pos; }
+void Stairs::setPosition(jt::Vector2f const& pos) { m_sprite->setPosition(pos); }

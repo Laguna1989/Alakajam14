@@ -135,6 +135,7 @@ private:
     void loadObjects();
     void createGuiles();
     void clearOldLevel();
+    void createDoorObjects();
 };
 
 #endif

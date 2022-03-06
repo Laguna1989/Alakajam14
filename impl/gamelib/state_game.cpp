@@ -90,11 +90,7 @@ void StateGame::doInternalCreate()
     createGuiles();
     createSnipeProjectilesGroup();
     createCrystalProjectilesGroup();
-    m_key = std::make_shared<Key>(*this);
-    add(m_key);
-    m_stairs = std::make_shared<Stairs>(*this);
-    add(m_stairs);
-
+    createDoorObjects();
     loadLevel("assets/cakeworld.json");
 
     // StateGame will call drawObjects itself.
@@ -110,6 +106,14 @@ void StateGame::doInternalCreate()
     m_timerText->setPosition(jt::Vector2f { 360.0f, 30.0f });
     m_timerText->setIgnoreCamMovement(true);
     m_timerText->setTextAlign(jt::Text::TextAlign::LEFT);
+}
+void StateGame::createDoorObjects()
+{
+    m_stairs = std::make_shared<Stairs>(*this);
+    add(m_stairs);
+
+    m_key = std::make_shared<Key>(*this);
+    add(m_key);
 }
 void StateGame::createGuiles() { m_guys = std::make_shared<jt::ObjectGroup<Guile>>(); }
 namespace {
