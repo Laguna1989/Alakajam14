@@ -458,8 +458,8 @@ void Player::attack()
     m_attackUnderlay->play("attack", 0, true);
     // TODO: trigger eye candy (e.g. particles)
 
-    for (auto enemyWk : *m_state.getEnemies()) {
-        auto enemy = enemyWk.lock();
+    for (auto enemyWeakPtr : *m_state.getEnemies()) {
+        auto enemy = enemyWeakPtr.lock();
         if (enemy == nullptr) {
             continue;
         }
