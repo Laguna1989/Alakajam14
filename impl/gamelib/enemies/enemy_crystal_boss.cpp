@@ -48,6 +48,12 @@ void EnemyCrystalBoss::doCreate()
     getAiStateManager().registerState("boss", bossState);
 
     getAiStateManager().switchToState("boss");
+
+    m_command = getGame()->getActionCommandManager().registerTemporaryCommand(
+        "killboss", [this](auto /*unused*/) {
+            getGame()->cheat();
+            receiveDamage(Damage { 2100.0f });
+        });
 }
 
 void EnemyCrystalBoss::doDie() { }

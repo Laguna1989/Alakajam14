@@ -79,7 +79,7 @@ void StateGame::doInternalCreate()
             + std::to_string(static_cast<int>(GP::GetScreenSize().y)),
         getGame()->gfx().textureManager());
     m_vignette->setIgnoreCamMovement(true);
-    m_vignette->setColor({ 255, 255, 255, 100 });
+    m_vignette->setColor({ 255, 255, 255, 180 });
 
     m_hud = std::make_shared<Hud>();
     add(m_hud);

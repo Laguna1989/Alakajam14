@@ -8,6 +8,8 @@ public:
     EnemyCrystalBoss(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
     bool isBoss() override;
 
+    std::shared_ptr<bool> m_command;
+
 private:
     void doDie() override;
     void doCreate() override;

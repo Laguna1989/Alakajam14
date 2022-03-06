@@ -1,6 +1,6 @@
 #include "tilemap_collisions.hpp"
 #include <algorithm>
-#include <set>
+
 namespace jt {
 
 namespace {

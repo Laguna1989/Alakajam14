@@ -66,7 +66,7 @@ void StateMenu::createTextCredits()
             + "\n\nF9 for License Information",
         10U, GP::getPalette().getColor(4));
     m_text_Credits->setTextAlign(jt::Text::TextAlign::LEFT);
-    m_text_Credits->setPosition({ 10, GP::GetScreenSize().y - 100 });
+    m_text_Credits->setPosition({ 10, GP::GetScreenSize().y - 80 });
     m_text_Credits->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 1, 1 });
 }
 
@@ -79,7 +79,9 @@ void StateMenu::createTextExplanation()
     m_text_Explanation->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 3, 3 });
 
     m_text_Time
-        = jt::dh::createText(getGame()->gfx().target(), "", 16U, GP::getPalette().getColor(7));
+        = jt::dh::createText(getGame()->gfx().target(), "", 16U, GP::getPalette().getColor(4));
+    m_text_Time->setPosition(m_text_Explanation->getPosition() + jt::Vector2f { 0.0f, 30.0f });
+    m_text_Time->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 1, 1 });
 }
 
 void StateMenu::createTextTitle()
