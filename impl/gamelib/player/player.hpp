@@ -47,8 +47,6 @@ public:
 private:
     StateGame& m_state;
 
-    std::shared_ptr<jt::Animation> m_animation;
-    std::shared_ptr<jt::Animation> m_attackUnderlay;
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
 
     std::shared_ptr<jt::Sound> m_soundDash;
@@ -75,8 +73,6 @@ private:
     std::string selectWalkAnimation(jt::Vector2f const& velocity) const;
 
     void updateSpells(const float elapsed);
-    void updateOneSpell(
-        float const elapsed, std::shared_ptr<SpellInterface> spell, std::shared_ptr<jt::Text> text);
 
     bool setAnimationIfNotSet(std::string const& newAnimationName);
     bool m_isDying { false };
