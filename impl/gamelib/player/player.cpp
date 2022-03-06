@@ -441,7 +441,7 @@ void Player::dash()
     m_dashVelocity
         = currentPlayerVelocity * GP::PlayerBaseDashVelocity() * m_charsheet->getDashFactor();
 
-    // TODO trigger eye candy
+    // TODO trigger eye candy (e.g. particles)
 }
 
 void Player::attack()
@@ -456,7 +456,7 @@ void Player::attack()
     m_soundStomp->play();
 
     m_attackUnderlay->play("attack", 0, true);
-    // TODO: Spore particle effects or whatev
+    // TODO: trigger eye candy (e.g. particles)
 
     for (auto enemyWk : *m_state.getEnemies()) {
         auto enemy = enemyWk.lock();
@@ -467,7 +467,7 @@ void Player::attack()
         auto myPos = getPosition();
         jt::Vector2f delta = nmePos - myPos;
         auto dist = jt::MathHelper::length(delta);
-        // TODO: Maybe derive this from gear
+
         float circularHurtboxRange = 20.0f;
         float directedHurtboxRange = 45.0f;
 
