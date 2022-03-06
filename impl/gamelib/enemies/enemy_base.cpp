@@ -128,3 +128,4 @@ void EnemyBase::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
 void EnemyBase::gainExperience(int value)
 { /* noting to do*/
 }
+bool EnemyBase::isBoss() { return false; }

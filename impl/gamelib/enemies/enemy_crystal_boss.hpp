@@ -7,6 +7,7 @@
 class EnemyCrystalBoss : public EnemyBase {
 public:
     EnemyCrystalBoss(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
+    bool isBoss() override;
 
 private:
     void doDie() override;

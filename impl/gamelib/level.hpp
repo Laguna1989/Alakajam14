@@ -1,6 +1,8 @@
 #ifndef ALAKAJAM14_LEVEL_HPP
 #define ALAKAJAM14_LEVEL_HPP
 
+#include "box2dwrapper/box2d_object.hpp"
+#include "enemies/enemy_base.hpp"
 #include "game_object.hpp"
 #include "tilemap/info_rect.hpp"
 #include "tilemap/tilemap_collisions.hpp"
@@ -38,10 +40,15 @@ public:
     std::shared_ptr<jt::pathfinder::NodeInterface> getTileAtPosition(
         jt::Vector2f const& actorPosInFloat);
 
+    std::vector<std::shared_ptr<jt::Box2DObject>> createColliders(
+        std::shared_ptr<jt::Box2DWorldInterface> world);
+
+    std::vector<std::shared_ptr<EnemyBase>> createEnemies(
+        std::shared_ptr<jt::Box2DWorldInterface> world);
+
     void drawTileNodeOverlay();
     void updateTileNodes(float const elapsed);
 
-    std::vector<jt::Rectf> getColliderRects();
     jt::Vector2f getPlayerSpawn() const;
     // TODO split into enemy/loot/guile
     std::vector<jt::tilemap::InfoRect> getInfoRects();

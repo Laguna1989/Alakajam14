@@ -1,4 +1,8 @@
 #include "level.hpp"
+#include "enemies/enemy_crystal_boss.hpp"
+#include "enemies/enemy_crystal_large.hpp"
+#include "enemies/enemy_crystal_medium.hpp"
+#include "enemies/enemy_crystal_small.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "pathfinder/pathfinder.hpp"
@@ -108,7 +112,6 @@ void Level::updateTileNodes(float const elapsed)
         t->getDrawable()->update(elapsed);
     }
 }
-std::vector<jt::Rectf> Level::getColliderRects() { return m_tileCollisions.getRects(); }
 
 jt::Vector2f Level::getPlayerSpawn() const { return m_playerSpawn; }
 std::vector<jt::tilemap::InfoRect> Level::getInfoRects() { return m_objects; }
@@ -155,4 +158,101 @@ std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> Level::calculatePath
     auto const tileForStart = getTileAtPosition(startPos);
     auto const tileForEnd = getTileAtPosition(endPos);
     return jt::pathfinder::calculatePath(tileForStart, tileForEnd);
+}
+std::vector<std::shared_ptr<jt::Box2DObject>> Level::createColliders(
+    std::shared_ptr<jt::Box2DWorldInterface> world)
+{
+    std::vector<std::shared_ptr<jt::Box2DObject>> colliders;
+
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_staticBody;
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryWalls();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryPlayer()
+        | GP::PhysicsCollisionCategoryPlayerShots() | GP::PhysicsCollisionCategoryEnemies()
+        | GP::PhysicsCollisionCategoryEnemyShots() | GP::PhysicsCollisionCategoryExperienceOrbs();
+
+    for (auto const& r : m_tileCollisions.getRects()) {
+
+        bodyDef.position.Set(r.left + r.width / 2.0f, r.top + r.height / 2.0f);
+        b2PolygonShape boxCollider {};
+        boxCollider.SetAsBox(r.width / 2.0f, r.height / 2.0f);
+        fixtureDef.shape = &boxCollider;
+
+        auto collider = std::make_shared<jt::Box2DObject>(world, &bodyDef);
+        collider->getB2Body()->CreateFixture(&fixtureDef);
+
+        colliders.push_back(collider);
+    }
+    return colliders;
+}
+
+b2BodyDef getEnemyDefinition(jt::Vector2f const& position)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(position.x, position.y);
+    bodyDef.linearDamping = 16.0f;
+    return bodyDef;
+}
+
+std::shared_ptr<EnemyBase> loadSingleEnemySmallCrystal(
+    jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
+{
+    b2BodyDef bodyDef = getEnemyDefinition(position);
+    return std::make_shared<EnemyCrystalSmall>(world, &bodyDef);
+}
+
+std::shared_ptr<EnemyBase> loadSingleEnemyMediumCrystal(
+    jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
+{
+    b2BodyDef bodyDef = getEnemyDefinition(position);
+    return std::make_shared<EnemyCrystalMedium>(world, &bodyDef);
+}
+
+std::shared_ptr<EnemyBase> loadSingleEnemyLargeCrystal(
+    jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
+{
+    b2BodyDef bodyDef = getEnemyDefinition(position);
+    return std::make_shared<EnemyCrystalLarge>(world, &bodyDef);
+}
+
+std::shared_ptr<EnemyBase> loadSingleEnemyBoss(
+    jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
+{
+    b2BodyDef bodyDef = getEnemyDefinition(position);
+    return std::make_shared<EnemyCrystalBoss>(world, &bodyDef);
+}
+
+std::shared_ptr<EnemyBase> loadSingleEnemy(
+    jt::tilemap::InfoRect const& info, std::shared_ptr<jt::Box2DWorldInterface> world)
+{
+    auto const position = info.position;
+    auto const type = info.properties.strings.at("enemyType");
+    if (type == "crystal_small") {
+        return loadSingleEnemySmallCrystal(position, world);
+    }
+    if (type == "crystal_medium") {
+        return loadSingleEnemyMediumCrystal(position, world);
+    }
+    if (type == "crystal_large") {
+        return loadSingleEnemyLargeCrystal(position, world);
+    }
+    if (type == "boss") {
+        return loadSingleEnemyBoss(position, world);
+    }
+    throw std::invalid_argument { "Enemy type " + type + " not supported" };
+}
+
+std::vector<std::shared_ptr<EnemyBase>> Level::createEnemies(
+    std::shared_ptr<jt::Box2DWorldInterface> world)
+{
+    std::vector<std::shared_ptr<EnemyBase>> enemies {};
+    for (auto const& enemyInfo : getEnemiesInfo()) {
+        enemies.emplace_back(loadSingleEnemy(enemyInfo, world));
+    }
+    return enemies;
 }

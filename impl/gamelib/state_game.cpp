@@ -90,8 +90,10 @@ void StateGame::doInternalCreate()
     createGuiles();
     createSnipeProjectilesGroup();
     createCrystalProjectilesGroup();
-    createKey();
-    createStairs();
+    m_key = std::make_shared<Key>(*this);
+    add(m_key);
+    m_stairs = std::make_shared<Stairs>(*this);
+    add(m_stairs);
 
     loadLevel("assets/cakeworld.json");
 
@@ -406,8 +408,14 @@ void StateGame::loadGuiles()
 
 void StateGame::loadEnemies()
 {
-    for (auto const& e : m_level->getEnemiesInfo()) {
-        loadSingleEnemy(e);
+    auto enemies = m_level->createEnemies(m_world);
+    for (auto e : enemies) {
+        setupEnemyDependencies(e);
+        m_enemies->push_back(e);
+        add(e);
+        if (e->isBoss()) {
+            m_boss = e;
+        }
     }
     getGame()->getLogger().debug("parsed N =" + std::to_string(m_enemies->size()) + " enemies");
 }
@@ -423,21 +431,6 @@ void StateGame::loadSingleLoot(jt::tilemap::InfoRect const& o)
     }
 }
 
-void StateGame::loadSingleEnemy(jt::tilemap::InfoRect const& info)
-{
-    auto const position = info.position;
-    auto const type = info.properties.strings.at("enemyType");
-    if (type == "crystal_small") {
-        loadSingleEnemySmallCrystal(position);
-    } else if (type == "crystal_medium") {
-        loadSingleEnemyMediumCrystal(position);
-    } else if (type == "crystal_large") {
-        loadSingleEnemyLargeCrystal(position);
-    } else if (type == "boss") {
-        loadSingleEnemyBoss(position);
-    }
-}
-
 void StateGame::setupEnemyDependencies(std::shared_ptr<EnemyBase> e)
 {
     e->setTarget(m_player);
@@ -447,84 +440,7 @@ void StateGame::setupEnemyDependencies(std::shared_ptr<EnemyBase> e)
     e->setDeferredActionHandler(this);
 }
 
-void StateGame::loadSingleEnemySmallCrystal(jt::Vector2f const& position)
-{
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(position.x, position.y);
-    bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef);
-    setupEnemyDependencies(e);
-    m_enemies->push_back(e);
-    add(e);
-}
-
-void StateGame::loadSingleEnemyMediumCrystal(jt::Vector2f const& position)
-{
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(position.x, position.y);
-    bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalMedium>(m_world, &bodyDef);
-    setupEnemyDependencies(e);
-    m_enemies->push_back(e);
-    add(e);
-}
-
-void StateGame::loadSingleEnemyLargeCrystal(jt::Vector2f const& position)
-{
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(position.x, position.y);
-    bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalLarge>(m_world, &bodyDef);
-    setupEnemyDependencies(e);
-    m_enemies->push_back(e);
-    add(e);
-}
-
-void StateGame::loadSingleEnemyBoss(jt::Vector2f const& position)
-{
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(position.x, position.y);
-    bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalBoss>(m_world, &bodyDef);
-    setupEnemyDependencies(e);
-    m_enemies->push_back(e);
-    m_boss = e;
-    add(e);
-}
-
-void StateGame::loadTileColliders()
-{
-    for (auto const& r : m_level->getColliderRects()) {
-        b2BodyDef bodyDef;
-        bodyDef.fixedRotation = true;
-        bodyDef.type = b2_staticBody;
-        bodyDef.position.Set(r.left + r.width / 2.0f, r.top + r.height / 2.0f);
-
-        b2FixtureDef fixtureDef;
-        b2PolygonShape boxCollider {};
-        boxCollider.SetAsBox(r.width / 2.0f, r.height / 2.0f);
-        fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryWalls();
-        fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryPlayer()
-            | GP::PhysicsCollisionCategoryPlayerShots() | GP::PhysicsCollisionCategoryEnemies()
-            | GP::PhysicsCollisionCategoryEnemyShots()
-            | GP::PhysicsCollisionCategoryExperienceOrbs();
-
-        fixtureDef.shape = &boxCollider;
-
-        auto collider = std::make_shared<jt::Box2DObject>(m_world, &bodyDef);
-        collider->getB2Body()->CreateFixture(&fixtureDef);
-
-        m_colliders.push_back(collider);
-    }
-}
+void StateGame::loadTileColliders() { m_colliders = m_level->createColliders(m_world); }
 
 std::shared_ptr<Player> StateGame::getPlayer() { return m_player; }
 
@@ -621,18 +537,6 @@ void StateGame::spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f 
     add(projectile);
 }
 
-void StateGame::createStairs()
-{
-    m_stairs = std::make_shared<Stairs>(*this);
-    add(m_stairs);
-}
-
 std::shared_ptr<Stairs> StateGame::getStairs() const { return m_stairs; }
-
-void StateGame::createKey()
-{
-    m_key = std::make_shared<Key>(*this);
-    add(m_key);
-}
 
 jt::Vector2f& StateGame::getStairsDest() { return m_stairsDest; }

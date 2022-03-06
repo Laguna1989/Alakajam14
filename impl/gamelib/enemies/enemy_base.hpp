@@ -37,6 +37,7 @@ public:
 
     jt::Vector2f getTargetPosition() override;
     void applyDamageToTarget(Damage const& dmg) override;
+    virtual bool isBoss();
 
 protected:
     float m_hitpoints { 1.0f };

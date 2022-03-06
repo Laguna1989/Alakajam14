@@ -92,7 +92,7 @@ private:
     std::shared_ptr<jt::Sound> m_musicIntro;
     std::shared_ptr<jt::Sound> m_musicLoop;
     std::shared_ptr<Stairs> m_stairs;
-    std::shared_ptr<EnemyCrystalBoss> m_boss;
+    std::shared_ptr<EnemyBase> m_boss;
     std::shared_ptr<Key> m_key;
     bool m_isIntroMusicPlaying { true };
     std::chrono::time_point<std::chrono::steady_clock> m_musicLoopStartTime;
@@ -125,8 +125,6 @@ private:
     void loadSingleEnemyLargeCrystal(jt::Vector2f const& position);
     void loadSingleLoot(jt::tilemap::InfoRect const& o);
     void createCrystalProjectilesGroup();
-    void createStairs();
-    void createKey();
     jt::Vector2f m_stairsDest;
     void loadSingleEnemyBoss(const jt::Vector2f& position);
     void setupEnemyDependencies(std::shared_ptr<EnemyBase> e);

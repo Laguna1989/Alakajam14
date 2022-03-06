@@ -53,3 +53,4 @@ void EnemyCrystalBoss::doCreate()
 }
 
 void EnemyCrystalBoss::doDie() { }
+bool EnemyCrystalBoss::isBoss() { return true; }
