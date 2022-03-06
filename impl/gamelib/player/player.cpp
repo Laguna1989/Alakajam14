@@ -70,16 +70,17 @@ void Player::createSounds() { }
 
 void Player::doUpdate(float const elapsed)
 {
-    if (m_dashTimer < 0.0f) {
-        m_input->updateMovement(*this);
-    }
+    if (!m_isDying) {
+        if (m_dashTimer < 0.0f) {
+            m_input->updateMovement(*this);
+        }
 
-    auto const canAttack = m_attackCooldown < 0.0f && m_dashTimer < 0.0f;
-    if (canAttack) {
-        m_input->updateAttack(*this);
+        auto const canAttack = m_attackCooldown < 0.0f && m_dashTimer < 0.0f;
+        if (canAttack) {
+            m_input->updateAttack(*this);
+        }
+        m_input->updateSpells(*this);
     }
-    m_input->updateSpells(*this);
-
     handleDash();
 
     updateSpells(elapsed);
