@@ -1,9 +1,7 @@
-//
-// Created by Laguna_HP on 01.03.2022.
-//
-
 #ifndef ALAKAJAM14_EXPERIENCE_SPAWNER_INTERFACE_HPP
 #define ALAKAJAM14_EXPERIENCE_SPAWNER_INTERFACE_HPP
+
+#include "vector.hpp"
 
 class ExperienceSpawnerInterface {
 public:

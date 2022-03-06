@@ -2,7 +2,6 @@
 #define ALAKAJAM14_ENEMY_CRYSTAL_SMALL_HPP
 
 #include "enemy_base.hpp"
-#include "pathfinder/node_interface.hpp"
 
 class EnemyCrystalSmall : public EnemyBase {
 public:

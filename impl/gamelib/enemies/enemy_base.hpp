@@ -1,12 +1,8 @@
 #ifndef GUARD_JAMTEMPLATE_ENEMY_GUARD_HPP
 #define GUARD_JAMTEMPLATE_ENEMY_GUARD_HPP
 
-#include "animation.hpp"
-#include "audio/sound.hpp"
 #include "box2dwrapper/box2d_object.hpp"
-#include "damage.hpp"
 #include "deferred_action_interface.hpp"
-#include "enemy_ai/ai_state_interface.hpp"
 #include "enemy_ai/ai_state_manager.hpp"
 #include "experience_spawner_interface.hpp"
 #include "target_interface.hpp"
@@ -14,6 +10,12 @@
 
 class StateGame;
 class ProjectileSpawnerInterface;
+struct Damage;
+
+namespace jt {
+class Animation;
+class Sound;
+} // namespace jt
 
 // TODO compose class via mix ins?
 class EnemyBase : public jt::Box2DObject, public TargetInterface {

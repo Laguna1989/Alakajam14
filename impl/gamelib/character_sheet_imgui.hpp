@@ -4,7 +4,6 @@
 #include "game_object.hpp"
 #include "hud/observer_interface.hpp"
 #include "particle_system.hpp"
-#include "shape.hpp"
 #include <functional>
 #include <map>
 #include <memory>

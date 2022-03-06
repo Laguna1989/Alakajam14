@@ -1,11 +1,14 @@
 #ifndef ALAKAJAM14_EXPERIENCE_ORB_HPP
 #define ALAKAJAM14_EXPERIENCE_ORB_HPP
 
-#include "animation.hpp"
-#include "audio/sound.hpp"
 #include "box2dwrapper/box2d_object.hpp"
 #include "target_interface.hpp"
 #include "vector.hpp"
+
+namespace jt {
+class Animation;
+class Sound;
+} // namespace jt
 
 class ExperienceOrb : public jt::Box2DObject {
 public:

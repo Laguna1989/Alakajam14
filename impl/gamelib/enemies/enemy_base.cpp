@@ -1,4 +1,7 @@
 #include "enemy_base.hpp"
+#include "animation.hpp"
+#include "audio/sound.hpp"
+#include "damage.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "projectile_spawner_interface.hpp"

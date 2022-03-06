@@ -1,7 +1,6 @@
 #ifndef ALAKAJAM14_LEVEL_HPP
 #define ALAKAJAM14_LEVEL_HPP
 
-#include "box2dwrapper/box2d_object.hpp"
 #include "enemies/enemy_base.hpp"
 #include "game_object.hpp"
 #include "tilemap/info_rect.hpp"
@@ -20,8 +19,12 @@ class NodeLayer;
 } // namespace tilemap
 
 namespace pathfinder {
+
 class NodeInterface;
+
 }
+
+class Box2DObject;
 } // namespace jt
 
 class Level : public jt::GameObject, public WorldPathCalculatorInterface {

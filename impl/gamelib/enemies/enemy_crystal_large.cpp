@@ -13,7 +13,7 @@ EnemyCrystalLarge::EnemyCrystalLarge(
 
 void EnemyCrystalLarge::doCreate()
 {
-    m_experience = 180;
+    m_experience = 100;
     m_hitpoints = GP::EnemyCrystallLargeHitPoints();
     m_movementSpeed = 30.0f;
     m_closeCombatDamage = 80.0f;

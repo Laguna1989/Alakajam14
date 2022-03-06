@@ -10,12 +10,6 @@ CrystalProjectile::CrystalProjectile(
 {
 }
 
-void CrystalProjectile::setDamage(Damage const& d) { m_damage = d; }
-
-void CrystalProjectile::setRotation(float rotation) { m_rotation = rotation; }
-
-Damage CrystalProjectile::getDamage() const { return m_damage; }
-
 void CrystalProjectile::doCreate()
 {
     m_animation = std::make_shared<jt::Animation>();

@@ -3,7 +3,6 @@
 #include "enemy_ai/ai_state_wait_for_target.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
-#include "math_helper.hpp"
 #include "random/random.hpp"
 #include "state_game.hpp"
 

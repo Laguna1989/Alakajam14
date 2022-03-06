@@ -2,20 +2,18 @@
 #include "enemies/enemy_ai/ai_state_boss.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
-#include "math_helper.hpp"
 #include "pathfinder/pathfinder.hpp"
 #include "projectile_spawner_interface.hpp"
-#include "random/random.hpp"
 #include "state_game.hpp"
-#include "state_menu.hpp"
 
 EnemyCrystalBoss::EnemyCrystalBoss(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def)
     : EnemyBase(world, def)
 {
-    m_experience = 5; // has no effect anyway -- said the dev ignoring glitch% speedrunners
+    m_experience = 5;
     m_hitpoints = GP::BossHitPoints();
     m_movementSpeed = GP::BossMovementSpeed();
+    m_closeCombatDamage = 70.0f;
 }
 
 void EnemyCrystalBoss::doCreate()

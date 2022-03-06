@@ -3,8 +3,8 @@
 #include "enemies/enemy_ai/ai_state_wait_for_target.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
-#include "math_helper.hpp"
 #include "projectile_spawner_interface.hpp"
+#include "random/random.hpp"
 #include "state_game.hpp"
 
 EnemyCrystalMedium::EnemyCrystalMedium(
@@ -15,7 +15,7 @@ EnemyCrystalMedium::EnemyCrystalMedium(
 
 void EnemyCrystalMedium::doCreate()
 {
-    m_experience = 40;
+    m_experience = 28 + jt::Random::getInt(0, 2);
     m_hitpoints = GP::EnemyCrystallMediumHitPoints();
     m_closeCombatDamage = 0.0f;
 

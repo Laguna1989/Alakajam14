@@ -1,9 +1,13 @@
 #ifndef ALAKAJAM14_KEY_HPP
 #define ALAKAJAM14_KEY_HPP
 
-#include "audio/sound.hpp"
 #include "game_object.hpp"
-#include "sprite.hpp"
+#include "vector.hpp"
+
+namespace jt {
+class Sound;
+class Sprite;
+} // namespace jt
 
 class StateGame;
 class Key : public jt::GameObject {

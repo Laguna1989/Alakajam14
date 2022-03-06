@@ -1,7 +1,9 @@
 #include "key.hpp"
+#include "audio/sound.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
+#include "sprite.hpp"
 #include "stairs.hpp"
 #include "state_game.hpp"
 

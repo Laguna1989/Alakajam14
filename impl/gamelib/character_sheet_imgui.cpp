@@ -3,7 +3,6 @@
 #include "game_properties.hpp"
 #include "imgui.h"
 #include "math_helper.hpp"
-#include <iostream>
 
 CharacterSheetImgui::CharacterSheetImgui(CharSheetObservers observers)
     : m_observers { observers }
