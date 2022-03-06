@@ -2,7 +2,7 @@
 #include "../game_properties.hpp"
 #include "color.hpp"
 #include "game_interface.hpp"
-#include "score_display.hpp"
+#include "experience_display.hpp"
 
 std::shared_ptr<ObserverInterface<int>> Hud::getObserverExperience() const
 {
@@ -20,7 +20,7 @@ void Hud::doCreate()
     m_TextExperience->setPosition({ 10, 4 });
     m_TextExperience->setIgnoreCamMovement(true);
 
-    m_displayExperience = std::make_shared<ScoreDisplay>(m_TextExperience, "Experience: ");
+    m_displayExperience = std::make_shared<ExperienceDisplay>(m_TextExperience, "Experience: ");
 
     m_healthBar = std::make_shared<jt::Bar>(96.0f, 16.0f, true, getGame()->gfx().textureManager());
     m_healthBar->setIgnoreCamMovement(true);

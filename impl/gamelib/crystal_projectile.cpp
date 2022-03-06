@@ -10,12 +10,6 @@ CrystalProjectile::CrystalProjectile(
 {
 }
 
-void CrystalProjectile::setDamage(Damage const& d) { m_damage = d; }
-
-void CrystalProjectile::setRotation(float rotation) { m_rotation = rotation; }
-
-Damage CrystalProjectile::getDamage() const { return m_damage; }
-
 void CrystalProjectile::doCreate()
 {
     m_animation = std::make_shared<jt::Animation>();
@@ -33,6 +27,10 @@ void CrystalProjectile::doCreate()
     b2PolygonShape boxCollider {};
     boxCollider.SetAsBox(2.0f, 2.0f);
     fixtureDef.shape = &boxCollider;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemyShots();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
+
     getB2Body()->CreateFixture(&fixtureDef);
 }
 

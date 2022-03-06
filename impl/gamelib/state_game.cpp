@@ -1,6 +1,8 @@
 ﻿#include "state_game.hpp"
 #include "box2dwrapper/box2d_world_impl.hpp"
 #include "color.hpp"
+#include "color_helpers.hpp"
+#include "drawable_helpers.hpp"
 #include "enemies/enemy_crystal_boss.hpp"
 #include "enemies/enemy_crystal_large.hpp"
 #include "enemies/enemy_crystal_medium.hpp"
@@ -9,14 +11,18 @@
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
 #include "key.hpp"
-#include "math_helper.hpp"
+#include "level.hpp"
+#include "pathfinder/pathfinder.hpp"
 #include "random/random.hpp"
 #include "shape.hpp"
 #include "sprite.hpp"
 #include "stairs.hpp"
 #include "state_menu.hpp"
-#include "strutils.hpp"
 #include "tilemap/tileson_loader.hpp"
+#include "timer.hpp"
+#include "tweens/tween_alpha.hpp"
+#include "tweens/tween_position.hpp"
+#include "tweens/tween_scale.hpp"
 
 namespace {
 void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
@@ -66,9 +72,6 @@ void StateGame::doInternalCreate()
     m_contactListener = std::make_shared<ShroomGameContactListener>(*this);
     m_world->setContactListener(m_contactListener);
 
-    float const w = static_cast<float>(GP::GetWindowSize().x);
-    float const h = static_cast<float>(GP::GetWindowSize().y);
-
     using jt::Shape;
 
     m_vignette = std::make_shared<jt::Sprite>("#v#"
@@ -84,11 +87,15 @@ void StateGame::doInternalCreate()
     createPlayer();
     createEnemies();
     createExperienceOrbs();
-    m_guys = std::make_shared<jt::ObjectGroup<Guile>>();
-    loadTilemap();
-
+    createGuiles();
     createSnipeProjectilesGroup();
     createCrystalProjectilesGroup();
+    m_key = std::make_shared<Key>(*this);
+    add(m_key);
+    m_stairs = std::make_shared<Stairs>(*this);
+    add(m_stairs);
+
+    loadLevel("assets/cakeworld.json");
 
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
@@ -98,12 +105,77 @@ void StateGame::doInternalCreate()
 
     m_musicLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_loop.ogg");
     m_musicLoop->setLoop(true);
+
+    m_timerText = jt::dh::createText(getGame()->gfx().target(), "0.00", 8);
+    m_timerText->setPosition(jt::Vector2f { 360.0f, 30.0f });
+    m_timerText->setIgnoreCamMovement(true);
+    m_timerText->setTextAlign(jt::Text::TextAlign::LEFT);
+}
+void StateGame::createGuiles() { m_guys = std::make_shared<jt::ObjectGroup<Guile>>(); }
+namespace {
+template <typename T>
+void clearGroup(std::shared_ptr<jt::ObjectGroup<T>> group)
+{
+    for (auto const& e : *group) {
+        auto entry = e.lock();
+        if (!entry) {
+            continue;
+        }
+        entry->kill();
+    }
+}
+} // namespace
+
+void StateGame::loadLevel(std::string const& fileName)
+{
+    clearOldLevel();
+    loadTilemap(fileName);
+}
+
+void StateGame::clearOldLevel()
+{
+    clearGroup(m_snipeProjectiles);
+    clearGroup(m_crystalProjectiles);
+    clearGroup(m_enemies);
+    clearGroup(m_experienceOrbs);
+    clearGroup(m_guys);
+    for (auto c : m_colliders) {
+        c->destroy();
+    }
+    m_colliders.clear();
+
+    if (m_level) {
+        m_level->kill();
+    }
+    basicUpdateObjects(0.1f);
 }
 
 void StateGame::createSnipeProjectilesGroup()
 {
     m_snipeProjectiles = std::make_shared<jt::ObjectGroup<SnipeProjectile>>();
     add(m_snipeProjectiles);
+
+    m_particlesSnipeParticleSystem = std::make_shared<jt::ParticleSystem<jt::Shape, 50>>(
+        [this]() {
+            auto shape = std::make_shared<jt::Shape>();
+            shape->makeRect({ 1, 1 }, getGame()->gfx().textureManager());
+            shape->setPosition({ -50000, -500000 });
+            shape->setColor(jt::MakeColor::FromHexString("6110a2"));
+            return shape;
+        },
+        [this](std::shared_ptr<jt::Shape> shape) {
+            jt::Vector2f pos = jt::Random::getRandomPointIn(jt::Rectf {
+                m_particlesSnipePosition.x - 3, m_particlesSnipePosition.y - 3, 6.0f, 6.0f });
+            shape->setPosition(pos);
+
+            auto twPos = jt::TweenPosition::create(
+                shape, 0.75f, pos, pos + jt::Vector2f { 0, jt::Random::getFloat(4.0f, 12.0f) });
+            add(twPos);
+
+            auto twAlpha = jt::TweenAlpha::create(shape, 0.7f, 250, 0);
+            add(twAlpha);
+        });
+    add(m_particlesSnipeParticleSystem);
 }
 
 void StateGame::createCrystalProjectilesGroup()
@@ -126,33 +198,87 @@ void StateGame::createPlayer()
     bodyDef.fixedRotation = true;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(104 * GP::PlayerSize().x, 64 * GP::PlayerSize().y);
-    m_player = std::make_shared<PlayerCharacter>(m_world, &bodyDef, *this);
+    m_player = std::make_shared<Player>(m_world, &bodyDef, *this);
+
+    m_particlesHeal = std::make_shared<jt::ParticleSystem<jt::Shape, 50>>(
+        [this]() {
+            auto shape = std::make_shared<jt::Shape>();
+            shape->makeRect({ 1, 4 }, getGame()->gfx().textureManager());
+            shape->setPosition({ -50000, -500000 });
+            shape->setColor(jt::colors::Green);
+            shape->setScale({ 1.0f, 0.1f });
+            return shape;
+        },
+        [this](std::shared_ptr<jt::Shape> shape) {
+            jt::Vector2f pos = jt::Random::getRandomPointIn(jt::Rectf {
+                m_player->getPosition().x - 12, m_player->getPosition().y - 8.0f, 24.0f, 24.0f });
+            shape->setPosition(pos);
+
+            auto twPos = jt::TweenPosition::create(shape, 0.75f, pos, pos + jt::Vector2f { 0, -8 });
+            add(twPos);
+
+            auto twAlpha = jt::TweenAlpha::create(shape, 0.7f, 250, 0);
+            add(twAlpha);
+
+            auto twScale = jt::TweenScale::create(shape, 0.75f, { 1.0f, 0.1f }, { 0.0f, 1.5f });
+            add(twScale);
+        });
+    add(m_particlesHeal);
+
+    m_player->setHealCallback([this]() {
+        auto t = std::make_shared<jt::Timer>(
+            0.15f, [this]() { m_particlesHeal->Fire(10); }, 5);
+        add(t);
+    });
+
     add(m_player);
 }
 
 void StateGame::doInternalUpdate(float const elapsed)
 {
+    if (m_touchedInput) {
+        m_timer += elapsed;
+    }
+    m_timerText->setText(jt::MathHelper::floatToStringWithXDigits(m_timer, 2));
+    m_timerText->update(elapsed);
     if (m_running) {
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
-        // update game logic here
 
-        m_tileLayerUnderlay->update(elapsed);
-        m_tileLayerUnderunderlay->update(elapsed);
-        m_tileLayerGround1->update(elapsed);
-        m_tileLayerOverlay->update(elapsed);
-        m_tileLayerOveroverlay->update(elapsed);
-
-        updateTileNodes(elapsed);
+        for (auto k : jt::getAllKeys()) {
+            if (getGame()->input().keyboard()->justPressed(k)) {
+                m_touchedInput = true;
+            }
+        }
+        for (auto sp : *m_snipeProjectiles) {
+            auto projectile = sp.lock();
+            if (!projectile) {
+                continue;
+            }
+            m_particlesSnipePosition = projectile->getPosition();
+            m_particlesSnipeParticleSystem->Fire(1);
+        }
 
         camFollowObject(
             getGame()->gfx().camera(), getGame()->gfx().window().getSize(), m_player, elapsed);
-
-        updateExperience();
 
         if (m_player->getCharSheet()->getHitpoints() < 0) {
             m_player->die();
 
             endGame();
+        }
+
+        if (!m_hasEnded) {
+
+            if (m_boss) {
+                if (!m_boss->isAlive()) {
+                    m_hasEnded = true;
+                    auto stateMenu = std::make_shared<StateMenu>();
+                    if (!getGame()->wasCheating()) {
+                        stateMenu->setScore(m_timer);
+                    }
+                    getGame()->getStateManager().switchState(stateMenu);
+                }
+            }
         }
 
         if (m_musicIntro->isPlaying()) {
@@ -179,47 +305,9 @@ void StateGame::doInternalUpdate(float const elapsed)
     m_vignette->update(elapsed);
 }
 
-void StateGame::updateExperience() const
-{
-    for (auto const& e : *m_experienceOrbs) {
-        auto experienceOrb = e.lock();
-        if (!experienceOrb) {
-            continue;
-        }
-        if (experienceOrb->getAge() < GP::ExperienceOrbIdleTime()) {
-            continue;
-        }
-
-        auto const playerPosition = m_player->getPosition();
-        auto const orbPosition = experienceOrb->getPosition();
-        auto diff = playerPosition - orbPosition;
-        auto const distance = jt::MathHelper::lengthSquared(diff);
-
-        if (distance < GP::ExperienceOrbAttractDistance() * GP::ExperienceOrbAttractDistance()) {
-            jt::MathHelper::normalizeMe(diff);
-            experienceOrb->setVelocity(diff * GP::ExperienceOrbVelocity());
-        }
-        if (distance < GP::ExperienceOrbPickupDistance() * GP::ExperienceOrbPickupDistance()
-            && !experienceOrb->m_pickedUp) {
-            m_player->gainExperience(experienceOrb->m_value);
-            experienceOrb->pickUp();
-        }
-    }
-}
-void StateGame::updateTileNodes(float const elapsed)
-{
-    for (auto const& t : m_nodeLayer->getAllTiles()) {
-
-        t->getDrawable()->update(elapsed);
-    }
-}
-
 void StateGame::doInternalDraw() const
 {
-    m_tileLayerUnderunderlay->draw(getGame()->gfx().target());
-    m_tileLayerUnderlay->draw(getGame()->gfx().target());
-    m_tileLayerGround1->draw(getGame()->gfx().target());
-    m_tileLayerOverlay->draw(getGame()->gfx().target());
+    m_level->drawLowerLayers();
 
     drawObjects();
     m_experienceOrbs->draw();
@@ -238,24 +326,15 @@ void StateGame::doInternalDraw() const
         }
         ob->draw();
     }
-    //    drawTileNodeOverlay();
+    //    m_level->drawTileNodeOverlay();
     m_snipeProjectiles->draw();
     m_crystalProjectiles->draw();
     m_stairs->draw();
     m_key->draw();
-    m_tileLayerOveroverlay->draw(getGame()->gfx().target());
+    m_level->drawUpperLayers();
     m_vignette->draw(getGame()->gfx().target());
+    m_timerText->draw(getGame()->gfx().target());
     m_hud->draw();
-}
-void StateGame::drawTileNodeOverlay()
-{
-    for (auto const& t : m_nodeLayer->getAllTiles()) {
-        if (t->getBlocked()) {
-            continue;
-        }
-
-        t->getDrawable()->draw(getGame()->gfx().target());
-    }
 }
 
 void StateGame::endGame()
@@ -274,64 +353,68 @@ void StateGame::endGame()
 
 std::string StateGame::getName() const { return "Game"; }
 
-void StateGame::loadTilemap()
+void StateGame::loadTilemap(std::string const& fileName)
 {
-    jt::tilemap::TilesonLoader loader { "assets/cakeworld.json" };
-    m_tileLayerGround1 = std::make_shared<jt::tilemap::TileLayer>(
-        loader.loadTilesFromLayer("ground1", getGame()->gfx().textureManager()));
-    m_tileLayerGround1->setScreenSizeHint(jt::Vector2f { 400, 300 });
-    m_tileLayerOverlay = std::make_shared<jt::tilemap::TileLayer>(
-        loader.loadTilesFromLayer("overlay", getGame()->gfx().textureManager()));
-    m_tileLayerOverlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
-    m_tileLayerUnderlay = std::make_shared<jt::tilemap::TileLayer>(
-        loader.loadTilesFromLayer("underlay", getGame()->gfx().textureManager()));
-    m_tileLayerUnderlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
-    m_tileLayerUnderunderlay = std::make_shared<jt::tilemap::TileLayer>(
-        loader.loadTilesFromLayer("underunderlay", getGame()->gfx().textureManager()));
-    m_tileLayerUnderunderlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
-    m_tileLayerOveroverlay = std::make_shared<jt::tilemap::TileLayer>(
-        loader.loadTilesFromLayer("overoverlay", getGame()->gfx().textureManager()));
-    m_tileLayerOveroverlay->setScreenSizeHint(jt::Vector2f { 400, 300 });
-    m_nodeLayer = std::make_shared<jt::tilemap::NodeLayer>(
-        loader.loadNodesFromLayer("ground1", getGame()->gfx().textureManager()));
+    m_level = std::make_shared<Level>(fileName);
+    add(m_level);
 
-    loadTileColliders(loader);
-
-    loadObjects(loader);
+    loadTileColliders();
+    loadObjects();
 }
-void StateGame::loadObjects(jt::tilemap::TilesonLoader& loader)
-{
-    auto objects = loader.loadObjectsFromLayer("objects");
-    loadPlayerSpawn(objects);
 
-    loadEnemies(objects);
+void StateGame::loadObjects()
+{
+    loadEnemies();
+    loadGuiles();
+    loadLoots();
+    loadDoorObjects();
+    loadPlayerSpawn();
 }
-void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
+void StateGame::loadDoorObjects()
 {
-    for (auto const& o : objects) {
-        if (strutil::contains(o.name, "enemy")) {
-            loadSingleEnemy(o);
-        } else if (strutil::contains(o.name, "loot")) {
-            loadSingleLoot(o);
-        } else if (o.type == "stairs") {
-            loadStairs(o.position);
-        } else if (o.type == "key") {
-            loadKey(o.position);
-        } else if (o.type == "dest") {
-            m_stairsDest = o.position;
-        } else if (o.type == "guile") {
+    m_stairs->setPosition(m_level->getStairsPosition());
+    m_key->setPosition(m_level->getKeysPosition());
+    m_stairsDest = m_level->getDestPosition();
+}
+void StateGame::loadPlayerSpawn()
+{
+    m_player->setPosition(m_level->getPlayerSpawn());
+    getGame()->gfx().camera().setCamOffset(m_player->getPosition() - GP::GetScreenSize() / 2.0f);
+}
 
-            b2BodyDef bodyDef;
-            bodyDef.fixedRotation = true;
-            bodyDef.type = b2_kinematicBody;
-            bodyDef.position.Set(o.position.x, o.position.y);
-            std::cout << "spawn guile: " << o.position.x << " " << o.position.y << std::endl;
+void StateGame::loadLoots()
+{
+    for (auto const& l : m_level->getLootInfo()) {
+        loadSingleLoot(l);
+    }
+}
 
-            auto guile = std::make_shared<Guile>(m_world, &bodyDef, m_player);
-            guile->m_spellToGive = o.properties.strings.at("spell");
-            guile->m_textString = o.properties.strings.at("text");
-            m_guys->push_back(guile);
-            add(guile);
+void StateGame::loadGuiles()
+{
+    for (auto const& o : m_level->getGuilesInfo()) {
+
+        b2BodyDef bodyDef;
+        bodyDef.fixedRotation = true;
+        bodyDef.type = b2_kinematicBody;
+        bodyDef.position.Set(o.position.x, o.position.y);
+
+        auto guile = std::make_shared<Guile>(m_world, &bodyDef, m_player);
+        guile->m_spellToGive = o.properties.strings.at("spell");
+        guile->m_textString = o.properties.strings.at("text");
+        m_guys->push_back(guile);
+        add(guile);
+    }
+}
+
+void StateGame::loadEnemies()
+{
+    auto enemies = m_level->createEnemies(m_world);
+    for (auto e : enemies) {
+        setupEnemyDependencies(e);
+        m_enemies->push_back(e);
+        add(e);
+        if (e->isBoss()) {
+            m_boss = e;
         }
     }
     getGame()->getLogger().debug("parsed N =" + std::to_string(m_enemies->size()) + " enemies");
@@ -340,136 +423,32 @@ void StateGame::loadEnemies(std::vector<jt::tilemap::InfoRect>& objects)
 void StateGame::loadSingleLoot(jt::tilemap::InfoRect const& o)
 {
     if (o.properties.strings.at("lootType") == "xp_small") {
-        spawnExperience(GP::LootExperienceSmallAmount(), o.position);
+        spawnExperience(GP::LootExperienceSmallAmount(), o.position, true);
     } else if (o.properties.strings.at("lootType") == "xp_medium") {
-        spawnExperience(GP::LootExperienceMediumAmount(), o.position);
+        spawnExperience(GP::LootExperienceMediumAmount(), o.position, true);
     } else if (o.properties.strings.at("lootType") == "xp_large") {
-        spawnExperience(GP::LootExperienceLargeAmount(), o.position);
+        spawnExperience(GP::LootExperienceLargeAmount(), o.position, true);
     }
 }
 
-void StateGame::loadSingleEnemy(jt::tilemap::InfoRect const& info)
+void StateGame::setupEnemyDependencies(std::shared_ptr<EnemyBase> e)
 {
-    auto const position = info.position;
-    auto const type = info.properties.strings.at("enemyType");
-    if (type == "crystal_small") {
-        loadSingleEnemySmallCrystal(position);
-    } else if (type == "crystal_medium") {
-        loadSingleEnemyMediumCrystal(position);
-    } else if (type == "crystal_large") {
-        loadSingleEnemyLargeCrystal(position);
-    } else if (type == "boss") {
-        loadSingleEnemyBoss(position);
-    }
+    e->setTarget(m_player);
+    e->setProjectileSpawner(this);
+    e->setExperienceSpawner(this);
+    e->setPathCalculator(m_level.get());
+    e->setDeferredActionHandler(this);
 }
 
-void StateGame::loadSingleEnemySmallCrystal(jt::Vector2f const& position)
-{
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(position.x, position.y);
-    bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalSmall>(m_world, &bodyDef, *this);
-    m_enemies->push_back(e);
-    add(e);
-}
+void StateGame::loadTileColliders() { m_colliders = m_level->createColliders(m_world); }
 
-void StateGame::loadSingleEnemyMediumCrystal(jt::Vector2f const& position)
-{
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(position.x, position.y);
-    bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalMedium>(m_world, &bodyDef, *this);
-    m_enemies->push_back(e);
-    add(e);
-}
-
-void StateGame::loadSingleEnemyLargeCrystal(jt::Vector2f const& position)
-{
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(position.x, position.y);
-    bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalLarge>(m_world, &bodyDef, *this);
-    m_enemies->push_back(e);
-    add(e);
-}
-
-void StateGame::loadSingleEnemyBoss(jt::Vector2f const& position)
-{
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(position.x, position.y);
-    bodyDef.linearDamping = 16.0f;
-    auto e = std::make_shared<EnemyCrystalBoss>(m_world, &bodyDef, *this);
-    m_enemies->push_back(e);
-    add(e);
-}
-
-void StateGame::loadPlayerSpawn(std::vector<jt::tilemap::InfoRect>& objects)
-{
-    for (auto const& o : objects) {
-        if (o.name == "player_spawn") {
-            m_player->setPosition(o.position);
-            getGame()->gfx().camera().setCamOffset(o.position - GP::GetScreenSize() / 2.0f);
-        }
-    }
-}
-
-void StateGame::loadTileColliders(jt::tilemap::TilesonLoader& loader)
-{
-    auto tileCollisions = loader.loadCollisionsFromLayer("ground1");
-    auto const levelColliderCountInitial = tileCollisions.getRects().size();
-    tileCollisions.refineColliders(16.0f);
-    auto const levelColliderCountOptimized = tileCollisions.getRects().size();
-    getGame()->getLogger().debug(
-        "Level colliders initial: " + std::to_string(levelColliderCountInitial)
-            + " and optimized: " + std::to_string(levelColliderCountOptimized),
-        { "level" });
-
-    for (auto const& r : tileCollisions.getRects()) {
-        b2BodyDef bodyDef;
-        bodyDef.fixedRotation = true;
-        bodyDef.type = b2_staticBody;
-        bodyDef.position.Set(r.left + r.width / 2.0f, r.top + r.height / 2.0f);
-
-        b2FixtureDef fixtureDef;
-        b2PolygonShape boxCollider {};
-        boxCollider.SetAsBox(r.width / 2.0f, r.height / 2.0f);
-        fixtureDef.shape = &boxCollider;
-
-        auto collider = std::make_shared<jt::Box2DObject>(m_world, &bodyDef);
-        collider->getB2Body()->CreateFixture(&fixtureDef);
-
-        m_colliders.push_back(collider);
-    }
-}
-
-std::shared_ptr<PlayerCharacter> StateGame::getPlayer() { return m_player; }
-
-std::shared_ptr<jt::pathfinder::NodeInterface> StateGame::getTileAtPosition(
-    jt::Vector2f const& actorPosInFloat)
-{
-    m_nodeLayer->reset();
-    // TODO introduce TileSize in GP
-    auto const actorPosInInt
-        = jt::Vector2u { static_cast<unsigned int>(actorPosInFloat.x / GP::PlayerSize().x),
-              static_cast<unsigned int>(actorPosInFloat.y / GP::PlayerSize().y) };
-
-    return m_nodeLayer->getTileAt(actorPosInInt)->getNode();
-}
+std::shared_ptr<Player> StateGame::getPlayer() { return m_player; }
 
 std::shared_ptr<jt::ObjectGroup<EnemyBase>> StateGame::getEnemies() { return m_enemies; }
 
 void StateGame::spawnExperience(int amount, jt::Vector2f const& pos, bool single)
 {
     if (!single) {
-        std::cout << "spawn experience" << std::endl;
         while (amount >= 5) {
             int value = jt::Random::getInt(1, 5);
             amount -= value;
@@ -489,8 +468,7 @@ void StateGame::spawnOneExperienceOrb(jt::Vector2f const& pos, int value)
     bodyDef.position.Set(pos.x, pos.y);
     bodyDef.linearDamping = 1.0f;
 
-    auto e = std::make_shared<ExperienceOrb>(
-        m_world, &bodyDef, pos + direction * jt::Random::getFloat(0.0f, 0.125f), value);
+    auto e = std::make_shared<ExperienceOrb>(m_world, &bodyDef, value, m_player);
     e->setVelocity(direction);
     add(e);
     m_experienceOrbs->push_back(e);
@@ -528,6 +506,12 @@ void StateGame::spawnCrystalProjectile(
     add(projectile);
 }
 
+void StateGame::queueDeferredAction(float time, std::function<void(void)> const& action)
+{
+    auto const t = std::make_shared<jt::Timer>(time, action, 1);
+    add(t);
+}
+
 std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> StateGame::getSnipeProjectiles() const
 {
     return m_snipeProjectiles;
@@ -552,15 +536,7 @@ void StateGame::spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f 
     m_snipeProjectiles->push_back(projectile);
     add(projectile);
 }
-void StateGame::loadStairs(jt::Vector2f f)
-{
-    m_stairs = std::make_shared<Stairs>(f, *this);
-    add(m_stairs);
-}
+
 std::shared_ptr<Stairs> StateGame::getStairs() const { return m_stairs; }
-void StateGame::loadKey(jt::Vector2f f)
-{
-    m_key = std::make_shared<Key>(f, *this);
-    add(m_key);
-}
+
 jt::Vector2f& StateGame::getStairsDest() { return m_stairsDest; }

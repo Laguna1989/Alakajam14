@@ -1,15 +1,18 @@
 #include "experience_orb.hpp"
+#include "animation.hpp"
+#include "audio/sound.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "math_helper.hpp"
 #include "random/random.hpp"
 
 ExperienceOrb::ExperienceOrb(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
-    jt::Vector2f const& pos, int value)
+    int value, std::weak_ptr<TargetInterface> target)
     : jt::Box2DObject { world, def }
+    , m_target { target }
 {
     m_value = value;
     m_animation = std::make_shared<jt::Animation>();
-    m_animation->setPosition(pos);
     m_animation->setScreenSizeHint(GP::GetScreenSize());
 }
 
@@ -31,9 +34,18 @@ void ExperienceOrb::doCreate()
 
     m_animation->setScreenSizeHint(GP::GetScreenSize());
 
+    b2FixtureDef fixtureDef;
+    b2PolygonShape boxCollider {};
+    boxCollider.SetAsBox(3.0f, 3.0f);
+    fixtureDef.shape = &boxCollider;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryExperienceOrbs();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls();
+
+    getB2Body()->CreateFixture(&fixtureDef);
+
     m_soundBling = std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg");
     m_soundBling->setVolume(0.7f);
-    m_soundBling->setLoop(false);
+    getGame()->audio().addTemporarySound(m_soundBling);
 }
 
 void ExperienceOrb::doUpdate(float const elapsed)
@@ -41,10 +53,26 @@ void ExperienceOrb::doUpdate(float const elapsed)
     m_animation->setPosition(getPosition() - GP::PlayerSize() * 0.5f);
     m_animation->update(elapsed);
 
-    m_soundBling->update();
-
     if (!m_soundBling->isPlaying() && m_pickedUp) {
         kill();
+    }
+
+    if (getAge() < GP::ExperienceOrbIdleTime()) {
+        return;
+    }
+    auto const playerPosition = m_target->getTargetPosition();
+    auto const orbPosition = getPosition();
+    auto diff = playerPosition - orbPosition;
+    auto const distance = jt::MathHelper::lengthSquared(diff);
+
+    if (distance < GP::ExperienceOrbAttractDistance() * GP::ExperienceOrbAttractDistance()) {
+        jt::MathHelper::normalizeMe(diff);
+        setVelocity(diff * GP::ExperienceOrbVelocity());
+    }
+    if (distance < GP::ExperienceOrbPickupDistance() * GP::ExperienceOrbPickupDistance()
+        && !m_pickedUp) {
+        m_target->gainExperience(m_value);
+        pickUp();
     }
 }
 

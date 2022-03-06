@@ -77,6 +77,9 @@ void StateMenu::createTextExplanation()
         "Press Space to start the game", 16U, GP::getPalette().getColor(7));
     m_text_Explanation->setPosition({ half_width, 100 });
     m_text_Explanation->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 3, 3 });
+
+    m_text_Time
+        = jt::dh::createText(getGame()->gfx().target(), "", 16U, GP::getPalette().getColor(7));
 }
 
 void StateMenu::createTextTitle()
@@ -156,6 +159,11 @@ void StateMenu::doInternalUpdate(float const elapsed)
     updateDrawables(elapsed);
     checkForTransitionToStateGame();
 
+    if (m_time > 0) {
+        m_text_Time->setText(
+            "Time of the last run: " + jt::MathHelper::floatToStringWithXDigits(m_time, 2));
+    }
+
     if (m_started) {
         // cheapo fade-out
         m_menuMusic->setVolume(m_menuMusic->getVolume() * 0.95f);
@@ -168,6 +176,7 @@ void StateMenu::updateDrawables(const float& elapsed)
     m_title->update(elapsed);
     m_text_Explanation->update(elapsed);
     m_text_Credits->update(elapsed);
+    m_text_Time->update(elapsed);
     m_overlay->update(elapsed);
     m_vignette->update(elapsed);
 }
@@ -201,8 +210,12 @@ void StateMenu::doInternalDraw() const
     m_text_Explanation->draw(getGame()->gfx().target());
     m_text_Credits->draw(getGame()->gfx().target());
 
+    m_text_Time->draw(getGame()->gfx().target());
+
     m_overlay->draw(getGame()->gfx().target());
     m_vignette->draw(getGame()->gfx().target());
 }
 
 std::string StateMenu::getName() const { return "Menu"; }
+
+void StateMenu::setScore(float s) { m_time = s; }

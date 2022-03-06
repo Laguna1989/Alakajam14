@@ -23,8 +23,7 @@ void SpellAttackSnipe::doTrigger()
 
     auto const projectileVelocity = playerVelocity;
 
-    jt::Vector2f const projectilePosition { playerPosition.x + projectileVelocity.x * 23.0f,
-        playerPosition.y + projectileVelocity.y * 23.0f };
+    jt::Vector2f const projectilePosition { playerPosition.x, playerPosition.y };
     m_state.spawnSnipeProjectile(projectilePosition, projectileVelocity);
 
     // TODO: Knockback.

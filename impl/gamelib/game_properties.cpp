@@ -11,8 +11,14 @@ jt::Vector2f GP::GetWindowSize() { return jt::Vector2f { 800, 600 }; }
 jt::Vector2f GP::GetScreenSize() { return GetWindowSize() * (1.0f / GetZoom()); }
 
 int GP::PhysicVelocityIterations() { return 20; }
-
 int GP::PhysicPositionIterations() { return 20; }
+
+std::uint16_t GP::PhysicsCollisionCategoryWalls() { return 0x0001; }
+std::uint16_t GP::PhysicsCollisionCategoryPlayer() { return 0x0002; }
+std::uint16_t GP::PhysicsCollisionCategoryEnemies() { return 0x0004; }
+std::uint16_t GP::PhysicsCollisionCategoryPlayerShots() { return 0x0008; }
+std::uint16_t GP::PhysicsCollisionCategoryEnemyShots() { return 0x0010; }
+std::uint16_t GP::PhysicsCollisionCategoryExperienceOrbs() { return 0x0020; }
 
 jt::Vector2f GP::PlayerSize() { return jt::Vector2f { 16.0f, 16.0f }; }
 float GP::PlayerBaseMovementSpeed() { return 55.0f; }
@@ -24,7 +30,7 @@ float GP::PlayerAttackCooldown() { return 0.6f; }
 
 float GP::ExperienceOrbVelocity() { return 55.0f; }
 float GP::ExperienceOrbIdleTime() { return 0.4f; }
-float GP::ExperienceOrbPickupDistance() { return 8.0f; }
+float GP::ExperienceOrbPickupDistance() { return 22.0f; }
 float GP::ExperienceOrbAttractDistance() { return 36.0f; }
 
 float GP::SpellSnipeProjectileSpeed() { return 250.0f; }
@@ -43,8 +49,11 @@ float GP::EnemyShotSpeed() { return 175.0f; }
 float GP::EnemyShotTimer() { return 1.2f; }
 float GP::EnemyShotRange() { return 210.0f; }
 float GP::EnemyShotDamage() { return 10.0f; }
+
 float GP::BossHitPoints() { return 2000.0f; }
+float GP::BossMovementSpeed() { return 15.0f; }
 
 float GP::LevelUpHealthIncrease() { return 7.0f; }
 float GP::LevelUpMovementSpeedIncrease() { return 0.035f; }
-float GP::LevelUpAttackDamageIncrease() { return 4; }
+float GP::LevelUpAttackDamageIncrease() { return 4.0f; }
+float GP::TileSizeInPixel() { return 16.0f; }

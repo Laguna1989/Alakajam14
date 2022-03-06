@@ -1,4 +1,5 @@
 #include "shroom_game_contact_listener.hpp"
+#include "enemies/enemy_base.hpp"
 #include "game_properties.hpp"
 #include "state_game.hpp"
 #include "timer.hpp"
@@ -27,9 +28,7 @@ void ShroomGameContactListener::BeginContact(b2Contact* contact)
         }
         auto crystalBody = crystalProjectile->getB2Body();
         if (bodyA == crystalBody || bodyB == crystalBody) {
-            if (crystalProjectile->getAge() > 0.2f) {
-                crystalProjectile->kill();
-            }
+            crystalProjectile->kill();
             auto const playerBody = m_state.getPlayer()->getB2Body();
             if (bodyA == playerBody || bodyB == playerBody) {
                 crystalProjectile->kill();

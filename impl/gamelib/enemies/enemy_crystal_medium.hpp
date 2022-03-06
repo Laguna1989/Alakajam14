@@ -5,11 +5,9 @@
 
 class EnemyCrystalMedium : public EnemyBase {
 public:
-    EnemyCrystalMedium(
-        std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
+    EnemyCrystalMedium(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
 
 private:
-    void doAI(float elapsed) override;
     void doCreate() override;
 
     float m_shootTimer { -1.0f };

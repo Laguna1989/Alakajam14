@@ -1,4 +1,5 @@
 #include "spell_book.hpp"
+#include "drawable_helpers.hpp"
 #include "game_interface.hpp"
 #include "imgui.h"
 #include "spell_attack_broad.hpp"
@@ -10,6 +11,19 @@
 #include "spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
 #include "strutils.hpp"
+
+namespace {
+std::string getKeysForId(std::size_t id)
+{
+    if (id == 0) {
+        return "[Q, 1]";
+    } else if (id == 1) {
+        return "[E, 2]";
+    } else {
+        return "[Tab, 3]";
+    }
+}
+} // namespace
 
 SpellBook::SpellBook(StateGame& state)
 {
@@ -23,16 +37,28 @@ SpellBook::SpellBook(StateGame& state)
     m_spells.push_back(std::make_shared<SpellAttackBroad>(state));
     m_spells.push_back(std::make_shared<SpellHeal>(*state.getPlayer()->getCharSheet()));
 
-    //    m_equippedSpells.push_back(getSpellByName("Snipe"));
-    //    m_equippedSpells.push_back(getSpellByName("Broad Stroke"));
-    //    m_equippedSpells.push_back(getSpellByName("Heal"));
+    m_equippedSpells.push_back(getSpellByName("None"));
+    m_equippedSpells.push_back(getSpellByName("None"));
+    m_equippedSpells.push_back(getSpellByName("None"));
+}
 
-    m_equippedSpells.push_back(getSpellByName("None"));
-    m_equippedSpells.push_back(getSpellByName("None"));
-    m_equippedSpells.push_back(getSpellByName("None"));
-
+void SpellBook::doCreate()
+{
     m_selectSound = std::make_shared<jt::Sound>("assets/sound/spellbook_click.ogg");
     m_selectSound->setVolume(0.5f);
+    getGame()->audio().addTemporarySound(m_selectSound);
+
+    m_newSpellText = jt::dh::createText(getGame()->gfx().target(), "New Spells!", 12);
+    m_newSpellText->setIgnoreCamMovement(true);
+    m_newSpellText->setPosition(jt::Vector2f { 350, 280 });
+
+    for (auto i = 0U; i != m_equippedSpells.size(); ++i) {
+        auto text = jt::dh::createText(getGame()->gfx().target(), getKeysForId(i) + " None", 12);
+        text->setIgnoreCamMovement(true);
+        text->setPosition(jt::Vector2f { 10.0f, 240.0f + i * 20.0f });
+        text->setTextAlign(jt::Text::TextAlign::LEFT);
+        m_spellTexts.push_back(text);
+    }
 }
 
 std::shared_ptr<SpellInterface> SpellBook::getSpellByName(std::string const& name) const
@@ -66,22 +92,38 @@ void SpellBook::makeSpellAvailable(std::string const& name)
     }
 
     m_availableSpells.push_back(name);
+    m_newSpell = true;
 }
 
-void SpellBook::doUpdate(float const /* elapsed */)
+void SpellBook::doUpdate(float const elapsed)
 {
-    m_selectSound->update();
+    float v = sin(getAge() * 2.5f);
+    auto a = 100 + 155 * v * v;
+    m_newSpellText->setColor(jt::Color { 255, 255, 255, static_cast<std::uint8_t>(a) });
+    m_newSpellText->update(elapsed);
 
     if (getGame()->input().keyboard()->justPressed(jt::KeyCode::L)) {
         m_drawSpellbook = !m_drawSpellbook;
+    }
+
+    for (auto const& t : m_spellTexts) {
+        t->update(elapsed);
     }
 }
 
 void SpellBook::doDraw() const
 {
+    if (m_newSpell) {
+        m_newSpellText->draw(getGame()->gfx().target());
+    }
+    for (auto const& t : m_spellTexts) {
+        t->draw(getGame()->gfx().target());
+    }
+
     if (!m_drawSpellbook) {
         return;
     }
+    m_newSpell = false;
     ImGui::SetNextWindowPos(ImVec2 { 400, 0 });
 
     ImGui::SetNextWindowSize(ImVec2 { 400, 600 });
@@ -109,16 +151,21 @@ void SpellBook::drawEquippedSpells() const
         }
 
         if (ImGui::BeginPopup(slotName.c_str())) {
-            if (strutil::starts_with(displayName, "None")) {
-                ImGui::Text("Nothing Equipped");
-            }
 
             auto const possibleSpells = getEquippableSpells();
-            for (auto const& spell : possibleSpells) {
-                if (ImGui::Selectable(spell.c_str())) {
-                    m_equippedSpells.at(i)->onUnEquip();
-                    m_equippedSpells.at(i) = getSpellByName(spell);
-                    m_equippedSpells.at(i)->onEquip();
+            if (possibleSpells.empty()) {
+                ImGui::Text("Nothing available");
+            } else {
+                for (auto const& spell : possibleSpells) {
+                    if (ImGui::Selectable(spell.c_str())) {
+                        m_equippedSpells.at(i)->onUnEquip();
+                        m_equippedSpells.at(i) = getSpellByName(spell);
+                        m_equippedSpells.at(i)->onEquip();
+                        auto const cost = getSpellByName(spell)->getExperienceCost();
+                        auto const xpString
+                            = (cost == 0 ? "" : " - " + std::to_string(cost) + "XP");
+                        m_spellTexts.at(i)->setText(getKeysForId(i) + " " + spell + xpString);
+                    }
                 }
             }
 
@@ -137,14 +184,9 @@ std::vector<std::string> SpellBook::getEquippableSpells() const
     std::vector<std::string> values;
 
     for (auto const& currentSpellName : m_availableSpells) {
-        if (std::find_if(m_equippedSpells.cbegin(), m_equippedSpells.cend(),
-                [&currentSpellName](auto const& potentialSpellToBeAdded) {
-                    return potentialSpellToBeAdded->getName() == currentSpellName;
-                })
-            == m_equippedSpells.end()) {
-            values.push_back(currentSpellName);
-        }
+        values.push_back(currentSpellName);
     }
 
     return values;
 }
+std::vector<std::shared_ptr<jt::Text>> SpellBook::getEquippedSpellTexts() { return m_spellTexts; }

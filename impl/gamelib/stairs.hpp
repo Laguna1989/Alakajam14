@@ -6,7 +6,8 @@
 #include "state_game.hpp"
 class Stairs : public jt::GameObject {
 public:
-    Stairs(jt::Vector2f const& pos, StateGame& state);
+    Stairs(StateGame& state);
+    void setPosition(jt::Vector2f const& pos);
     void unlock();
 
 private:

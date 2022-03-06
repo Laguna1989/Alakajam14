@@ -8,7 +8,7 @@
 #include "sprite.hpp"
 #include "text.hpp"
 
-class ScoreDisplay;
+class ExperienceDisplay;
 
 class Hud : public jt::GameObject {
 public:
@@ -17,7 +17,7 @@ public:
     std::shared_ptr<ObserverInterface<float>> getObserverHealthMax() const;
 
 private:
-    std::shared_ptr<ScoreDisplay> m_displayExperience;
+    std::shared_ptr<ExperienceDisplay> m_displayExperience;
     std::shared_ptr<HealthDisplay> m_displayHealth;
     std::shared_ptr<HealthMaxDisplay> m_displayHealthMax;
 

@@ -1,4 +1,5 @@
-#include "character.hpp"
+#include "player.hpp"
+#include "enemies/enemy_base.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
@@ -7,38 +8,70 @@
 #include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
 
-PlayerCharacter::PlayerCharacter(
+Player::Player(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state)
     : jt::Box2DObject { world, def }
     , m_state { state }
 {
-    m_charsheet = std::make_shared<CharacterSheetImgui>(m_state.m_hud->getObserverExperience(),
-        m_state.m_hud->getObserverHealth(), m_state.m_hud->getObserverHealthMax());
 }
 
-void PlayerCharacter::doCreate()
+void Player::doCreate()
 {
     b2FixtureDef fixtureDef;
     b2PolygonShape boxCollider {};
     boxCollider.SetAsBox(GP::PlayerSize().x / 2.1f, GP::PlayerSize().y / 2.1f);
     fixtureDef.shape = &boxCollider;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryPlayer();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryEnemyShots() | GP::PhysicsCollisionCategoryEnemies();
     getB2Body()->CreateFixture(&fixtureDef);
 
     createAnimation();
 
+    CharSheetObservers charSheetObservers { m_state.m_hud->getObserverExperience(),
+        m_state.m_hud->getObserverHealth(), m_state.m_hud->getObserverHealthMax(), m_healCallback };
+
+    m_charsheet = std::make_shared<CharacterSheetImgui>(charSheetObservers);
     m_charsheet->setGameInstance(getGame());
     m_charsheet->create();
 
     m_spellBook = std::make_shared<SpellBook>(m_state);
     m_spellBook->setGameInstance(getGame());
+    m_spellBook->create();
 
+    createSounds();
+
+    m_commands.push_back(getGame()->getActionCommandManager().registerTemporaryCommand(
+        "learnspell", [this](std::vector<std::string> args) {
+            getGame()->cheat();
+            if (args.size() != 1) {
+                return;
+            }
+            m_spellBook->makeSpellAvailable(args.at(0));
+        }));
+
+    m_commands.push_back(getGame()->getActionCommandManager().registerTemporaryCommand(
+        "getxp", [this](std::vector<std::string> args) {
+            getGame()->cheat();
+            if (args.size() != 1) {
+                return;
+            }
+            int amount = std::stoi(args.at(0));
+            m_charsheet->changeExperiencePoints(amount);
+        }));
+}
+void Player::createSounds()
+{
     m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
     m_soundDash->setVolume(0.4f);
+    getGame()->audio().addTemporarySound(m_soundDash);
 
     m_soundStomp = std::make_shared<jt::Sound>("assets/sound/attack_stomp.ogg");
     m_soundStomp->setVolume(0.4f);
+    getGame()->audio().addTemporarySound(m_soundStomp);
 
     m_soundDeath = std::make_shared<jt::Sound>("assets/sound/GAME_OVER.ogg");
+    getGame()->audio().addTemporarySound(m_soundDeath);
 
     auto const soundHurt1 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_01.ogg");
     auto const soundHurt2 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_02.ogg");
@@ -60,7 +93,7 @@ void PlayerCharacter::doCreate()
     m_soundGroupHurt->add(soundHurt5);
 }
 
-void PlayerCharacter::createAnimation()
+void Player::createAnimation()
 {
     auto const frameTimeAttack = 0.05f;
 
@@ -173,12 +206,12 @@ void PlayerCharacter::createAnimation()
     m_attackUnderlay->add("assets/attack_underlay.png", "initial", jt::Vector2u { 32u, 32u }, { 0 },
         0.1f, getGame()->gfx().textureManager());
     m_attackUnderlay->add("assets/attack_underlay.png", "attack", jt::Vector2u { 32u, 32u },
-        jt::MathHelper::numbersBetween(0u, 9u), frameTimeAttack * 2.0f,
+        jt::MathHelper::numbersBetween(3u, 9u), frameTimeAttack * 2.0f,
         getGame()->gfx().textureManager());
     m_attackUnderlay->play("initial");
 }
 
-void PlayerCharacter::doUpdate(float const elapsed)
+void Player::doUpdate(float const elapsed)
 {
     handleInputMovement();
     handleInputAttack();
@@ -193,47 +226,52 @@ void PlayerCharacter::doUpdate(float const elapsed)
     m_charsheet->update(elapsed);
     m_spellBook->update(elapsed);
 
-    m_soundDash->update();
-    m_soundStomp->update();
-    m_soundGroupHurt->update();
-    m_soundDeath->update();
-
     if (getCharSheet()->getHitpoints() <= 0 && !m_soundDeath->isPlaying() && m_isDying) {
         m_hasFinishedDying = true;
     }
 }
 
-void PlayerCharacter::updateSpells(const float elapsed)
+void Player::updateSpells(const float elapsed)
 {
     auto const& equippedSpells = m_spellBook->getEquippedSpells();
 
-    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Q);
-    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Num1);
-    updateOneSpell(elapsed, equippedSpells.at(0), jt::KeyCode::Numpad1);
-    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::E);
-    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::Num2);
-    updateOneSpell(elapsed, equippedSpells.at(1), jt::KeyCode::Numpad2);
-    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Tab);
-    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Num3);
-    updateOneSpell(elapsed, equippedSpells.at(2), jt::KeyCode::Numpad3);
+    auto equippedSpellTexts = m_spellBook->getEquippedSpellTexts();
+    updateOneSpell(elapsed, equippedSpells.at(0), equippedSpellTexts.at(0),
+        { jt::KeyCode::Q, jt::KeyCode::Num1, jt::KeyCode::Numpad1 });
+
+    updateOneSpell(elapsed, equippedSpells.at(1), equippedSpellTexts.at(1),
+        { jt::KeyCode::E, jt::KeyCode::Num2, jt::KeyCode::Numpad2 });
+
+    updateOneSpell(elapsed, equippedSpells.at(2), equippedSpellTexts.at(2),
+        { jt::KeyCode::Tab, jt::KeyCode::Num3, jt::KeyCode::Numpad3 });
 }
 
-void PlayerCharacter::updateOneSpell(
-    float const elapsed, std::shared_ptr<SpellInterface> spell, jt::KeyCode key)
+void Player::updateOneSpell(float const elapsed, std::shared_ptr<SpellInterface> spell,
+    std::shared_ptr<jt::Text> text, std::vector<jt::KeyCode> keys)
 {
     spell->update(elapsed);
-    if (getGame()->input().keyboard()->justPressed(key)) {
-        auto const cost = spell->getExperienceCost();
-        // TODO warmup for spells?
-        if (spell->canTrigger() && m_charsheet->getExperiencePoints() >= cost) {
-            getGame()->getLogger().debug("Spell triggered: " + spell->getName());
-            m_charsheet->changeExperiencePoints(-cost);
-            spell->trigger();
+    auto const cost = spell->getExperienceCost();
+    auto hasEnoughMana = m_charsheet->getExperiencePoints() >= cost;
+    auto spellCanBeCast = spell->canTrigger() && hasEnoughMana;
+    if (spellCanBeCast) {
+        text->setColor(jt::colors::White);
+    } else {
+        text->setColor(jt::colors::Gray);
+    }
+    for (auto key : keys) {
+        if (getGame()->input().keyboard()->justPressed(key)) {
+            if (spellCanBeCast) {
+                getGame()->getLogger().debug("Spell triggered: " + spell->getName());
+                m_charsheet->changeExperiencePoints(-cost);
+                spell->trigger();
+            } else {
+                text->shake(0.4f, 2);
+            }
         }
     }
 }
 
-void PlayerCharacter::handleInputAttack()
+void Player::handleInputAttack()
 {
     if (m_attackCooldown > 0.0f) {
         return;
@@ -247,7 +285,7 @@ void PlayerCharacter::handleInputAttack()
     }
 }
 
-void PlayerCharacter::updateAnimation(float const elapsed)
+void Player::updateAnimation(float const elapsed)
 {
     auto const v = getVelocity();
     if (m_dashTimer > 0.0f) {
@@ -304,13 +342,11 @@ void PlayerCharacter::updateAnimation(float const elapsed)
                     jt::MathHelper::normalizeMe(delta);
                     float sc = jt::MathHelper::dot(look, delta);
                     if (sc > 0.5f) {
-                        // TODO: Derive Damage from stats & gear
                         enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() });
                     }
                     continue;
                 } else if (dist < circularHurtboxRange) {
                     // Circular hurtbox with short range
-                    // TODO: Derive Damage from stats & gear
                     enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() / 3.0f });
                 }
             }
@@ -346,7 +382,7 @@ void PlayerCharacter::updateAnimation(float const elapsed)
     m_attackUnderlay->update(elapsed);
 }
 
-std::string PlayerCharacter::selectDashAnimation(jt::Vector2f const& velocity) const
+std::string Player::selectDashAnimation(jt::Vector2f const& velocity) const
 {
     std::string dashAnimationName { "dash_down" };
     if (velocity.x > 0 && abs(velocity.y) >= 0 && abs(velocity.y) < 0.1f) {
@@ -363,7 +399,7 @@ std::string PlayerCharacter::selectDashAnimation(jt::Vector2f const& velocity) c
     return dashAnimationName;
 }
 
-bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
+bool Player::setAnimationIfNotSet(std::string const& newAnimationName)
 {
     std::string const& currentAnimationName = m_animation->getCurrentAnimationName();
 
@@ -382,7 +418,7 @@ bool PlayerCharacter::setAnimationIfNotSet(std::string const& newAnimationName)
     return false;
 }
 
-void PlayerCharacter::handleInputMovement()
+void Player::handleInputMovement()
 {
     auto keyboard = getGame()->input().keyboard();
 
@@ -409,7 +445,7 @@ void PlayerCharacter::handleInputMovement()
         handleDashInput();
     }
 }
-void PlayerCharacter::handleDashInput()
+void Player::handleDashInput()
 {
     if (m_dashCooldown >= 0) {
         return;
@@ -420,7 +456,7 @@ void PlayerCharacter::handleDashInput()
     }
 }
 
-void PlayerCharacter::doDraw() const
+void Player::doDraw() const
 {
     m_attackUnderlay->draw(getGame()->gfx().target());
     m_animation->draw(getGame()->gfx().target());
@@ -428,18 +464,18 @@ void PlayerCharacter::doDraw() const
     m_spellBook->draw();
 }
 
-std::shared_ptr<CharacterSheetImgui> PlayerCharacter::getCharSheet() { return m_charsheet; }
+std::shared_ptr<CharacterSheetImgui> Player::getCharSheet() { return m_charsheet; }
 
-void PlayerCharacter::gainExperience(int value) { m_charsheet->changeExperiencePoints(value); }
+void Player::gainExperience(int value) { m_charsheet->changeExperiencePoints(value); }
 
-void PlayerCharacter::receiveDamage(Damage const& dmg)
+void Player::receiveDamage(Damage const& dmg)
 {
     m_charsheet->changeHitpoints(dmg.value);
     setAnimationIfNotSet("hurt");
     m_soundGroupHurt->play();
 }
 
-void PlayerCharacter::die()
+void Player::die()
 {
     if (!m_isDying) {
         m_isDying = true;
@@ -448,4 +484,15 @@ void PlayerCharacter::die()
         setAnimationIfNotSet("die");
     }
 }
-std::shared_ptr<SpellBook> PlayerCharacter::getSpellBook() { return m_spellBook; }
+std::shared_ptr<SpellBook> Player::getSpellBook() { return m_spellBook; }
+
+jt::Vector2f Player::getTargetPosition() { return getPosition(); }
+void Player::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
+
+void Player::setHealCallback(std::function<void(void)> healCallback)
+{
+    m_healCallback = [healCallback, this]() {
+        m_animation->flash(0.2f, jt::colors::Green);
+        healCallback();
+    };
+}
