@@ -81,6 +81,7 @@ private:
     void createSounds();
     std::function<void(void)> m_healCallback;
     std::vector<std::shared_ptr<bool>> m_commands;
+    void handleDash();
 };
 
 #endif // GUARD_JAMTEMPLATE_CHARACTER_HPP

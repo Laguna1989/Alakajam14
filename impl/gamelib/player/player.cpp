@@ -225,6 +225,8 @@ void Player::doUpdate(float const elapsed)
         m_input->updateAttack(*this);
     }
 
+    handleDash();
+
     updateSpells(elapsed);
     updateAnimation(elapsed);
 
@@ -283,29 +285,9 @@ void Player::updateOneSpell(float const elapsed, std::shared_ptr<SpellInterface>
 void Player::updateAnimation(float const elapsed)
 {
     auto const v = getVelocity();
-    if (m_dashTimer > 0.0f) {
-        auto const dashAnimationName = selectDashAnimation(v);
 
-        if (setAnimationIfNotSet(dashAnimationName)) {
-            m_soundDash->stop();
-            m_soundDash->play();
-
-            m_animation->flash(0.3f);
-            auto p = getPosition();
-            auto vn = v;
-            jt::MathHelper::normalizeMe(vn);
-            m_dashVelocity = vn * GP::PlayerBaseDashVelocity() * m_charsheet->getDashFactor();
-
-            // TODO trigger eye candy
-        }
-        if (m_dashTimer >= GP::PlayerDashTotalTime()
-                - GP::PlayerDashActiveTime() * m_charsheet->getDashFactor()) {
-            setVelocity(m_dashVelocity);
-        } else {
-            setVelocity(jt::Vector2f { 0.0f, 0.0f });
-        }
-
-    } else if (m_attackCooldown <= 0.0f) {
+    auto const notInDashNotInAttack = m_dashTimer <= 0.0f && m_attackCooldown <= 0.0f;
+    if (notInDashNotInAttack) {
         // no dash, no attack
         if (jt::MathHelper::lengthSquared(v) < 2) {
             setAnimationIfNotSet("idle");
@@ -334,6 +316,19 @@ void Player::updateAnimation(float const elapsed)
 
     m_animation->update(elapsed);
     m_attackUnderlay->update(elapsed);
+}
+void Player::handleDash()
+{
+    if (m_dashTimer > 0.0f) {
+        auto const isInActiveDashMode = m_dashTimer >= GP::PlayerDashTotalTime()
+                - GP::PlayerDashActiveTime() * m_charsheet->getDashFactor();
+
+        if (isInActiveDashMode) {
+            setVelocity(m_dashVelocity);
+        } else {
+            setVelocity(jt::Vector2f { 0.0f, 0.0f });
+        }
+    }
 }
 
 std::string Player::selectDashAnimation(jt::Vector2f const& velocity) const
@@ -418,10 +413,27 @@ void Player::dash()
     if (m_dashCooldown >= 0) {
         return;
     }
-    if (jt::MathHelper::lengthSquared(getVelocity()) > 0) {
+
+    auto currentPlayerVelocity = getVelocity();
+
+    if (jt::MathHelper::lengthSquared(currentPlayerVelocity) > 0) {
         m_dashTimer = GP::PlayerDashTotalTime();
         m_dashCooldown = GP::PlayerBaseDashCooldown();
     }
+
+    setAnimationIfNotSet(selectDashAnimation(currentPlayerVelocity));
+
+    m_soundDash->stop();
+    m_soundDash->play();
+
+    m_animation->flash(0.3f);
+    auto p = getPosition();
+
+    jt::MathHelper::normalizeMe(currentPlayerVelocity);
+    m_dashVelocity
+        = currentPlayerVelocity * GP::PlayerBaseDashVelocity() * m_charsheet->getDashFactor();
+
+    // TODO trigger eye candy
 }
 
 void Player::attack()
