@@ -3,7 +3,7 @@
 
 #include "animation.hpp"
 #include "box2dwrapper/box2d_object.hpp"
-#include "player.hpp"
+#include "player/player.hpp"
 #include "text.hpp"
 #include <memory>
 

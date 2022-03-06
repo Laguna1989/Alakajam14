@@ -1,4 +1,4 @@
-#include "player.hpp"
+#include "player/player.hpp"
 #include "enemies/enemy_base.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
