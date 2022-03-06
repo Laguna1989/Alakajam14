@@ -5,8 +5,6 @@
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "crystal_projectile.hpp"
 #include "deferred_action_interface.hpp"
-#include "enemies/enemy_crystal_boss.hpp"
-#include "experience_orb.hpp"
 #include "experience_spawner_interface.hpp"
 #include "game_state.hpp"
 #include "guile.hpp"
@@ -34,6 +32,7 @@ class Hud;
 class Stairs;
 class EnemyBase;
 class Level;
+class ExperienceOrb;
 
 class StateGame : public jt::GameState,
                   public ProjectileSpawnerInterface,
@@ -103,6 +102,7 @@ private:
 
     bool m_running { true };
     bool m_hasEnded { false };
+    jt::Vector2f m_stairsDest;
 
     void doInternalCreate() override;
     void doInternalUpdate(float const elapsed) override;
@@ -119,14 +119,9 @@ private:
     void createSnipeProjectilesGroup();
     void loadTileColliders();
     void loadEnemies();
-    void loadSingleEnemy(jt::tilemap::InfoRect const& info);
-    void loadSingleEnemySmallCrystal(jt::Vector2f const& position);
-    void loadSingleEnemyMediumCrystal(jt::Vector2f const& position);
-    void loadSingleEnemyLargeCrystal(jt::Vector2f const& position);
     void loadSingleLoot(jt::tilemap::InfoRect const& o);
     void createCrystalProjectilesGroup();
-    jt::Vector2f m_stairsDest;
-    void loadSingleEnemyBoss(const jt::Vector2f& position);
+
     void setupEnemyDependencies(std::shared_ptr<EnemyBase> e);
     void loadGuiles();
     void loadLoots();

@@ -7,6 +7,7 @@
 #include "enemies/enemy_crystal_large.hpp"
 #include "enemies/enemy_crystal_medium.hpp"
 #include "enemies/enemy_crystal_small.hpp"
+#include "experience_orb.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
