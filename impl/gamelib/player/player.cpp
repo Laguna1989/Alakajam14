@@ -305,48 +305,7 @@ void Player::updateAnimation(float const elapsed)
             setVelocity(jt::Vector2f { 0.0f, 0.0f });
         }
 
-    } else if (m_attackCooldown > 0.0f) {
-        if (setAnimationIfNotSet("attack_down")) {
-            m_soundStomp->stop();
-            m_soundStomp->play();
-
-            m_attackUnderlay->play("attack", 0, true);
-            // TODO: Spore particle effects or whatev
-
-            for (auto enemyWk : *m_state.getEnemies()) {
-                auto enemy = enemyWk.lock();
-                if (enemy == nullptr) {
-                    continue;
-                }
-                auto nmePos = enemy->getPosition();
-                auto myPos = getPosition();
-                jt::Vector2f delta = nmePos - myPos;
-                auto dist = jt::MathHelper::length(delta);
-                // TODO: Maybe derive this from gear
-                float circularHurtboxRange = 20.0f;
-                float directedHurtboxRange = 45.0f;
-
-                if (dist < directedHurtboxRange) {
-                    // Forward-facing hurtbox with medium range
-                    jt::Vector2f look = getVelocity();
-                    if (jt::MathHelper::length(look) < 0.1f) {
-                        // Look down if not moving
-                        look = { 0.0f, 1.0f };
-                    }
-                    jt::MathHelper::normalizeMe(look);
-                    jt::MathHelper::normalizeMe(delta);
-                    float sc = jt::MathHelper::dot(look, delta);
-                    if (sc > 0.5f) {
-                        enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() });
-                    }
-                    continue;
-                } else if (dist < circularHurtboxRange) {
-                    // Circular hurtbox with short range
-                    enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() / 3.0f });
-                }
-            }
-        }
-    } else {
+    } else if (m_attackCooldown <= 0.0f) {
         // no dash, no attack
         if (jt::MathHelper::lengthSquared(v) < 2) {
             setAnimationIfNotSet("idle");
@@ -464,4 +423,51 @@ void Player::dash()
         m_dashCooldown = GP::PlayerBaseDashCooldown();
     }
 }
-void Player::attack() { m_attackCooldown = GP::PlayerAttackCooldown(); }
+
+void Player::attack()
+{
+    if (!setAnimationIfNotSet("attack_down")) {
+        return;
+    }
+
+    m_attackCooldown = GP::PlayerAttackCooldown();
+
+    m_soundStomp->stop();
+    m_soundStomp->play();
+
+    m_attackUnderlay->play("attack", 0, true);
+    // TODO: Spore particle effects or whatev
+
+    for (auto enemyWk : *m_state.getEnemies()) {
+        auto enemy = enemyWk.lock();
+        if (enemy == nullptr) {
+            continue;
+        }
+        auto nmePos = enemy->getPosition();
+        auto myPos = getPosition();
+        jt::Vector2f delta = nmePos - myPos;
+        auto dist = jt::MathHelper::length(delta);
+        // TODO: Maybe derive this from gear
+        float circularHurtboxRange = 20.0f;
+        float directedHurtboxRange = 45.0f;
+
+        if (dist < directedHurtboxRange) {
+            // Forward-facing hurtbox with medium range
+            jt::Vector2f look = getVelocity();
+            if (jt::MathHelper::length(look) < 0.1f) {
+                // Look down if not moving
+                look = { 0.0f, 1.0f };
+            }
+            jt::MathHelper::normalizeMe(look);
+            jt::MathHelper::normalizeMe(delta);
+            float sc = jt::MathHelper::dot(look, delta);
+            if (sc > 0.5f) {
+                enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() });
+            }
+            continue;
+        } else if (dist < circularHurtboxRange) {
+            // Circular hurtbox with short range
+            enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() / 3.0f });
+        }
+    }
+}
