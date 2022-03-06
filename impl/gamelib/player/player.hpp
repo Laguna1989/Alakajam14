@@ -13,6 +13,7 @@
 #include "input_component_interface.hpp"
 #include "particle_system.hpp"
 #include "shape.hpp"
+#include "sound_component_interface.hpp"
 #include "spells/spell_attack_snipe.hpp"
 #include "spells/spell_book.hpp"
 #include "target_interface.hpp"
@@ -49,17 +50,12 @@ private:
     StateGame& m_state;
 
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
-
-    std::shared_ptr<jt::Sound> m_soundDash;
-    std::shared_ptr<jt::Sound> m_soundStomp;
-    std::shared_ptr<jt::Sound> m_soundDeath;
-
-    std::shared_ptr<jt::SoundGroup> m_soundGroupHurt;
-
     std::shared_ptr<SpellBook> m_spellBook;
 
+    // TODO make unique_ptr
     std::shared_ptr<InputComponentInterface> m_input { nullptr };
     std::unique_ptr<GraphicsComponentInterface> m_graphics { nullptr };
+    std::unique_ptr<SoundComponentInterface> m_audio { nullptr };
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };

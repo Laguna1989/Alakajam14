@@ -6,6 +6,7 @@
 #include "math_helper.hpp"
 #include "player_graphics_component.hpp"
 #include "player_input_component.hpp"
+#include "player_sound_component.hpp"
 #include "spells/spell_none.hpp"
 #include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
@@ -39,7 +40,7 @@ void Player::doCreate()
     m_spellBook->setGameInstance(getGame());
     m_spellBook->create();
 
-    createSounds();
+    m_audio = std::make_unique<PlayerSoundComponent>(getGame()->audio());
 
     m_commands.push_back(getGame()->getActionCommandManager().registerTemporaryCommand(
         "learnspell", [this](std::vector<std::string> args) {
@@ -65,38 +66,7 @@ void Player::doCreate()
     m_graphics = std::make_unique<PlayerGraphicsComponent>(getGame());
 }
 
-void Player::createSounds()
-{
-    m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
-    m_soundDash->setVolume(0.4f);
-    getGame()->audio().addTemporarySound(m_soundDash);
-
-    m_soundStomp = std::make_shared<jt::Sound>("assets/sound/attack_stomp.ogg");
-    m_soundStomp->setVolume(0.4f);
-    getGame()->audio().addTemporarySound(m_soundStomp);
-
-    m_soundDeath = std::make_shared<jt::Sound>("assets/sound/GAME_OVER.ogg");
-    getGame()->audio().addTemporarySound(m_soundDeath);
-
-    auto const soundHurt1 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_01.ogg");
-    auto const soundHurt2 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_02.ogg");
-    auto const soundHurt3 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_03.ogg");
-    auto const soundHurt4 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_04.ogg");
-    auto const soundHurt5 = std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_05.ogg");
-
-    soundHurt1->setVolume(0.6f);
-    soundHurt2->setVolume(0.6f);
-    soundHurt3->setVolume(0.6f);
-    soundHurt4->setVolume(0.6f);
-    soundHurt5->setVolume(0.6f);
-
-    m_soundGroupHurt = std::make_shared<jt::SoundGroup>();
-    m_soundGroupHurt->add(soundHurt1);
-    m_soundGroupHurt->add(soundHurt2);
-    m_soundGroupHurt->add(soundHurt3);
-    m_soundGroupHurt->add(soundHurt4);
-    m_soundGroupHurt->add(soundHurt5);
-}
+void Player::createSounds() { }
 
 void Player::doUpdate(float const elapsed)
 {
@@ -123,7 +93,8 @@ void Player::doUpdate(float const elapsed)
     m_charsheet->update(elapsed);
     m_spellBook->update(elapsed);
 
-    if (getCharSheet()->getHitpoints() <= 0 && !m_soundDeath->isPlaying() && m_isDying) {
+    if (getCharSheet()->getHitpoints() <= 0
+        && !m_audio->isPlaying(SoundComponentInterface::SoundId::DEATH) && m_isDying) {
         m_hasFinishedDying = true;
     }
 }
@@ -252,14 +223,14 @@ void Player::receiveDamage(Damage const& dmg)
 {
     m_charsheet->changeHitpoints(dmg.value);
     m_graphics->setAnimationIfNotSet("hurt");
-    m_soundGroupHurt->play();
+    m_audio->play(SoundComponentInterface::SoundId::HURT);
 }
 
 void Player::die()
 {
     if (!m_isDying) {
         m_isDying = true;
-        m_soundDeath->play();
+        m_audio->play(SoundComponentInterface::SoundId::DEATH);
         m_graphics->setPlayerAnimationLooping(false);
         m_graphics->setAnimationIfNotSet("die");
     }
@@ -292,8 +263,7 @@ void Player::dash()
 
     m_graphics->setAnimationIfNotSet(selectDashAnimation(currentPlayerVelocity));
 
-    m_soundDash->stop();
-    m_soundDash->play();
+    m_audio->play(SoundComponentInterface::SoundId::DASH);
 
     m_graphics->flash(0.3f, jt::colors::White);
     auto p = getPosition();
@@ -313,8 +283,7 @@ void Player::attack()
 
     m_attackCooldown = GP::PlayerAttackCooldown();
 
-    m_soundStomp->stop();
-    m_soundStomp->play();
+    m_audio->play(SoundComponentInterface::SoundId::STOMP);
 
     m_graphics->setUnderlayAnimation("attack");
     // TODO: trigger eye candy (e.g. particles)
