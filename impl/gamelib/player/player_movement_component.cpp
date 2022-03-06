@@ -2,13 +2,13 @@
 #include "game_properties.hpp"
 #include "player.hpp"
 
-PlayerMovementComponent::PlayerMovementComponent(
+PlayerInputComponent::PlayerInputComponent(
     std::shared_ptr<jt::KeyboardInputInterface> keyboardInterface)
     : m_keyboard { keyboardInterface }
 {
 }
 
-void PlayerMovementComponent::update(Player& player)
+void PlayerInputComponent::updateMovement(Player& player)
 {
     player.setVelocity(jt::Vector2f { 0.0f, 0.0f });
 
@@ -28,4 +28,11 @@ void PlayerMovementComponent::update(Player& player)
     if (m_keyboard->pressed(jt::KeyCode::S) || m_keyboard->pressed(jt::KeyCode::Down)) {
         player.addVelocity(jt::Vector2f { 0.0f, speed });
     }
+
+    if (m_keyboard->justPressed(jt::KeyCode::LShift)
+        || m_keyboard->justPressed(jt::KeyCode::RShift)) {
+        player.dash();
+    }
 }
+
+void PlayerInputComponent::updateAttack(Player& player) { }

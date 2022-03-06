@@ -9,7 +9,7 @@
 #include "damage.hpp"
 #include "game_object.hpp"
 #include "input/key_codes.hpp"
-#include "movement_component_interface.hpp"
+#include "input_component_interface.hpp"
 #include "particle_system.hpp"
 #include "shape.hpp"
 #include "spells/spell_attack_snipe.hpp"
@@ -26,7 +26,6 @@ public:
     std::shared_ptr<CharacterSheetImgui> getCharSheet();
     std::shared_ptr<SpellBook> getSpellBook();
 
-    void handleInputMovement();
     void updateAnimation(float const elapsed);
 
     void gainExperience(int value) override;
@@ -58,7 +57,7 @@ private:
 
     std::shared_ptr<SpellBook> m_spellBook;
 
-    std::shared_ptr<MovementComponentInterface> m_movementInput { nullptr };
+    std::shared_ptr<InputComponentInterface> m_movementInput { nullptr };
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
@@ -69,7 +68,6 @@ private:
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
-    void handleDashInput();
     void createAnimation();
     void handleInputAttack();
     std::string selectDashAnimation(jt::Vector2f const& velocity) const;

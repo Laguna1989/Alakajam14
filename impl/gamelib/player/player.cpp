@@ -61,7 +61,7 @@ void Player::doCreate()
             m_charsheet->changeExperiencePoints(amount);
         }));
 
-    m_movementInput = std::make_shared<PlayerMovementComponent>(getGame()->input().keyboard());
+    m_movementInput = std::make_shared<PlayerInputComponent>(getGame()->input().keyboard());
 }
 void Player::createSounds()
 {
@@ -216,7 +216,9 @@ void Player::createAnimation()
 
 void Player::doUpdate(float const elapsed)
 {
-    handleInputMovement();
+    if (m_dashTimer < 0.0f) {
+        m_movementInput->updateMovement(*this);
+    }
     handleInputAttack();
 
     updateSpells(elapsed);
@@ -419,23 +421,6 @@ bool Player::setAnimationIfNotSet(std::string const& newAnimationName)
         return true;
     }
     return false;
-}
-
-void Player::handleInputMovement()
-{
-
-    if (m_dashTimer < 0.0f) {
-        m_movementInput->update(*this);
-    }
-
-    handleDashInput();
-}
-void Player::handleDashInput()
-{
-    auto keyboard = getGame()->input().keyboard();
-    if (keyboard->justPressed(jt::KeyCode::LShift) || keyboard->justPressed(jt::KeyCode::RShift)) {
-        dash();
-    }
 }
 
 void Player::dash()
