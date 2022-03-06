@@ -4,7 +4,7 @@
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
 #include "math_helper.hpp"
-#include "player_movement_component.hpp"
+#include "player_input_component.hpp"
 #include "spells/spell_none.hpp"
 #include "spells/spell_passive_movement_speed.hpp"
 #include "state_game.hpp"
@@ -61,7 +61,7 @@ void Player::doCreate()
             m_charsheet->changeExperiencePoints(amount);
         }));
 
-    m_movementInput = std::make_shared<PlayerInputComponent>(getGame()->input().keyboard());
+    m_input = std::make_shared<PlayerInputComponent>(getGame()->input().keyboard());
 }
 void Player::createSounds()
 {
@@ -217,9 +217,13 @@ void Player::createAnimation()
 void Player::doUpdate(float const elapsed)
 {
     if (m_dashTimer < 0.0f) {
-        m_movementInput->updateMovement(*this);
+        m_input->updateMovement(*this);
     }
-    handleInputAttack();
+
+    auto const canAttack = m_attackCooldown < 0.0f && m_dashTimer < 0.0f;
+    if (canAttack) {
+        m_input->updateAttack(*this);
+    }
 
     updateSpells(elapsed);
     updateAnimation(elapsed);
@@ -273,20 +277,6 @@ void Player::updateOneSpell(float const elapsed, std::shared_ptr<SpellInterface>
                 text->shake(0.4f, 2);
             }
         }
-    }
-}
-
-void Player::handleInputAttack()
-{
-    if (m_attackCooldown > 0.0f) {
-        return;
-    }
-    if (m_dashTimer > 0.0f) {
-        return;
-    }
-    if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Space)
-        || getGame()->input().keyboard()->justPressed(jt::KeyCode::Numpad0)) {
-        m_attackCooldown = GP::PlayerAttackCooldown();
     }
 }
 
@@ -423,17 +413,6 @@ bool Player::setAnimationIfNotSet(std::string const& newAnimationName)
     return false;
 }
 
-void Player::dash()
-{
-    if (m_dashCooldown >= 0) {
-        return;
-    }
-    if (jt::MathHelper::lengthSquared(getVelocity()) > 0) {
-        m_dashTimer = GP::PlayerDashTotalTime();
-        m_dashCooldown = GP::PlayerBaseDashCooldown();
-    }
-}
-
 void Player::doDraw() const
 {
     m_attackUnderlay->draw(getGame()->gfx().target());
@@ -474,3 +453,15 @@ void Player::setHealCallback(std::function<void(void)> healCallback)
         healCallback();
     };
 }
+
+void Player::dash()
+{
+    if (m_dashCooldown >= 0) {
+        return;
+    }
+    if (jt::MathHelper::lengthSquared(getVelocity()) > 0) {
+        m_dashTimer = GP::PlayerDashTotalTime();
+        m_dashCooldown = GP::PlayerBaseDashCooldown();
+    }
+}
+void Player::attack() { m_attackCooldown = GP::PlayerAttackCooldown(); }

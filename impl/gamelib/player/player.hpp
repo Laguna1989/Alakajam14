@@ -41,6 +41,7 @@ public:
     void setHealCallback(std::function<void(void)> healCallback);
 
     void dash();
+    void attack();
 
 private:
     StateGame& m_state;
@@ -57,7 +58,7 @@ private:
 
     std::shared_ptr<SpellBook> m_spellBook;
 
-    std::shared_ptr<InputComponentInterface> m_movementInput { nullptr };
+    std::shared_ptr<InputComponentInterface> m_input { nullptr };
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };
@@ -69,7 +70,6 @@ private:
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
     void createAnimation();
-    void handleInputAttack();
     std::string selectDashAnimation(jt::Vector2f const& velocity) const;
 
     void updateSpells(const float elapsed);

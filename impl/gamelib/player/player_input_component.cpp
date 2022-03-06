@@ -1,4 +1,4 @@
-#include "player_movement_component.hpp"
+#include "player_input_component.hpp"
 #include "game_properties.hpp"
 #include "player.hpp"
 
@@ -35,4 +35,10 @@ void PlayerInputComponent::updateMovement(Player& player)
     }
 }
 
-void PlayerInputComponent::updateAttack(Player& player) { }
+void PlayerInputComponent::updateAttack(Player& player)
+{
+    if (m_keyboard->justPressed(jt::KeyCode::Space)
+        || m_keyboard->justPressed(jt::KeyCode::Numpad0)) {
+        player.attack();
+    }
+}
