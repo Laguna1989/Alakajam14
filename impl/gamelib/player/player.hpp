@@ -42,6 +42,7 @@ public:
 
     void dash();
     void attack();
+    void castSpell(std::size_t spellIndex);
 
 private:
     StateGame& m_state;
@@ -74,8 +75,8 @@ private:
     std::string selectWalkAnimation(jt::Vector2f const& velocity) const;
 
     void updateSpells(const float elapsed);
-    void updateOneSpell(float const elapsed, std::shared_ptr<SpellInterface> spell,
-        std::shared_ptr<jt::Text> text, std::vector<jt::KeyCode> keys);
+    void updateOneSpell(
+        float const elapsed, std::shared_ptr<SpellInterface> spell, std::shared_ptr<jt::Text> text);
 
     bool setAnimationIfNotSet(std::string const& newAnimationName);
     bool m_isDying { false };

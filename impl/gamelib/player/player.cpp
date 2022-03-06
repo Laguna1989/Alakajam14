@@ -224,6 +224,7 @@ void Player::doUpdate(float const elapsed)
     if (canAttack) {
         m_input->updateAttack(*this);
     }
+    m_input->updateSpells(*this);
 
     handleDash();
 
@@ -245,20 +246,14 @@ void Player::doUpdate(float const elapsed)
 void Player::updateSpells(const float elapsed)
 {
     auto const& equippedSpells = m_spellBook->getEquippedSpells();
-
-    auto equippedSpellTexts = m_spellBook->getEquippedSpellTexts();
-    updateOneSpell(elapsed, equippedSpells.at(0), equippedSpellTexts.at(0),
-        { jt::KeyCode::Q, jt::KeyCode::Num1, jt::KeyCode::Numpad1 });
-
-    updateOneSpell(elapsed, equippedSpells.at(1), equippedSpellTexts.at(1),
-        { jt::KeyCode::E, jt::KeyCode::Num2, jt::KeyCode::Numpad2 });
-
-    updateOneSpell(elapsed, equippedSpells.at(2), equippedSpellTexts.at(2),
-        { jt::KeyCode::Tab, jt::KeyCode::Num3, jt::KeyCode::Numpad3 });
+    auto const& equippedSpellsText = m_spellBook->getEquippedSpellTexts();
+    for (auto i : { 0, 1, 2 }) {
+        updateOneSpell(elapsed, equippedSpells.at(i), equippedSpellsText.at(i));
+    }
 }
 
-void Player::updateOneSpell(float const elapsed, std::shared_ptr<SpellInterface> spell,
-    std::shared_ptr<jt::Text> text, std::vector<jt::KeyCode> keys)
+void Player::updateOneSpell(
+    float const elapsed, std::shared_ptr<SpellInterface> spell, std::shared_ptr<jt::Text> text)
 {
     spell->update(elapsed);
     auto const cost = spell->getExperienceCost();
@@ -269,16 +264,23 @@ void Player::updateOneSpell(float const elapsed, std::shared_ptr<SpellInterface>
     } else {
         text->setColor(jt::colors::Gray);
     }
-    for (auto key : keys) {
-        if (getGame()->input().keyboard()->justPressed(key)) {
-            if (spellCanBeCast) {
-                getGame()->getLogger().debug("Spell triggered: " + spell->getName());
-                m_charsheet->changeExperiencePoints(-cost);
-                spell->trigger();
-            } else {
-                text->shake(0.4f, 2);
-            }
-        }
+}
+
+void Player::castSpell(std::size_t spellIndex)
+{
+    std::shared_ptr<SpellInterface> spell = m_spellBook->getEquippedSpells().at(spellIndex);
+    auto text = m_spellBook->getEquippedSpellTexts().at(spellIndex);
+
+    auto const cost = spell->getExperienceCost();
+    auto hasEnoughMana = m_charsheet->getExperiencePoints() >= cost;
+    auto spellCanBeCast = spell->canTrigger() && hasEnoughMana;
+
+    if (spellCanBeCast) {
+        getGame()->getLogger().debug("Spell triggered: " + spell->getName());
+        m_charsheet->changeExperiencePoints(-cost);
+        spell->trigger();
+    } else {
+        text->shake(0.4f, 2);
     }
 }
 

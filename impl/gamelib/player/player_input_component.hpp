@@ -11,6 +11,7 @@ public:
 
     void updateMovement(Player& player) override;
     void updateAttack(Player& player) override;
+    void updateSpells(Player& player) override;
 
 private:
     std::shared_ptr<jt::KeyboardInputInterface> m_keyboard { nullptr };

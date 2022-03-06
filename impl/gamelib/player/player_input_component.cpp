@@ -42,3 +42,19 @@ void PlayerInputComponent::updateAttack(Player& player)
         player.attack();
     }
 }
+void PlayerInputComponent::updateSpells(Player& player)
+{
+    std::map<std::size_t, std::vector<jt::KeyCode>> lookup;
+
+    lookup[0] = { jt::KeyCode::Q, jt::KeyCode::Num1, jt::KeyCode::Numpad1 };
+    lookup[1] = { jt::KeyCode::E, jt::KeyCode::Num2, jt::KeyCode::Numpad2 };
+    lookup[2] = { jt::KeyCode::Tab, jt::KeyCode::Num3, jt::KeyCode::Numpad3 };
+
+    for (auto const& kvp : lookup) {
+        for (auto const& key : kvp.second) {
+            if (m_keyboard->justPressed(key)) {
+                player.castSpell(kvp.first);
+            }
+        }
+    }
+}
