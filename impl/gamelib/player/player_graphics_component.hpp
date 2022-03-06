@@ -11,6 +11,10 @@ public:
     explicit PlayerGraphicsComponent(std::shared_ptr<jt::GameInterface> gameInterface);
 
     void updateGraphics(float elapsed) override;
+    void setPosition(jt::Vector2f const& playerPosition) override;
+
+    void draw(std::shared_ptr<jt::RenderTarget> target) override;
+    void flash(float time, jt::Color const& color) override;
 
 private:
     void createAnimation(jt::TextureManagerInterface& textureManager);

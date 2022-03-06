@@ -8,6 +8,7 @@
 #include "character_sheet_imgui.hpp"
 #include "damage.hpp"
 #include "game_object.hpp"
+#include "graphics_component_interface.hpp"
 #include "input/key_codes.hpp"
 #include "input_component_interface.hpp"
 #include "particle_system.hpp"
@@ -58,6 +59,7 @@ private:
     std::shared_ptr<SpellBook> m_spellBook;
 
     std::shared_ptr<InputComponentInterface> m_input { nullptr };
+    std::unique_ptr<GraphicsComponentInterface> m_graphics { nullptr };
 
     float m_dashTimer { -1.0f };
     float m_dashCooldown { -1.0f };

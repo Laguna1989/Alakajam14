@@ -122,4 +122,27 @@ void PlayerGraphicsComponent::createAnimation(jt::TextureManagerInterface& textu
     m_attackUnderlay->play("initial");
 }
 
-void PlayerGraphicsComponent::updateGraphics(float elapsed) { }
+void PlayerGraphicsComponent::updateGraphics(float elapsed)
+{
+    m_animation->update(elapsed);
+    m_attackUnderlay->update(elapsed);
+}
+
+void PlayerGraphicsComponent::setPosition(jt::Vector2f const& playerPosition)
+{
+    auto spritePosition = playerPosition - GP::PlayerSize() * 0.5f;
+
+    m_animation->setPosition(spritePosition);
+    m_attackUnderlay->setPosition(spritePosition - jt::Vector2f { 8.0f, 8.0f });
+}
+
+void PlayerGraphicsComponent::draw(std::shared_ptr<jt::RenderTarget> target)
+{
+    m_attackUnderlay->draw(target);
+    m_animation->draw(target);
+}
+
+void PlayerGraphicsComponent::flash(float time, jt::Color const& color)
+{
+    m_animation->flash(time, color);
+}

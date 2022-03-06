@@ -4,6 +4,7 @@
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
 #include "math_helper.hpp"
+#include "player_graphics_component.hpp"
 #include "player_input_component.hpp"
 #include "spells/spell_none.hpp"
 #include "spells/spell_passive_movement_speed.hpp"
@@ -62,7 +63,10 @@ void Player::doCreate()
         }));
 
     m_input = std::make_shared<PlayerInputComponent>(getGame()->input().keyboard());
+
+    m_graphics = std::make_unique<PlayerGraphicsComponent>(getGame());
 }
+
 void Player::createSounds()
 {
     m_soundDash = std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg");
@@ -96,8 +100,6 @@ void Player::createSounds()
     m_soundGroupHurt->add(soundHurt5);
 }
 
-
-
 void Player::doUpdate(float const elapsed)
 {
     if (m_dashTimer < 0.0f) {
@@ -113,6 +115,7 @@ void Player::doUpdate(float const elapsed)
     handleDash();
 
     updateSpells(elapsed);
+
     updateAnimation(elapsed);
 
     m_dashTimer -= elapsed;
@@ -174,12 +177,8 @@ void Player::updateAnimation(float const elapsed)
         setAnimationIfNotSet(walkAnimation);
     }
 
-    m_animation->setPosition(getPosition() - GP::PlayerSize() * 0.5f);
-    m_attackUnderlay->setPosition(
-        getPosition() - GP::PlayerSize() * 0.5f - jt::Vector2f { 8.0f, 8.0f });
-
-    m_animation->update(elapsed);
-    m_attackUnderlay->update(elapsed);
+    m_graphics->setPosition(getPosition());
+    m_graphics->updateGraphics(elapsed);
 }
 
 void Player::handleDash()
@@ -261,8 +260,7 @@ bool Player::setAnimationIfNotSet(std::string const& newAnimationName)
 
 void Player::doDraw() const
 {
-    m_attackUnderlay->draw(getGame()->gfx().target());
-    m_animation->draw(getGame()->gfx().target());
+    m_graphics->draw(getGame()->gfx().target());
     m_charsheet->draw();
     m_spellBook->draw();
 }
@@ -295,7 +293,7 @@ void Player::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
 void Player::setHealCallback(std::function<void(void)> healCallback)
 {
     m_healCallback = [healCallback, this]() {
-        m_animation->flash(0.2f, jt::colors::Green);
+        m_graphics->flash(0.2f, jt::colors::Green);
         healCallback();
     };
 }
@@ -318,7 +316,7 @@ void Player::dash()
     m_soundDash->stop();
     m_soundDash->play();
 
-    m_animation->flash(0.3f);
+    m_graphics->flash(0.3f, jt::colors::White);
     auto p = getPosition();
 
     jt::MathHelper::normalizeMe(currentPlayerVelocity);
