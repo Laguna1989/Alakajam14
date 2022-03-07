@@ -1,0 +1,66 @@
+{
+    "ais": [
+        {
+            "name": "wait",
+            "nextState": "follow",
+            "range": 120.0,
+            "type": 0
+        },
+        {
+            "name": "follow",
+            "nextState": "wait",
+            "range": 200.0,
+            "type": 1
+        }
+    ],
+    "animations": [
+        {
+            "animationName": "idle",
+            "fileName": "assets/crystal_idle_large_green.png",
+            "frameIndices": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ],
+            "frameTimeInSeconds": 0.1,
+            "imageSizeX": 48,
+            "imageSizeY": 48
+        },
+        {
+            "animationName": "shoot",
+            "fileName": "assets/crystal_shoot_large_green.png",
+            "frameIndices": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "frameTimeInSeconds": 0.1,
+            "imageSizeX": 48,
+            "imageSizeY": 48
+        },
+        {
+            "animationName": "dead",
+            "fileName": "assets/crystal_dead_large_green.png",
+            "frameIndices": [
+                0,
+                1,
+                2,
+                3,
+				4,
+				5
+            ],
+            "frameTimeInSeconds": 0.1,
+            "imageSizeX": 48,
+            "imageSizeY": 48
+        }
+    ],
+    "closeCombatDamage": 90.0,
+    "colliderRadius": 8.0,
+    "experience": 90,
+    "hitpoints": 1000.0,
+    "movementSpeed": 35.0,
+	"isBoss": false
+}

@@ -10,7 +10,6 @@
 #include "guile.hpp"
 #include "key.hpp"
 #include "object_group.hpp"
-#include "player/player.hpp"
 #include "projectile_spawner_interface.hpp"
 #include "shroom_game_contact_listener.hpp"
 #include "snipe_projectile.hpp"
@@ -33,6 +32,7 @@ class Stairs;
 class EnemyBase;
 class Level;
 class ExperienceOrb;
+class Player;
 
 class StateGame : public jt::GameState,
                   public ProjectileSpawnerInterface,

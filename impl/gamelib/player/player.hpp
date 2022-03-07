@@ -52,8 +52,7 @@ private:
     std::shared_ptr<CharacterSheetImgui> m_charsheet;
     std::shared_ptr<SpellBook> m_spellBook;
 
-    // TODO make unique_ptr
-    std::shared_ptr<InputComponentInterface> m_input { nullptr };
+    std::unique_ptr<InputComponentInterface> m_input { nullptr };
     std::unique_ptr<GraphicsComponentInterface> m_graphics { nullptr };
     std::unique_ptr<SoundComponentInterface> m_audio { nullptr };
 
@@ -62,6 +61,10 @@ private:
     jt::Vector2f m_dashVelocity { 0.0f, 0.0f };
 
     float m_attackCooldown { -1.0f };
+    bool m_isDying { false };
+    std::function<void(void)> m_healCallback;
+
+    std::vector<std::shared_ptr<bool>> m_commands;
 
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
@@ -71,10 +74,6 @@ private:
 
     void updateSpells(const float elapsed);
 
-    bool m_isDying { false };
-    void createSounds();
-    std::function<void(void)> m_healCallback;
-    std::vector<std::shared_ptr<bool>> m_commands;
     void handleDash();
 };
 

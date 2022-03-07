@@ -4,6 +4,7 @@
 #include "box2dwrapper/box2d_object.hpp"
 #include "deferred_action_interface.hpp"
 #include "enemy_ai/ai_state_manager.hpp"
+#include "enemy_info.hpp"
 #include "experience_spawner_interface.hpp"
 #include "target_interface.hpp"
 #include "world_path_calculator_interface.hpp"
@@ -21,6 +22,8 @@ class Sound;
 class EnemyBase : public jt::Box2DObject, public TargetInterface {
 public:
     EnemyBase(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
+    EnemyBase(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
+        EnemyInfo const& info);
     void receiveDamage(Damage const& dmg);
 
     void setTarget(std::weak_ptr<TargetInterface> target);
@@ -41,12 +44,13 @@ public:
     void applyDamageToTarget(Damage const& dmg) override;
     virtual bool isBoss();
 
-protected:
+private:
     float m_hitpoints { 1.0f };
     int m_experience { 0 };
     float m_attackCooldown { -1.0f };
     float m_movementSpeed { 1.0f };
     float m_closeCombatDamage { 0.0f };
+    EnemyInfo m_info;
     std::shared_ptr<jt::Animation> m_animation;
 
     AiStateManager m_aiStateManager;
@@ -60,16 +64,17 @@ protected:
     bool m_isInDieAnimation { false };
     jt::Vector2f m_deathPosition { 0.0f, 0.0f };
 
-private:
     // non owning weak or raw pointers
     ExperienceSpawnerInterface* m_experienceSpawner { nullptr };
     DeferredActionInterface* m_deferredActionHandler { nullptr };
 
+    bool m_isBoss { false };
+
+    void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
 
     void performAI(float elapsed);
     void die();
-    virtual void doDie() {};
 };
 #endif

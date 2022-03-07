@@ -1,10 +1,8 @@
 #include "level.hpp"
-#include "enemies/enemy_crystal_boss.hpp"
-#include "enemies/enemy_crystal_large.hpp"
-#include "enemies/enemy_crystal_medium.hpp"
-#include "enemies/enemy_crystal_small.hpp"
+#include "enemies/enemy_serialization.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "nlohmann.hpp"
 #include "pathfinder/pathfinder.hpp"
 #include "strutils.hpp"
 #include "tilemap/node_layer.hpp"
@@ -199,32 +197,67 @@ b2BodyDef getEnemyDefinition(jt::Vector2f const& position)
     return bodyDef;
 }
 
+EnemyInfo loadEnemyInfoCrystalSmall()
+{
+    std::ifstream f { "assets/enemy_crystal_small.json" };
+    nlohmann::json j;
+    f >> j;
+    EnemyInfo ei = j.get<EnemyInfo>();
+    return ei;
+}
+
+EnemyInfo loadEnemyInfoCrystalMedium()
+{
+    std::ifstream f { "assets/enemy_crystal_medium.json" };
+    nlohmann::json j;
+    f >> j;
+    EnemyInfo ei = j.get<EnemyInfo>();
+    return ei;
+}
+
+EnemyInfo loadEnemyInfoCrystalLarge()
+{
+    std::ifstream f { "assets/enemy_crystal_large.json" };
+    nlohmann::json j;
+    f >> j;
+    EnemyInfo ei = j.get<EnemyInfo>();
+    return ei;
+}
+EnemyInfo loadEnemyInfoCrystalBoss()
+{
+    std::ifstream f { "assets/enemy_crystal_boss.json" };
+    nlohmann::json j;
+    f >> j;
+    EnemyInfo ei = j.get<EnemyInfo>();
+    return ei;
+}
+
 std::shared_ptr<EnemyBase> loadSingleEnemySmallCrystal(
     jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
 {
     b2BodyDef bodyDef = getEnemyDefinition(position);
-    return std::make_shared<EnemyCrystalSmall>(world, &bodyDef);
+    return std::make_shared<EnemyBase>(world, &bodyDef, loadEnemyInfoCrystalSmall());
 }
 
 std::shared_ptr<EnemyBase> loadSingleEnemyMediumCrystal(
     jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
 {
     b2BodyDef bodyDef = getEnemyDefinition(position);
-    return std::make_shared<EnemyCrystalMedium>(world, &bodyDef);
+    return std::make_shared<EnemyBase>(world, &bodyDef, loadEnemyInfoCrystalMedium());
 }
 
 std::shared_ptr<EnemyBase> loadSingleEnemyLargeCrystal(
     jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
 {
     b2BodyDef bodyDef = getEnemyDefinition(position);
-    return std::make_shared<EnemyCrystalLarge>(world, &bodyDef);
+    return std::make_shared<EnemyBase>(world, &bodyDef, loadEnemyInfoCrystalLarge());
 }
 
 std::shared_ptr<EnemyBase> loadSingleEnemyBoss(
     jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
 {
     b2BodyDef bodyDef = getEnemyDefinition(position);
-    return std::make_shared<EnemyCrystalBoss>(world, &bodyDef);
+    return std::make_shared<EnemyBase>(world, &bodyDef, loadEnemyInfoCrystalBoss());
 }
 
 std::shared_ptr<EnemyBase> loadSingleEnemy(

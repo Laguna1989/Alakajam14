@@ -2,6 +2,10 @@
 #include "animation.hpp"
 #include "audio/sound.hpp"
 #include "damage.hpp"
+#include "enemies/enemy_ai/ai_state_boss.hpp"
+#include "enemies/enemy_ai/ai_state_follow_target.hpp"
+#include "enemies/enemy_ai/ai_state_shooter.hpp"
+#include "enemies/enemy_ai/ai_state_wait_for_target.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "projectile_spawner_interface.hpp"
@@ -10,6 +14,69 @@
 EnemyBase::EnemyBase(std::shared_ptr<jt::Box2DWorldInterface> world, const b2BodyDef* def)
     : Box2DObject { world, def }
 {
+}
+
+EnemyBase::EnemyBase(
+    std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, EnemyInfo const& info)
+    : Box2DObject { world, def }
+{
+    m_info = info;
+    m_experience = info.experience;
+    m_hitpoints = info.hitpoints;
+    m_closeCombatDamage = info.closeCombatDamage;
+    m_movementSpeed = info.movementSpeed;
+    m_isBoss = info.isBoss;
+}
+
+void EnemyBase::doCreate()
+{
+    m_animation = std::make_shared<jt::Animation>();
+    for (auto const& animInfo : m_info.animations) {
+        m_animation->add(animInfo.fileName, animInfo.animationName, animInfo.imageSize,
+            animInfo.frameIndices, animInfo.frameTimeInSeconds, getGame()->gfx().textureManager());
+    }
+    m_animation->play(m_info.animations.begin()->animationName);
+
+    b2FixtureDef fixtureDef;
+    b2CircleShape circle {};
+    circle.m_radius = m_info.colliderRadius;
+
+    fixtureDef.shape = &circle;
+    fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemies();
+    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
+        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
+
+    getB2Body()->CreateFixture(&fixtureDef);
+
+    for (auto const& aiInfo : m_info.ais) {
+        if (aiInfo.type == aiInfo.WAIT) {
+            auto waitState = std::make_shared<AiStateWaitForTarget>();
+            waitState->setTarget(m_target);
+            waitState->setNextState(aiInfo.nextState);
+            waitState->setDetectRange(aiInfo.range);
+            getAiStateManager().registerState(aiInfo.name, waitState);
+        } else if (aiInfo.type == aiInfo.SHOOT) {
+            auto shooterState = std::make_shared<AiStateShooter>();
+            shooterState->setTarget(m_target);
+            shooterState->setNextState(aiInfo.nextState);
+            shooterState->setForgetRange(aiInfo.range);
+            shooterState->setProjectileSpawner(m_projectileSpawner);
+            getAiStateManager().registerState(aiInfo.name, shooterState);
+        } else if (aiInfo.type == aiInfo.FOLLOW) {
+            auto followState = std::make_shared<AiStateFollowTarget>();
+            followState->setTarget(m_target);
+            followState->setNextState(aiInfo.nextState);
+            followState->setPathCalculator(m_pathCalculator);
+            getAiStateManager().registerState(aiInfo.name, followState);
+        } else if (aiInfo.type == aiInfo.BOSS) {
+            auto bossState = std::make_shared<AiStateBoss>();
+            bossState->setTarget(m_target);
+            bossState->setPathCalculator(m_pathCalculator);
+            bossState->setProjectileSpawner(m_projectileSpawner);
+            getAiStateManager().registerState(aiInfo.name, bossState);
+        }
+    }
+    getAiStateManager().switchToState(m_info.ais.begin()->name);
 }
 
 void EnemyBase::doUpdate(const float elapsed)
@@ -78,7 +145,6 @@ void EnemyBase::die()
             m_experienceSpawner->spawnExperience(m_experience, m_deathPosition, false);
         }
     });
-    doDie();
 }
 
 void EnemyBase::setTarget(std::weak_ptr<TargetInterface> target) { m_target = target; }
@@ -131,4 +197,4 @@ void EnemyBase::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
 void EnemyBase::gainExperience(int value)
 { /* noting to do*/
 }
-bool EnemyBase::isBoss() { return false; }
+bool EnemyBase::isBoss() { return m_isBoss; }

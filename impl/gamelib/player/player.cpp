@@ -61,12 +61,10 @@ void Player::doCreate()
             m_charsheet->changeExperiencePoints(amount);
         }));
 
-    m_input = std::make_shared<PlayerInputComponent>(getGame()->input().keyboard());
+    m_input = std::make_unique<PlayerInputComponent>(getGame()->input().keyboard());
 
     m_graphics = std::make_unique<PlayerGraphicsComponent>(getGame());
 }
-
-void Player::createSounds() { }
 
 void Player::doUpdate(float const elapsed)
 {

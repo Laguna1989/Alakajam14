@@ -54,23 +54,17 @@ public:
     static int SpellSnipeExpCosts();
     static float SpellBroadProjectileSpeed();
     static int SpellBroadExpCosts();
-    static float EnemyCrystallSmallHitPoints();
-    static float EnemyCrystallMediumHitPoints();
-    static float EnemyCrystallLargeHitPoints();
     static int LootExperienceMediumAmount();
     static int LootExperienceSmallAmount();
     static int LootExperienceLargeAmount();
 
     static float EnemyShotSpeed();
     static float EnemyShotTimer();
-    static float EnemyShotRange();
     static float EnemyShotDamage();
-    static float BossHitPoints();
     static float LevelUpHealthIncrease();
     static float LevelUpMovementSpeedIncrease();
     static float LevelUpAttackDamageIncrease();
     static float TileSizeInPixel();
-    static float BossMovementSpeed();
 };
 
 #endif
