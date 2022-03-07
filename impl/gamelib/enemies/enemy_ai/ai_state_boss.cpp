@@ -7,7 +7,7 @@ AiStateBoss::AiStateBoss()
     m_shooter.setForgetRange(99999999999999999999.0f);
 }
 
-void AiStateBoss::update(float elapsed, EnemyBase* base)
+void AiStateBoss::update(float elapsed, Enemy* base)
 {
     if (calculateDistanceToTarget() >= 73984) {
         return;

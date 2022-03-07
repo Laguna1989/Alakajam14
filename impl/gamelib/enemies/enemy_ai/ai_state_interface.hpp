@@ -5,12 +5,12 @@
 #include <memory>
 
 class TargetInterface;
-class EnemyBase;
+class Enemy;
 
 class AiStateInterface {
 public:
     virtual ~AiStateInterface() = default;
-    virtual void update(float elapsed, EnemyBase* base) = 0;
+    virtual void update(float elapsed, Enemy* base) = 0;
 
     virtual void setTarget(std::weak_ptr<TargetInterface> target) = 0;
     virtual void setPosition(jt::Vector2f const& pos) = 0;

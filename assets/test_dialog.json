@@ -1,0 +1,31 @@
+{
+    "dialog": [
+        {
+            "identifier": "0",
+            "lines": [
+                "Hello there",
+                "Bla"
+            ],
+            "options": [
+                {
+                    "next": "1",
+                    "spell": "Heal",
+                    "text": "General Kenobi"
+                },
+                {
+                    "next": "0",
+                    "spell": "",
+                    "text": "What was that"
+                }
+            ]
+        },
+        {
+            "identifier": "1",
+            "lines": [
+                "You know your memes",
+                "Don't you?"
+            ],
+            "options": []
+        }
+    ]
+}

@@ -19,10 +19,10 @@ class Sound;
 } // namespace jt
 
 // TODO compose class via mix ins?
-class EnemyBase : public jt::Box2DObject, public TargetInterface {
+class Enemy : public jt::Box2DObject, public TargetInterface {
 public:
-    EnemyBase(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
-    EnemyBase(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
+    Enemy(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def);
+    Enemy(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
         EnemyInfo const& info);
     void receiveDamage(Damage const& dmg);
 
@@ -42,7 +42,8 @@ public:
 
     jt::Vector2f getTargetPosition() override;
     void applyDamageToTarget(Damage const& dmg) override;
-    virtual bool isBoss();
+    bool isBoss();
+    void makeSpellAvailable(std::string const& spellName) override;
 
 private:
     float m_hitpoints { 1.0f };

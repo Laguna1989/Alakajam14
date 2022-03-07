@@ -10,7 +10,7 @@ class WorldPathCalculatorInterface;
 
 class AiStateFollowTarget : public AiStateImpl {
 public:
-    void update(float elapsed, EnemyBase* base) override;
+    void update(float elapsed, Enemy* base) override;
     void setNextState(std::string const& nextState);
     void setForgetRange(float range);
     void setPathCalculator(WorldPathCalculatorInterface* pathCalculator);
@@ -22,9 +22,9 @@ private:
     WorldPathCalculatorInterface* m_pathCalculator { nullptr };
     float m_timeToPathfind { -1.0f };
     std::vector<std::shared_ptr<jt::pathfinder::NodeInterface>> m_cachedPath;
-    void walkToTarget(float elapsed, EnemyBase* base);
+    void walkToTarget(float elapsed, Enemy* base);
 
-    void closeRangeAttack(float elapsed, EnemyBase* base);
+    void closeRangeAttack(float elapsed, Enemy* base);
     float m_timeSinceTriggeredAttack { -1.0f };
     float m_attackCooldown { -1.0f };
 };

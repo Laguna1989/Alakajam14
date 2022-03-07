@@ -1,5 +1,5 @@
 #include "ai_state_follow_target.hpp"
-#include "enemies/enemy_base.hpp"
+#include "enemies/enemy.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
 #include "random/random.hpp"
@@ -11,7 +11,7 @@ void AiStateFollowTarget::setPathCalculator(WorldPathCalculatorInterface* pathCa
     m_pathCalculator = pathCalculator;
 }
 
-void AiStateFollowTarget::update(float elapsed, EnemyBase* base)
+void AiStateFollowTarget::update(float elapsed, Enemy* base)
 {
     float const distanceSquared = calculateDistanceToTarget();
     if (distanceSquared > m_forgetRange * m_forgetRange) {
@@ -25,7 +25,7 @@ void AiStateFollowTarget::update(float elapsed, EnemyBase* base)
     closeRangeAttack(elapsed, base);
 }
 
-void AiStateFollowTarget::walkToTarget(float elapsed, EnemyBase* base)
+void AiStateFollowTarget::walkToTarget(float elapsed, Enemy* base)
 {
     m_timeToPathfind -= elapsed;
 
@@ -53,7 +53,7 @@ void AiStateFollowTarget::walkToTarget(float elapsed, EnemyBase* base)
     base->moveInDirection(diffToTile);
 }
 
-void AiStateFollowTarget::closeRangeAttack(float elapsed, EnemyBase* base)
+void AiStateFollowTarget::closeRangeAttack(float elapsed, Enemy* base)
 {
     m_attackCooldown -= elapsed;
 

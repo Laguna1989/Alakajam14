@@ -1,4 +1,4 @@
-#include "enemy_base.hpp"
+#include "enemy.hpp"
 #include "animation.hpp"
 #include "audio/sound.hpp"
 #include "damage.hpp"
@@ -11,12 +11,12 @@
 #include "projectile_spawner_interface.hpp"
 #include "system_helper.hpp"
 
-EnemyBase::EnemyBase(std::shared_ptr<jt::Box2DWorldInterface> world, const b2BodyDef* def)
+Enemy::Enemy(std::shared_ptr<jt::Box2DWorldInterface> world, const b2BodyDef* def)
     : Box2DObject { world, def }
 {
 }
 
-EnemyBase::EnemyBase(
+Enemy::Enemy(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, EnemyInfo const& info)
     : Box2DObject { world, def }
 {
@@ -28,7 +28,7 @@ EnemyBase::EnemyBase(
     m_isBoss = info.isBoss;
 }
 
-void EnemyBase::doCreate()
+void Enemy::doCreate()
 {
     m_animation = std::make_shared<jt::Animation>();
     for (auto const& animInfo : m_info.animations) {
@@ -79,7 +79,7 @@ void EnemyBase::doCreate()
     getAiStateManager().switchToState(m_info.ais.begin()->name);
 }
 
-void EnemyBase::doUpdate(const float elapsed)
+void Enemy::doUpdate(const float elapsed)
 {
     m_staggeredTime -= elapsed;
     m_attackCooldown -= elapsed;
@@ -106,9 +106,9 @@ void EnemyBase::doUpdate(const float elapsed)
     }
 }
 
-void EnemyBase::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
+void Enemy::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
 
-void EnemyBase::receiveDamage(const Damage& dmg)
+void Enemy::receiveDamage(const Damage& dmg)
 {
     // TODO visual candy
     m_animation->flash(0.15f, jt::colors::Red);
@@ -122,7 +122,7 @@ void EnemyBase::receiveDamage(const Damage& dmg)
     }
 }
 
-void EnemyBase::die()
+void Enemy::die()
 {
     // don't die twice
     if (m_isInDieAnimation) {
@@ -147,18 +147,18 @@ void EnemyBase::die()
     });
 }
 
-void EnemyBase::setTarget(std::weak_ptr<TargetInterface> target) { m_target = target; }
-void EnemyBase::setPathCalculator(WorldPathCalculatorInterface* calculator)
+void Enemy::setTarget(std::weak_ptr<TargetInterface> target) { m_target = target; }
+void Enemy::setPathCalculator(WorldPathCalculatorInterface* calculator)
 {
     m_pathCalculator = calculator;
 }
 
-void EnemyBase::setProjectileSpawner(ProjectileSpawnerInterface* spawner)
+void Enemy::setProjectileSpawner(ProjectileSpawnerInterface* spawner)
 {
     m_projectileSpawner = spawner;
 }
 
-void EnemyBase::performAI(float elapsed)
+void Enemy::performAI(float elapsed)
 {
     if (jt::SystemHelper::is_uninitialized_weak_ptr(m_target) || m_target.expired()) {
         return;
@@ -174,27 +174,28 @@ void EnemyBase::performAI(float elapsed)
     currentState->update(elapsed, this);
 }
 
-void EnemyBase::setDeferredActionHandler(DeferredActionInterface* handler)
+void Enemy::setDeferredActionHandler(DeferredActionInterface* handler)
 {
     m_deferredActionHandler = handler;
 }
 
-void EnemyBase::setExperienceSpawner(ExperienceSpawnerInterface* spawner)
+void Enemy::setExperienceSpawner(ExperienceSpawnerInterface* spawner)
 {
     m_experienceSpawner = spawner;
 }
 
-AiStateManager& EnemyBase::getAiStateManager() { return m_aiStateManager; }
-void EnemyBase::moveInDirection(jt::Vector2f const& dir) { setVelocity(dir * m_movementSpeed); }
-float EnemyBase::playAnimation(std::string const& animName)
+AiStateManager& Enemy::getAiStateManager() { return m_aiStateManager; }
+void Enemy::moveInDirection(jt::Vector2f const& dir) { setVelocity(dir * m_movementSpeed); }
+float Enemy::playAnimation(std::string const& animName)
 {
     m_animation->play(animName);
     return m_animation->getCurrentAnimTotalTime();
 }
-float EnemyBase::getCloseCombatDamage() const { return m_closeCombatDamage; }
-jt::Vector2f EnemyBase::getTargetPosition() { return getPosition(); }
-void EnemyBase::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
-void EnemyBase::gainExperience(int value)
+float Enemy::getCloseCombatDamage() const { return m_closeCombatDamage; }
+jt::Vector2f Enemy::getTargetPosition() { return getPosition(); }
+void Enemy::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
+void Enemy::gainExperience(int value)
 { /* noting to do*/
 }
-bool EnemyBase::isBoss() { return m_isBoss; }
+bool Enemy::isBoss() { return m_isBoss; }
+void Enemy::makeSpellAvailable(std::string const& spellName) { }

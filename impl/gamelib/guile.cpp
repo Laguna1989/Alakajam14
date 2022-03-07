@@ -1,13 +1,14 @@
 #include "guile.hpp"
+#include "dialog/dialog.hpp"
 #include "drawable_helpers.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
 
 Guile::Guile(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def,
-    std::weak_ptr<Player> player)
+    std::weak_ptr<TargetInterface> player)
     : Box2DObject(world, def)
-    , m_player { player }
+    , m_target { player }
 {
 }
 
@@ -25,38 +26,43 @@ void Guile::doCreate()
         getGame()->gfx().textureManager());
     m_animation->play("idle");
 
-    m_text = jt::dh::createText(getGame()->gfx().target(), m_textString, 12);
+    m_dialog->setGameInstance(getGame());
+    m_dialog->create();
+    m_dialog->setGiveSpellCallback([this](std::string const& spell) {
+        m_target.lock()->makeSpellAvailable(spell);
+        getGame()->getLogger().debug("give spell: " + spell);
+    });
 }
 
 void Guile::doUpdate(float const elapsed)
 {
-    //    std::cout << "guile update\n";
     m_animation->setPosition(getPosition() - jt::Vector2f { 8.0f, 8.0f });
     m_animation->update(elapsed);
-    m_text->setPosition(
-        getPosition() - jt::Vector2f { 0, 32 } + jt::Vector2f { 0.0f, sin(m_age) * 5 });
-    m_text->update(elapsed);
-    auto player = m_player.lock();
+    auto player = m_target.lock();
     if (!player) {
         return;
     }
-    auto const playerPos = player->getPosition();
+    auto const playerPos = player->getTargetPosition();
     auto const guilePos = getPosition();
 
     float const distance = jt::MathHelper::lengthSquared(playerPos - guilePos);
-
-    if (!m_hasGivenSpell) {
-
-        if (distance < 32 * 32) {
-            player->getSpellBook()->makeSpellAvailable(m_spellToGive);
-            m_hasGivenSpell = true;
-            getGame()->getLogger().debug("give spell: " + m_spellToGive);
-        }
-    }
 }
 
 void Guile::doDraw() const
 {
     m_animation->draw(getGame()->gfx().target());
-    m_text->draw(getGame()->gfx().target());
+
+    auto const playerPos = m_target.lock()->getTargetPosition();
+
+    auto const guilePos = getPosition();
+
+    float const distance = jt::MathHelper::lengthSquared(playerPos - guilePos);
+
+    if (distance < 32 * 32) {
+        if (m_dialog) {
+            m_dialog->draw();
+        }
+    }
 }
+
+void Guile::setDialog(DialogInfo const& info) { m_dialog = std::make_shared<Dialog>(info); }

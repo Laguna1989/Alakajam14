@@ -1,6 +1,7 @@
 #include "spell_attack_snipe.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
+#include "player/player.hpp"
 #include "state_game.hpp"
 
 SpellAttackSnipe::SpellAttackSnipe(StateGame& state)

@@ -3,6 +3,7 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
+#include "player/player.hpp"
 #include "sprite.hpp"
 #include "stairs.hpp"
 #include "state_game.hpp"

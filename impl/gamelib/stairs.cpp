@@ -2,6 +2,8 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
+#include "player/player.hpp"
+
 void Stairs::unlock() { m_locked = false; }
 Stairs::Stairs(StateGame& state)
     : m_locked(true)

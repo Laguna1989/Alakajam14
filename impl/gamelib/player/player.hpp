@@ -26,7 +26,6 @@ public:
     Player(std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, StateGame& state);
 
     std::shared_ptr<CharacterSheetImgui> getCharSheet();
-    std::shared_ptr<SpellBook> getSpellBook();
 
     void updateAnimation(float const elapsed);
 
@@ -45,6 +44,7 @@ public:
     void dash();
     void attack();
     void castSpell(std::size_t spellIndex);
+    void makeSpellAvailable(std::string const& spellName) override;
 
 private:
     StateGame& m_state;

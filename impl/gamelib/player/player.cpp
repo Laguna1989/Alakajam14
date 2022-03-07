@@ -1,5 +1,5 @@
 #include "player/player.hpp"
-#include "enemies/enemy_base.hpp"
+#include "enemies/enemy.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "hud/hud.hpp"
@@ -234,7 +234,6 @@ void Player::die()
         m_graphics->setAnimationIfNotSet("die");
     }
 }
-std::shared_ptr<SpellBook> Player::getSpellBook() { return m_spellBook; }
 
 jt::Vector2f Player::getTargetPosition() { return getPosition(); }
 void Player::applyDamageToTarget(Damage const& dmg) { receiveDamage(dmg); }
@@ -319,4 +318,8 @@ void Player::attack()
             enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() / 3.0f });
         }
     }
+}
+void Player::makeSpellAvailable(std::string const& spellName)
+{
+    m_spellBook->makeSpellAvailable(spellName);
 }

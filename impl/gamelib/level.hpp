@@ -1,8 +1,9 @@
 #ifndef ALAKAJAM14_LEVEL_HPP
 #define ALAKAJAM14_LEVEL_HPP
 
-#include "enemies/enemy_base.hpp"
+#include "enemies/enemy.hpp"
 #include "game_object.hpp"
+#include "guile.hpp"
 #include "tilemap/info_rect.hpp"
 #include "tilemap/tilemap_collisions.hpp"
 #include "vector.hpp"
@@ -46,8 +47,11 @@ public:
     std::vector<std::shared_ptr<jt::Box2DObject>> createColliders(
         std::shared_ptr<jt::Box2DWorldInterface> world);
 
-    std::vector<std::shared_ptr<EnemyBase>> createEnemies(
+    std::vector<std::shared_ptr<Enemy>> createEnemies(
         std::shared_ptr<jt::Box2DWorldInterface> world);
+
+    std::vector<std::shared_ptr<Guile>> createGuiles(
+        std::shared_ptr<jt::Box2DWorldInterface> world, std::weak_ptr<TargetInterface> target);
 
     void drawTileNodeOverlay();
     void updateTileNodes(float const elapsed);

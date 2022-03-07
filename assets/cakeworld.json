@@ -3854,14 +3854,9 @@
                  "name":"Guile_Heal",
                  "properties":[
                         {
-                         "name":"spell",
+                         "name":"dialog",
                          "type":"string",
-                         "value":"Heal"
-                        }, 
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"You will kill the crystals, will you?"
+                         "value":"assets\/test_dialog.json"
                         }],
                  "rotation":0,
                  "type":"guile",
@@ -3869,28 +3864,6 @@
                  "width":0,
                  "x":1670,
                  "y":1045.33333333333
-                }, 
-                {
-                 "height":0,
-                 "id":242,
-                 "name":"Guile_Snipe",
-                 "properties":[
-                        {
-                         "name":"spell",
-                         "type":"string",
-                         "value":"Snipe"
-                        }, 
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"I am more of a long distance fighter"
-                        }],
-                 "rotation":0,
-                 "type":"guile",
-                 "visible":true,
-                 "width":0,
-                 "x":1484,
-                 "y":2091.33333333333
                 }, 
                 {
                  "height":12,
@@ -3910,28 +3883,6 @@
                  "y":1973.66666666667
                 }, 
                 {
-                 "height":0,
-                 "id":244,
-                 "name":"Guile_Broad",
-                 "properties":[
-                        {
-                         "name":"spell",
-                         "type":"string",
-                         "value":"Broad Stroke"
-                        }, 
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"I like to kill two birds with one stone"
-                        }],
-                 "rotation":0,
-                 "type":"guile",
-                 "visible":true,
-                 "width":0,
-                 "x":2240.18181818182,
-                 "y":319.818181818182
-                }, 
-                {
                  "height":12,
                  "id":245,
                  "name":"enemy",
@@ -3947,72 +3898,6 @@
                  "width":12,
                  "x":2179.63636363636,
                  "y":409.090909090909
-                }, 
-                {
-                 "height":0,
-                 "id":246,
-                 "name":"Guile_Speed",
-                 "properties":[
-                        {
-                         "name":"spell",
-                         "type":"string",
-                         "value":"Increased Speed"
-                        }, 
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"How did I get lost here?"
-                        }],
-                 "rotation":0,
-                 "type":"guile",
-                 "visible":true,
-                 "width":0,
-                 "x":30.3333333333335,
-                 "y":1803.66666666667
-                }, 
-                {
-                 "height":0,
-                 "id":247,
-                 "name":"Guile_Dash",
-                 "properties":[
-                        {
-                         "name":"spell",
-                         "type":"string",
-                         "value":"Improve Dash"
-                        }, 
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"A precise dash can save your life"
-                        }],
-                 "rotation":0,
-                 "type":"guile",
-                 "visible":true,
-                 "width":0,
-                 "x":1532.5,
-                 "y":775
-                }, 
-                {
-                 "height":0,
-                 "id":248,
-                 "name":"Guile_Attack",
-                 "properties":[
-                        {
-                         "name":"spell",
-                         "type":"string",
-                         "value":"Increased Attack Speed"
-                        }, 
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"I had some great time at the beach"
-                        }],
-                 "rotation":0,
-                 "type":"guile",
-                 "visible":true,
-                 "width":0,
-                 "x":185.818181818182,
-                 "y":1616.54545454545
                 }, 
                 {
                  "height":12.6667,
@@ -4041,6 +3926,91 @@
                  "width":15.3333,
                  "x":1690.08335,
                  "y":318.04165
+                }, 
+                {
+                 "height":0,
+                 "id":251,
+                 "name":"Guile_Heal",
+                 "properties":[
+                        {
+                         "name":"dialog",
+                         "type":"string",
+                         "value":"assets\/test_dialog.json"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":1536,
+                 "y":768
+                }, 
+                {
+                 "height":0,
+                 "id":252,
+                 "name":"Guile_Heal",
+                 "properties":[
+                        {
+                         "name":"dialog",
+                         "type":"string",
+                         "value":"assets\/test_dialog.json"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":192,
+                 "y":1616
+                }, 
+                {
+                 "height":0,
+                 "id":253,
+                 "name":"Guile_Heal",
+                 "properties":[
+                        {
+                         "name":"dialog",
+                         "type":"string",
+                         "value":"assets\/test_dialog.json"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":32,
+                 "y":1808
+                }, 
+                {
+                 "height":0,
+                 "id":254,
+                 "name":"Guile_Heal",
+                 "properties":[
+                        {
+                         "name":"dialog",
+                         "type":"string",
+                         "value":"assets\/test_dialog.json"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":1478,
+                 "y":2085.33
+                }, 
+                {
+                 "height":0,
+                 "id":255,
+                 "name":"Guile_Heal",
+                 "properties":[
+                        {
+                         "name":"dialog",
+                         "type":"string",
+                         "value":"assets\/test_dialog.json"
+                        }],
+                 "rotation":0,
+                 "type":"guile",
+                 "visible":true,
+                 "width":0,
+                 "x":2240,
+                 "y":320
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -4126,7 +4096,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":251,
+ "nextobjectid":256,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

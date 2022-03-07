@@ -1,7 +1,7 @@
 #include "ai_state_wait_for_target.hpp"
-#include "enemies/enemy_base.hpp"
+#include "enemies/enemy.hpp"
 
-void AiStateWaitForTarget::update(float elapsed, EnemyBase* base)
+void AiStateWaitForTarget::update(float elapsed, Enemy* base)
 {
     float const distanceSquared = calculateDistanceToTarget();
 

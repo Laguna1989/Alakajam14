@@ -6,6 +6,7 @@
 #include "experience_orb.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "guile.hpp"
 #include "hud/hud.hpp"
 #include "key.hpp"
 #include "level.hpp"
@@ -191,7 +192,7 @@ void StateGame::createExperienceOrbs()
     add(m_experienceOrbs);
 }
 
-void StateGame::createEnemies() { m_enemies = std::make_shared<jt::ObjectGroup<EnemyBase>>(); }
+void StateGame::createEnemies() { m_enemies = std::make_shared<jt::ObjectGroup<Enemy>>(); }
 
 void StateGame::createPlayer()
 {
@@ -320,13 +321,13 @@ void StateGame::doInternalDraw() const
         ob->draw();
     }
 
-    for (auto o : *m_guys) {
-        auto ob = o.lock();
-        if (ob == nullptr) {
-            continue;
-        }
-        ob->draw();
-    }
+    //    for (auto o : *m_guys) {
+    //        auto ob = o.lock();
+    //        if (ob == nullptr) {
+    //            continue;
+    //        }
+    //        ob->draw();
+    //    }
     //    m_level->drawTileNodeOverlay();
     m_snipeProjectiles->draw();
     m_crystalProjectiles->draw();
@@ -392,16 +393,7 @@ void StateGame::loadLoots()
 
 void StateGame::loadGuiles()
 {
-    for (auto const& o : m_level->getGuilesInfo()) {
-
-        b2BodyDef bodyDef;
-        bodyDef.fixedRotation = true;
-        bodyDef.type = b2_kinematicBody;
-        bodyDef.position.Set(o.position.x, o.position.y);
-
-        auto guile = std::make_shared<Guile>(m_world, &bodyDef, m_player);
-        guile->m_spellToGive = o.properties.strings.at("spell");
-        guile->m_textString = o.properties.strings.at("text");
+    for (auto const& guile : m_level->createGuiles(m_world, m_player)) {
         m_guys->push_back(guile);
         add(guile);
     }
@@ -432,7 +424,7 @@ void StateGame::loadSingleLoot(jt::tilemap::InfoRect const& o)
     }
 }
 
-void StateGame::setupEnemyDependencies(std::shared_ptr<EnemyBase> e)
+void StateGame::setupEnemyDependencies(std::shared_ptr<Enemy> e)
 {
     e->setTarget(m_player);
     e->setProjectileSpawner(this);
@@ -445,7 +437,7 @@ void StateGame::loadTileColliders() { m_colliders = m_level->createColliders(m_w
 
 std::shared_ptr<Player> StateGame::getPlayer() { return m_player; }
 
-std::shared_ptr<jt::ObjectGroup<EnemyBase>> StateGame::getEnemies() { return m_enemies; }
+std::shared_ptr<jt::ObjectGroup<Enemy>> StateGame::getEnemies() { return m_enemies; }
 
 void StateGame::spawnExperience(int amount, jt::Vector2f const& pos, bool single)
 {

@@ -1,7 +1,9 @@
 #include "level.hpp"
+#include "dialog/dialog_serializer.hpp"
 #include "enemies/enemy_serialization.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
+#include "guile.hpp"
 #include "nlohmann.hpp"
 #include "pathfinder/pathfinder.hpp"
 #include "strutils.hpp"
@@ -232,35 +234,35 @@ EnemyInfo loadEnemyInfoCrystalBoss()
     return ei;
 }
 
-std::shared_ptr<EnemyBase> loadSingleEnemySmallCrystal(
+std::shared_ptr<Enemy> loadSingleEnemySmallCrystal(
     jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
 {
     b2BodyDef bodyDef = getEnemyDefinition(position);
-    return std::make_shared<EnemyBase>(world, &bodyDef, loadEnemyInfoCrystalSmall());
+    return std::make_shared<Enemy>(world, &bodyDef, loadEnemyInfoCrystalSmall());
 }
 
-std::shared_ptr<EnemyBase> loadSingleEnemyMediumCrystal(
+std::shared_ptr<Enemy> loadSingleEnemyMediumCrystal(
     jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
 {
     b2BodyDef bodyDef = getEnemyDefinition(position);
-    return std::make_shared<EnemyBase>(world, &bodyDef, loadEnemyInfoCrystalMedium());
+    return std::make_shared<Enemy>(world, &bodyDef, loadEnemyInfoCrystalMedium());
 }
 
-std::shared_ptr<EnemyBase> loadSingleEnemyLargeCrystal(
+std::shared_ptr<Enemy> loadSingleEnemyLargeCrystal(
     jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
 {
     b2BodyDef bodyDef = getEnemyDefinition(position);
-    return std::make_shared<EnemyBase>(world, &bodyDef, loadEnemyInfoCrystalLarge());
+    return std::make_shared<Enemy>(world, &bodyDef, loadEnemyInfoCrystalLarge());
 }
 
-std::shared_ptr<EnemyBase> loadSingleEnemyBoss(
+std::shared_ptr<Enemy> loadSingleEnemyBoss(
     jt::Vector2f const& position, std::shared_ptr<jt::Box2DWorldInterface> world)
 {
     b2BodyDef bodyDef = getEnemyDefinition(position);
-    return std::make_shared<EnemyBase>(world, &bodyDef, loadEnemyInfoCrystalBoss());
+    return std::make_shared<Enemy>(world, &bodyDef, loadEnemyInfoCrystalBoss());
 }
 
-std::shared_ptr<EnemyBase> loadSingleEnemy(
+std::shared_ptr<Enemy> loadSingleEnemy(
     jt::tilemap::InfoRect const& info, std::shared_ptr<jt::Box2DWorldInterface> world)
 {
     auto const position = info.position;
@@ -280,12 +282,44 @@ std::shared_ptr<EnemyBase> loadSingleEnemy(
     throw std::invalid_argument { "Enemy type " + type + " not supported" };
 }
 
-std::vector<std::shared_ptr<EnemyBase>> Level::createEnemies(
+std::vector<std::shared_ptr<Enemy>> Level::createEnemies(
     std::shared_ptr<jt::Box2DWorldInterface> world)
 {
-    std::vector<std::shared_ptr<EnemyBase>> enemies {};
+    std::vector<std::shared_ptr<Enemy>> enemies {};
     for (auto const& enemyInfo : getEnemiesInfo()) {
         enemies.emplace_back(loadSingleEnemy(enemyInfo, world));
     }
     return enemies;
+}
+
+std::shared_ptr<Guile> loadSingleGuile(
+    std::shared_ptr<jt::Box2DWorldInterface> world, std::weak_ptr<TargetInterface> target)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_kinematicBody;
+
+    return std::make_shared<Guile>(world, &bodyDef, target);
+}
+
+DialogInfo loadDialog(std::string const& fileName)
+{
+    std::ifstream f { fileName };
+    nlohmann::json j;
+    f >> j;
+
+    return j.get<DialogInfo>();
+}
+
+std::vector<std::shared_ptr<Guile>> Level::createGuiles(
+    std::shared_ptr<jt::Box2DWorldInterface> world, std::weak_ptr<TargetInterface> target)
+{
+    std::vector<std::shared_ptr<Guile>> guiles;
+    for (auto const& guileInfo : getGuilesInfo()) {
+        auto guile = loadSingleGuile(world, target);
+        guile->setPosition(guileInfo.position);
+        guile->setDialog(loadDialog(guileInfo.properties.strings.at("dialog")));
+        guiles.push_back(guile);
+    }
+    return guiles;
 }

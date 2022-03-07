@@ -1,5 +1,5 @@
 #include "ai_state_shooter.hpp"
-#include "enemies/enemy_base.hpp"
+#include "enemies/enemy.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
 #include "projectile_spawner_interface.hpp"
@@ -8,7 +8,7 @@
 void AiStateShooter::setNextState(std::string const& nextState) { m_nextState = nextState; }
 void AiStateShooter::setForgetRange(float forgetRange) { m_forgetRange = forgetRange; }
 
-void AiStateShooter::update(float elapsed, EnemyBase* base)
+void AiStateShooter::update(float elapsed, Enemy* base)
 {
     if (m_projectileSpawner == nullptr) {
         return;

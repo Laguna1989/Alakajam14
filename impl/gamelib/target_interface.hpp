@@ -13,6 +13,8 @@ public:
     virtual void applyDamageToTarget(Damage const& dmg) = 0;
 
     virtual void gainExperience(int value) = 0;
+
+    virtual void makeSpellAvailable(std::string const& spellName) = 0;
 };
 
 #endif // ALAKAJAM14_TARGET_INTERFACE_HPP

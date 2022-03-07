@@ -8,7 +8,7 @@ class ProjectileSpawnerInterface;
 
 class AiStateShooter : public AiStateImpl {
 public:
-    void update(float elapsed, EnemyBase* base) override;
+    void update(float elapsed, Enemy* base) override;
     void setNextState(std::string const& nextState);
     void setForgetRange(float forgetRange);
     void setProjectileSpawner(ProjectileSpawnerInterface* spawner);

@@ -2,6 +2,7 @@
 #include "spell_attack_broad.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
+#include "player/player.hpp"
 #include "state_game.hpp"
 
 SpellAttackBroad::SpellAttackBroad(StateGame& state)

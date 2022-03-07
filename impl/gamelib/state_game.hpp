@@ -7,9 +7,10 @@
 #include "deferred_action_interface.hpp"
 #include "experience_spawner_interface.hpp"
 #include "game_state.hpp"
-#include "guile.hpp"
 #include "key.hpp"
 #include "object_group.hpp"
+#include "particle_system.hpp"
+#include "player/player.hpp"
 #include "projectile_spawner_interface.hpp"
 #include "shroom_game_contact_listener.hpp"
 #include "snipe_projectile.hpp"
@@ -25,14 +26,15 @@
 // fwd decls
 namespace jt {
 class Sprite;
+class Text;
 } // namespace jt
 
 class Hud;
 class Stairs;
-class EnemyBase;
+class Enemy;
 class Level;
 class ExperienceOrb;
-class Player;
+class Guile;
 
 class StateGame : public jt::GameState,
                   public ProjectileSpawnerInterface,
@@ -43,7 +45,7 @@ public:
 
     std::shared_ptr<Player> getPlayer();
 
-    std::shared_ptr<jt::ObjectGroup<EnemyBase>> getEnemies();
+    std::shared_ptr<jt::ObjectGroup<Enemy>> getEnemies();
 
     void spawnExperience(int amount, jt::Vector2f const& pos, bool single) override;
 
@@ -72,7 +74,7 @@ private:
     std::shared_ptr<Level> m_level;
     std::shared_ptr<Player> m_player;
 
-    std::shared_ptr<jt::ObjectGroup<EnemyBase>> m_enemies;
+    std::shared_ptr<jt::ObjectGroup<Enemy>> m_enemies;
     std::shared_ptr<jt::ObjectGroup<ExperienceOrb>> m_experienceOrbs;
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> m_snipeProjectiles;
@@ -91,7 +93,7 @@ private:
     std::shared_ptr<jt::Sound> m_musicIntro;
     std::shared_ptr<jt::Sound> m_musicLoop;
     std::shared_ptr<Stairs> m_stairs;
-    std::shared_ptr<EnemyBase> m_boss;
+    std::shared_ptr<Enemy> m_boss;
     std::shared_ptr<Key> m_key;
     bool m_isIntroMusicPlaying { true };
     std::chrono::time_point<std::chrono::steady_clock> m_musicLoopStartTime;
@@ -122,7 +124,7 @@ private:
     void loadSingleLoot(jt::tilemap::InfoRect const& o);
     void createCrystalProjectilesGroup();
 
-    void setupEnemyDependencies(std::shared_ptr<EnemyBase> e);
+    void setupEnemyDependencies(std::shared_ptr<Enemy> e);
     void loadGuiles();
     void loadLoots();
     void loadPlayerSpawn();

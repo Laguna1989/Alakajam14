@@ -6,7 +6,7 @@
 
 class AiStateWaitForTarget : public AiStateImpl {
 public:
-    void update(float elapsed, EnemyBase* base) override;
+    void update(float elapsed, Enemy* base) override;
     void setNextState(std::string const& nextState);
 
     void setDetectRange(float range);

@@ -8,7 +8,7 @@
 class AiStateBoss : public AiStateImpl {
 public:
     AiStateBoss();
-    void update(float elapsed, EnemyBase* base) override;
+    void update(float elapsed, Enemy* base) override;
     void setPathCalculator(WorldPathCalculatorInterface* mpathCalculator);
     void setProjectileSpawner(ProjectileSpawnerInterface* spawner);
 
