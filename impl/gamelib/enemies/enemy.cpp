@@ -111,7 +111,7 @@ void Enemy::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
 void Enemy::receiveDamage(const Damage& dmg)
 {
     // TODO visual candy
-    m_animation->flash(0.2f, jt::Color { 97, 16, 162 });
+    m_animation->flash(0.2f, jt::Color { 163, 51, 255 });
 
     m_hitpoints -= dmg.value;
 
