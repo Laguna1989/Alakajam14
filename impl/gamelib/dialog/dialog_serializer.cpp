@@ -17,14 +17,18 @@ void to_json(nlohmann::json& j, DialogInfo const& d)
 void from_json(nlohmann::json const& j, DialogOption& d)
 {
     j.at("text").get_to(d.text);
-
     j.at("next").get_to(d.next);
-    j.at("spell").get_to(d.spellToGive);
+    
+    if (j.count("spell") != 0) {
+        j.at("spell").get_to(d.spellToGive);
+    }
 }
 void from_json(nlohmann::json const& j, DialogLine& d)
 {
-    j.at("options").get_to(d.options);
     j.at("identifier").get_to(d.identifier);
     j.at("lines").get_to(d.lines);
+    if (j.count("options") != 0) {
+        j.at("options").get_to(d.options);
+    }
 }
 void from_json(nlohmann::json const& j, DialogInfo& d) { j.at("dialog").get_to(d.lines); }

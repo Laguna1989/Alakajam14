@@ -8,12 +8,10 @@
             "options": [
                 {
                     "next": "ziege",
-                    "spell": "",
                     "text": "Ziege"
                 },
                 {
                     "next": "tor",
-                    "spell": "",
                     "text": "Tor"
                 }
             ]
@@ -31,7 +29,6 @@
                 },
                 {
                     "next": "0",
-                    "spell": "",
                     "text": "Incorrect"
                 }
 			]
@@ -49,7 +46,6 @@
                 },
                 {
                     "next": "0",
-                    "spell": "",
                     "text": "Incorrect"
                 }
 			]
@@ -58,8 +54,7 @@
             "identifier": "end",
             "lines": [
                 "Du weisst ja schon alles, gut gemacht"
-            ],
-            "options": []
+            ]
         }
     ]
 }
