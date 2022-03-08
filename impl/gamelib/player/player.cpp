@@ -284,7 +284,15 @@ void Player::attack()
     m_audio->play(SoundComponentInterface::SoundId::STOMP);
 
     m_graphics->setUnderlayAnimation("attack");
-    m_attackCallback(getPosition());
+
+    jt::Vector2f look = getVelocity();
+    if (jt::MathHelper::length(look) < 0.1f) {
+        // Look down if not moving
+        look = { 0.0f, 1.0f };
+    }
+    jt::MathHelper::normalizeMe(look);
+
+    m_attackCallback(getPosition() + look * GP::TileSizeInPixel());
     // TODO: In die Richtung verschieben, in die wir gucken.
 
     for (auto enemyWeakPtr : *m_state.getEnemies()) {
@@ -302,12 +310,6 @@ void Player::attack()
 
         if (dist < directedHurtboxRange) {
             // Forward-facing hurtbox with medium range
-            jt::Vector2f look = getVelocity();
-            if (jt::MathHelper::length(look) < 0.1f) {
-                // Look down if not moving
-                look = { 0.0f, 1.0f };
-            }
-            jt::MathHelper::normalizeMe(look);
             jt::MathHelper::normalizeMe(delta);
             float sc = jt::MathHelper::dot(look, delta);
             if (sc > 0.5f) {
@@ -320,10 +322,12 @@ void Player::attack()
         }
     }
 }
+
 void Player::makeSpellAvailable(std::string const& spellName)
 {
     m_spellBook->makeSpellAvailable(spellName);
 }
+
 void Player::setAttackCallback(std::function<void(jt::Vector2f)> attackCallback)
 {
     m_attackCallback = attackCallback;
