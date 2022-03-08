@@ -17,11 +17,17 @@ void Dialog::doDraw() const
     drawSingleLine(d);
     drawOptions(d);
 }
+
 void Dialog::drawOptions(DialogLine const& d) const
 {
     if (m_currentIndex >= d.lines.size()) {
 
         ImGui::Begin("Dialog");
+        if (d.lines.empty()) {
+            ImGui::Text("%s", ("!!!invalid entry or empty lines: " + m_currentLineId).c_str());
+            ImGui::End();
+            return;
+        }
         ImGui::Text("%s", d.lines.back().c_str());
         if (d.options.empty()) {
             ImGui::End();
@@ -40,6 +46,7 @@ void Dialog::drawOptions(DialogLine const& d) const
         ImGui::End();
     }
 }
+
 void Dialog::drawSingleLine(DialogLine& d) const
 {
 
@@ -58,8 +65,9 @@ void Dialog::drawSingleLine(DialogLine& d) const
 DialogLine Dialog::getCurrentLine() const
 {
     for (auto const& l : m_dialogInfo.lines) {
-        if (l.identifier == m_currentLineId)
+        if (l.identifier == m_currentLineId) {
             return l;
+        }
     }
     return DialogLine {};
 }

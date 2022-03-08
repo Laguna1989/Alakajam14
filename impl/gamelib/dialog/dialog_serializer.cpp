@@ -18,7 +18,7 @@ void from_json(nlohmann::json const& j, DialogOption& d)
 {
     j.at("text").get_to(d.text);
     j.at("next").get_to(d.next);
-    
+
     if (j.count("spell") != 0) {
         j.at("spell").get_to(d.spellToGive);
     }
