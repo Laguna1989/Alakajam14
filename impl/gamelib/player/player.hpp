@@ -40,6 +40,7 @@ public:
     void applyDamageToTarget(Damage const& dmg) override;
 
     void setHealCallback(std::function<void(void)> healCallback);
+    void setAttackCallback(std::function<void(jt::Vector2f)> attackCallback);
 
     void dash();
     void attack();
@@ -62,18 +63,19 @@ private:
 
     float m_attackCooldown { -1.0f };
     bool m_isDying { false };
+
     std::function<void(void)> m_healCallback;
+    std::function<void(jt::Vector2f)> m_attackCallback;
 
     std::vector<std::shared_ptr<bool>> m_commands;
-
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;
     std::string selectDashAnimation(jt::Vector2f const& velocity) const;
+
     std::string selectWalkAnimation(jt::Vector2f const& velocity) const;
 
     void updateSpells(const float elapsed);
-
     void handleDash();
 };
 
