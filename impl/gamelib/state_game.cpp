@@ -262,7 +262,7 @@ void StateGame::createPlayer()
             add(twScale);
 
             auto twColor = jt::TweenColor::create(
-                shape, 0.25f, jt::Color { 146, 65, 243, 255 }, jt::Color { 97, 16, 162, 0 });
+                shape, 0.25f, jt::Color { 146, 65, 243, 255 }, jt::Color { 159, 101, 207, 255 });
             add(twColor);
 
             auto twAlpha = jt::TweenAlpha::create(shape, 0.15f, 255, 0);
