@@ -3,27 +3,61 @@
         {
             "identifier": "0",
             "lines": [
-                "Hello there",
-                "Bla"
+                "Hallo"
             ],
             "options": [
                 {
-                    "next": "1",
-                    "spell": "Heal",
-                    "text": "General Kenobi"
+                    "next": "ziege",
+                    "spell": "",
+                    "text": "Ziege"
                 },
                 {
-                    "next": "0",
+                    "next": "tor",
                     "spell": "",
-                    "text": "What was that"
+                    "text": "Tor"
                 }
             ]
         },
         {
-            "identifier": "1",
+            "identifier": "ziege",
             "lines": [
-                "You know your memes",
-                "Don't you?"
+                "Das Ziegenproblem ..."
+            ],
+            "options": [
+				{
+                    "next": "end",
+                    "spell": "Heal",
+                    "text": "Correct"
+                },
+                {
+                    "next": "0",
+                    "spell": "",
+                    "text": "Incorrect"
+                }
+			]
+        },
+        {
+            "identifier": "tor",
+            "lines": [
+                "Das Torwächterproblem ..."
+            ],
+            "options": [
+				{
+                    "next": "end",
+                    "spell": "Snipe",
+                    "text": "Correct"
+                },
+                {
+                    "next": "0",
+                    "spell": "",
+                    "text": "Incorrect"
+                }
+			]
+        },
+        {
+            "identifier": "end",
+            "lines": [
+                "Du weisst ja schon alles, gut gemacht"
             ],
             "options": []
         }
