@@ -305,9 +305,7 @@ void Player::attack()
         jt::Vector2f delta = nmePos - myPos;
         auto dist = jt::MathHelper::length(delta);
 
-        float circularHurtboxRange = 20.0f;
         float directedHurtboxRange = 30.0f;
-
         if (dist < directedHurtboxRange) {
             // Forward-facing hurtbox with medium range
             jt::MathHelper::normalizeMe(delta);
@@ -316,9 +314,6 @@ void Player::attack()
                 enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() });
             }
             continue;
-        } else if (dist < circularHurtboxRange) {
-            // Circular hurtbox with short range
-            enemy->receiveDamage(Damage { m_charsheet->getAttackDamageValue() / 3.0f });
         }
     }
 }
