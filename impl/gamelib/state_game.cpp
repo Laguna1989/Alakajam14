@@ -19,6 +19,7 @@
 #include "state_menu.hpp"
 #include "timer.hpp"
 #include "tweens/tween_alpha.hpp"
+#include "tweens/tween_color.hpp"
 #include "tweens/tween_position.hpp"
 #include "tweens/tween_scale.hpp"
 
@@ -236,26 +237,32 @@ void StateGame::createPlayer()
     m_particlesAttack = std::make_shared<jt::ParticleSystem<jt::Shape, 50>>(
         [this]() {
             auto shape = std::make_shared<jt::Shape>();
-            shape->makeRect({ 1, 4 }, getGame()->gfx().textureManager());
+            shape->makeRect({ 1, 1 }, getGame()->gfx().textureManager());
             shape->setPosition({ -50000, -500000 });
-            shape->setColor(jt::colors::Red);
-            shape->setScale({ 1.0f, 0.1f });
+            shape->setColor(jt::Color { 146, 65, 243 });
+            shape->setScale({ 1.0f, 1.0f });
             return shape;
         },
         [this](std::shared_ptr<jt::Shape> shape) {
-            jt::Vector2f pos
-                = jt::Random::getRandomPointIn(jt::Rectf { m_particleAttackPosition.x - 12.0f,
-                    m_particleAttackPosition.y - 8.0f, 24.0f, 24.0f });
-            shape->setPosition(pos);
+            jt::Vector2f initialPosition = m_particleAttackPosition;
 
-            auto twPos = jt::TweenPosition::create(shape, 0.75f, pos, pos + jt::Vector2f { 0, -8 });
+            jt::Vector2f offset
+                = jt::Random::getRandomPointIn(jt::Rectf { -12.0f, -8.0f, 24.0f, 24.0f });
+            shape->setPosition(initialPosition);
+
+            auto twPos = jt::TweenPosition::create(
+                shape, 0.25f, initialPosition + offset * 0.3f, initialPosition + offset);
             add(twPos);
 
-            auto twAlpha = jt::TweenAlpha::create(shape, 0.7f, 250, 0);
-            add(twAlpha);
+            //            auto twAlpha = jt::TweenAlpha::create(shape, 0.15f, 255, 0);
+            //            twAlpha->setStartDelay(0.1f);
+            //            add(twAlpha);
 
-            auto twScale = jt::TweenScale::create(shape, 0.75f, { 1.0f, 0.1f }, { 0.0f, 1.5f });
+            auto twScale = jt::TweenScale::create(shape, 0.75f, { 1.0f, 1.0f }, { 2.0f, 2.0f });
             add(twScale);
+
+            auto twColor = jt::TweenColor::create(
+                shape, 0.25f, jt::Color { 146, 65, 243, 255 }, jt::Color { 97, 16, 162, 0 });
         });
     add(m_particlesAttack);
     m_player->setAttackCallback([this](jt::Vector2f position) {
