@@ -234,7 +234,7 @@ void StateGame::createPlayer()
         add(t);
     });
 
-    m_particlesAttack = std::make_shared<jt::ParticleSystem<jt::Shape, 50>>(
+    m_particlesAttack = std::make_shared<jt::ParticleSystem<jt::Shape, 150>>(
         [this]() {
             auto shape = std::make_shared<jt::Shape>();
             shape->makeRect({ 1, 1 }, getGame()->gfx().textureManager());
@@ -246,23 +246,28 @@ void StateGame::createPlayer()
         [this](std::shared_ptr<jt::Shape> shape) {
             jt::Vector2f initialPosition = m_particleAttackPosition;
 
-            jt::Vector2f offset
-                = jt::Random::getRandomPointIn(jt::Rectf { -12.0f, -8.0f, 24.0f, 24.0f });
-            shape->setPosition(initialPosition);
+            /*   jt::Vector2f offset
+                   = jt::Random::getRandomPointIn(jt::Rectf { -12.0f, -8.0f, 24.0f, 24.0f });
+              */
+            auto const angle = jt::MathHelper::deg2rad(jt::Random::getFloat(0.0f, 360.f));
+            auto const distance = jt::Random::getFloat(0.0f, 45.0f / 4.0f);
+            jt::Vector2f offset { distance * sin(angle), distance * cos(angle) };
+            shape->setPosition(initialPosition + offset * 0.3f);
 
             auto twPos = jt::TweenPosition::create(
                 shape, 0.25f, initialPosition + offset * 0.3f, initialPosition + offset);
             add(twPos);
-
-            //            auto twAlpha = jt::TweenAlpha::create(shape, 0.15f, 255, 0);
-            //            twAlpha->setStartDelay(0.1f);
-            //            add(twAlpha);
 
             auto twScale = jt::TweenScale::create(shape, 0.75f, { 1.0f, 1.0f }, { 2.0f, 2.0f });
             add(twScale);
 
             auto twColor = jt::TweenColor::create(
                 shape, 0.25f, jt::Color { 146, 65, 243, 255 }, jt::Color { 97, 16, 162, 0 });
+            add(twColor);
+
+            auto twAlpha = jt::TweenAlpha::create(shape, 0.15f, 255, 0);
+            twAlpha->setStartDelay(0.4f);
+            add(twAlpha);
         });
     add(m_particlesAttack);
     m_player->setAttackCallback([this](jt::Vector2f position) {

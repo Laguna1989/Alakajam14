@@ -306,7 +306,7 @@ void Player::attack()
         auto dist = jt::MathHelper::length(delta);
 
         float circularHurtboxRange = 20.0f;
-        float directedHurtboxRange = 45.0f;
+        float directedHurtboxRange = 30.0f;
 
         if (dist < directedHurtboxRange) {
             // Forward-facing hurtbox with medium range

@@ -82,7 +82,7 @@ private:
 
     std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesHeal;
     std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesSnipeParticleSystem;
-    std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesAttack;
+    std::shared_ptr<jt::ParticleSystem<jt::Shape, 150>> m_particlesAttack;
     jt::Vector2f m_particleAttackPosition;
 
     std::shared_ptr<jt::ObjectGroup<Guile>> m_guys;
