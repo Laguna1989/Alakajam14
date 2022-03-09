@@ -7,6 +7,7 @@
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "guile.hpp"
+#include "healing_potion.hpp"
 #include "hud/hud.hpp"
 #include "key.hpp"
 #include "level.hpp"
@@ -86,6 +87,7 @@ void StateGame::doInternalCreate()
     createPlayer();
     createEnemies();
     createExperienceOrbs();
+    createHealingPotions();
     createGuiles();
     createSnipeProjectilesGroup();
     createCrystalProjectilesGroup();
@@ -191,6 +193,12 @@ void StateGame::createExperienceOrbs()
 {
     m_experienceOrbs = std::make_shared<jt::ObjectGroup<ExperienceOrb>>();
     add(m_experienceOrbs);
+}
+
+void StateGame::createHealingPotions()
+{
+    m_healingPotions = std::make_shared<jt::ObjectGroup<HealingPotion>>();
+    add(m_healingPotions);
 }
 
 void StateGame::createEnemies() { m_enemies = std::make_shared<jt::ObjectGroup<Enemy>>(); }
@@ -463,6 +471,8 @@ void StateGame::loadSingleLoot(jt::tilemap::InfoRect const& o)
         spawnExperience(GP::LootExperienceMediumAmount(), o.position, true);
     } else if (o.properties.strings.at("lootType") == "xp_large") {
         spawnExperience(GP::LootExperienceLargeAmount(), o.position, true);
+    } else if (o.properties.strings.at("lootType") == "healing_potion") {
+        spawnHealingPotion(o.position);
     }
 }
 
@@ -491,6 +501,19 @@ void StateGame::spawnExperience(int amount, jt::Vector2f const& pos, bool single
         }
     }
     spawnOneExperienceOrb(pos, amount);
+}
+
+void StateGame::spawnHealingPotion(jt::Vector2f const& pos)
+{
+    b2BodyDef bodyDef;
+    bodyDef.fixedRotation = true;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(pos.x, pos.y);
+    bodyDef.linearDamping = 1.0f;
+
+    auto e = std::make_shared<HealingPotion>(m_world, &bodyDef, m_player);
+    add(e);
+    m_healingPotions->push_back(e);
 }
 
 void StateGame::spawnOneExperienceOrb(jt::Vector2f const& pos, int value)

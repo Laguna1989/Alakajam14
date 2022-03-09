@@ -7,6 +7,7 @@
 #include "deferred_action_interface.hpp"
 #include "experience_spawner_interface.hpp"
 #include "game_state.hpp"
+#include "healing_potion.hpp"
 #include "key.hpp"
 #include "object_group.hpp"
 #include "particle_system.hpp"
@@ -76,13 +77,15 @@ private:
 
     std::shared_ptr<jt::ObjectGroup<Enemy>> m_enemies;
     std::shared_ptr<jt::ObjectGroup<ExperienceOrb>> m_experienceOrbs;
+    std::shared_ptr<jt::ObjectGroup<HealingPotion>> m_healingPotions;
 
     std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> m_snipeProjectiles;
-    std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> m_crystalProjectiles;
 
+    std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> m_crystalProjectiles;
     std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesHeal;
     std::shared_ptr<jt::ParticleSystem<jt::Shape, 50>> m_particlesSnipeParticleSystem;
     std::shared_ptr<jt::ParticleSystem<jt::Shape, 150>> m_particlesAttack;
+
     jt::Vector2f m_particleAttackPosition;
 
     std::shared_ptr<jt::ObjectGroup<Guile>> m_guys;
@@ -90,7 +93,6 @@ private:
     std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders {};
 
     std::shared_ptr<b2ContactListener> m_contactListener;
-
     std::shared_ptr<jt::Sprite> m_vignette;
     std::shared_ptr<jt::Sound> m_musicIntro;
     std::shared_ptr<jt::Sound> m_musicLoop;
@@ -98,24 +100,24 @@ private:
     std::shared_ptr<Enemy> m_boss;
     std::shared_ptr<Key> m_key;
     bool m_isIntroMusicPlaying { true };
-    std::chrono::time_point<std::chrono::steady_clock> m_musicLoopStartTime;
 
+    std::chrono::time_point<std::chrono::steady_clock> m_musicLoopStartTime;
     float m_timer { 0.0f };
     bool m_touchedInput { false };
-    std::shared_ptr<jt::Text> m_timerText;
 
+    std::shared_ptr<jt::Text> m_timerText;
     bool m_running { true };
     bool m_hasEnded { false };
-    jt::Vector2f m_stairsDest;
 
+    jt::Vector2f m_stairsDest;
     void doInternalCreate() override;
+
     void doInternalUpdate(float const elapsed) override;
 
     void doInternalDraw() const override;
-
     void endGame();
-    void loadTilemap(std::string const& fileName);
 
+    void loadTilemap(std::string const& fileName);
     void createPlayer();
     void createEnemies();
     void createExperienceOrbs();
@@ -124,8 +126,8 @@ private:
     void loadTileColliders();
     void loadEnemies();
     void loadSingleLoot(jt::tilemap::InfoRect const& o);
-    void createCrystalProjectilesGroup();
 
+    void createCrystalProjectilesGroup();
     void setupEnemyDependencies(std::shared_ptr<Enemy> e);
     void loadGuiles();
     void loadLoots();
@@ -135,6 +137,8 @@ private:
     void createGuiles();
     void clearOldLevel();
     void createDoorObjects();
+    void spawnHealingPotion(const jt::Vector2f& pos);
+    void createHealingPotions();
 };
 
 #endif

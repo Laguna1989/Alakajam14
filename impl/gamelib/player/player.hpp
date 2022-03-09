@@ -32,10 +32,11 @@ public:
     void gainExperience(int value) override;
 
     void receiveDamage(Damage const& dmg);
+    void healBy(int healedHp);
 
     void die();
-    bool m_hasFinishedDying { false };
 
+    bool m_hasFinishedDying { false };
     jt::Vector2f getTargetPosition() override;
     void applyDamageToTarget(Damage const& dmg) override;
 

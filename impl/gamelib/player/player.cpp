@@ -222,6 +222,12 @@ void Player::receiveDamage(Damage const& dmg)
     m_audio->play(SoundComponentInterface::SoundId::HURT);
 }
 
+void Player::healBy(int healedHp)
+{
+    m_charsheet->changeHitpoints(-healedHp);
+    m_graphics->flash(0.3f, jt::colors::Green);
+}
+
 void Player::die()
 {
     if (!m_isDying) {

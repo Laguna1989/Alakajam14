@@ -36,28 +36,29 @@ public:
     static std::uint16_t PhysicsCollisionCategoryPlayerShots();
     static std::uint16_t PhysicsCollisionCategoryEnemyShots();
     static std::uint16_t PhysicsCollisionCategoryExperienceOrbs();
+    static std::uint16_t PhysicsCollisionCategoryHealingPotions();
 
     static jt::Vector2f PlayerSize();
     static float PlayerBaseMovementSpeed();
     static float PlayerBaseDashVelocity();
     static float PlayerDashTotalTime();
     static float PlayerDashActiveTime();
-    static float PlayerBaseDashCooldown();
 
+    static float PlayerBaseDashCooldown();
     static float ExperienceOrbVelocity();
     static float ExperienceOrbIdleTime();
     static float ExperienceOrbPickupDistance();
     static float ExperienceOrbAttractDistance();
-    static float PlayerAttackCooldown();
 
+    static float PlayerAttackCooldown();
     static float SpellSnipeProjectileSpeed();
     static int SpellSnipeExpCosts();
     static float SpellBroadProjectileSpeed();
     static int SpellBroadExpCosts();
     static int LootExperienceMediumAmount();
     static int LootExperienceSmallAmount();
-    static int LootExperienceLargeAmount();
 
+    static int LootExperienceLargeAmount();
     static float EnemyShotSpeed();
     static float EnemyShotTimer();
     static float EnemyShotDamage();
@@ -65,6 +66,8 @@ public:
     static float LevelUpMovementSpeedIncrease();
     static float LevelUpAttackDamageIncrease();
     static float TileSizeInPixel();
+    static float HealingPotionAmount();
+    static const float HealingPotionPickupDistance();
 };
 
 #endif
