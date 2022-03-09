@@ -1,5 +1,6 @@
 #include "logging_audio.hpp"
 #include "logging_sound.hpp"
+#include <functional>
 namespace jt {
 
 LoggingAudio::LoggingAudio(AudioInterface& decoratee, LoggerInterface& logger)
@@ -34,5 +35,11 @@ std::shared_ptr<SoundInterface> LoggingAudio::getPermanentSound(std::string cons
 void LoggingAudio::removePermanentSound(std::string const& identifier) { }
 
 oalpp::SoundContextInterface& LoggingAudio::getContext() { return m_decoratee.getContext(); }
+std::shared_ptr<SoundInterface> LoggingAudio::soundPool(std::string const& baseIdentifier,
+    std::function<std::shared_ptr<SoundInterface>()> function, std::size_t count)
+{
+    m_logger.debug("sound pool: " + baseIdentifier, { "jt", "audio" });
+    return m_decoratee.soundPool(baseIdentifier, function, count);
+}
 
 } // namespace jt

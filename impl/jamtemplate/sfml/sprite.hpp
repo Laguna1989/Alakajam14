@@ -30,14 +30,14 @@ public:
     void setColor(jt::Color const& col) override;
     jt::Color getColor() const override;
 
-    virtual jt::Rectf getGlobalBounds() const override;
-    virtual jt::Rectf getLocalBounds() const override;
+    jt::Rectf getGlobalBounds() const override;
+    jt::Rectf getLocalBounds() const override;
 
-    virtual void setScale(jt::Vector2f const& scale);
-    virtual jt::Vector2f getScale() const;
+    void setScale(jt::Vector2f const& scale) override;
+    jt::Vector2f getScale() const override;
 
-    virtual void setOrigin(jt::Vector2f const& origin);
-    virtual jt::Vector2f getOrigin() const;
+    void setOrigin(jt::Vector2f const& origin) override;
+    jt::Vector2f getOrigin() const override;
 
     // WARNING: This function is slow, because it needs to copy
     // graphics memory to ram first.
@@ -63,7 +63,7 @@ private:
     void doDraw(std::shared_ptr<jt::RenderTarget> const sptr) const override;
     void doDrawFlash(std::shared_ptr<jt::RenderTarget> const sptr) const override;
 
-    void doRotate(float rot);
+    void doRotate(float rot) override;
 };
 
 } // namespace jt

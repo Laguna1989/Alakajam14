@@ -47,15 +47,9 @@ void ExperienceOrb::doCreate()
 }
 void ExperienceOrb::initSound()
 {
-    auto const randomNumber = jt::Random::getInt(0, 5);
-    auto const soundName = "bling" + std::to_string(randomNumber);
-
-    m_soundBling = getGame()->audio().getPermanentSound(soundName);
-    if (m_soundBling == nullptr) {
-        m_soundBling = std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg");
-        m_soundBling->setVolume(0.7f);
-        getGame()->audio().addPermanentSound(soundName, m_soundBling);
-    }
+    m_soundBling = getGame()->audio().soundPool(
+        "bling", []() { return std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg"); }, 5);
+    m_soundBling->setVolume(0.7f);
 }
 
 void ExperienceOrb::doUpdate(float const elapsed)
