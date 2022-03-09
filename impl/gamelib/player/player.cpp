@@ -78,6 +78,8 @@ void Player::doUpdate(float const elapsed)
             m_input->updateAttack(*this);
         }
         m_input->updateSpells(*this);
+    } else {
+        setVelocity(jt::Vector2f { 0.0f, 0.0f });
     }
     handleDash();
 
@@ -207,12 +209,7 @@ std::string Player::selectWalkAnimation(jt::Vector2f const& velocity) const
     return walkAnimationName;
 }
 
-void Player::doDraw() const
-{
-    m_graphics->draw(getGame()->gfx().target());
-    m_charsheet->draw();
-    m_spellBook->draw();
-}
+void Player::doDraw() const { m_graphics->draw(getGame()->gfx().target()); }
 
 std::shared_ptr<CharacterSheetImgui> Player::getCharSheet() { return m_charsheet; }
 
@@ -326,4 +323,9 @@ void Player::makeSpellAvailable(std::string const& spellName)
 void Player::setAttackCallback(std::function<void(jt::Vector2f)> attackCallback)
 {
     m_attackCallback = attackCallback;
+}
+void Player::drawOverlay() const
+{
+    m_charsheet->draw();
+    m_spellBook->draw();
 }

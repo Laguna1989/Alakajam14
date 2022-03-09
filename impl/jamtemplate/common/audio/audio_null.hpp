@@ -2,7 +2,6 @@
 #define GUARD_JAMTEMPLATE_AUDIO_NULL_HPP
 
 #include "audio_interface.hpp"
-#include <functional>
 
 namespace jt {
 

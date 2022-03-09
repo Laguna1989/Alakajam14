@@ -1,6 +1,5 @@
 #include "logging_audio.hpp"
 #include "logging_sound.hpp"
-#include <functional>
 namespace jt {
 
 LoggingAudio::LoggingAudio(AudioInterface& decoratee, LoggerInterface& logger)

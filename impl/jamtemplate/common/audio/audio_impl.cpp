@@ -2,7 +2,6 @@
 #include "random/random.hpp"
 #include "sound.hpp"
 #include <algorithm>
-#include <functional>
 
 namespace jt {
 

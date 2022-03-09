@@ -375,6 +375,7 @@ void StateGame::doInternalDraw() const
     m_stairs->draw();
     m_key->draw();
     m_level->drawUpperLayers();
+    m_player->drawOverlay();
     m_vignette->draw(getGame()->gfx().target());
     m_timerText->draw(getGame()->gfx().target());
     m_hud->draw();

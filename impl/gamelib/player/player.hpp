@@ -47,6 +47,8 @@ public:
     void castSpell(std::size_t spellIndex);
     void makeSpellAvailable(std::string const& spellName) override;
 
+    void drawOverlay() const;
+
 private:
     StateGame& m_state;
 
