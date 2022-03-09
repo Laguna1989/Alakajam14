@@ -1,4 +1,5 @@
 #include "info_screen.hpp"
+#include "audio/sound.hpp"
 #include "game_interface.hpp"
 #include "imgui.h"
 
@@ -21,7 +22,7 @@ void InfoScreen::doUpdate(float const elapsed)
         m_frameTimesVector[index - pushIndex] = m_frameTimes[index];
     }
 
-    m_GameObjectAliveCount.push(getNumberOfAliveGameObjects());
+    m_GameObjectAliveCount.push(static_cast<float>(getNumberOfAliveGameObjects()));
     auto const pushIndex2 = m_GameObjectAliveCount.getPushIndex();
     for (auto index = pushIndex2; index != pushIndex2 + m_GameObjectAliveCount.size(); ++index) {
         m_GameObjectAliveCountVector[index - pushIndex2] = m_GameObjectAliveCount[index];
@@ -66,6 +67,15 @@ void InfoScreen::doDraw() const
         ImGui::PlotLines("AliveGameObjects [#] = %s", m_GameObjectAliveCountVector.data(),
             static_cast<int>(m_GameObjectAliveCountVector.size()), 0, nullptr, 0, FLT_MAX,
             ImVec2 { 0, 100 });
+
+        ImGui::Separator();
+        std::string const createdSoundsText
+            = "# Sounds (created): " + std::to_string(jt::Sound::createdObjects());
+        std::string const aliveSoundsText
+            = "# Sounds (alive): " + std::to_string(jt::Sound::aliveObjects());
+
+        ImGui::Text(createdSoundsText.c_str());
+        ImGui::Text(aliveSoundsText.c_str());
     }
     ImGui::End();
 }

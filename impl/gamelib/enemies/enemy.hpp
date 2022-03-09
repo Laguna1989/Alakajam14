@@ -15,7 +15,7 @@ struct Damage;
 
 namespace jt {
 class Animation;
-class Sound;
+class SoundInterface;
 } // namespace jt
 
 // TODO compose class via mix ins?

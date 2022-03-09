@@ -1,12 +1,12 @@
-#ifndef ALAKAJAM14_SPELL_HEAL_HPP
-#define ALAKAJAM14_SPELL_HEAL_HPP
+#ifndef ALAKAJAM14_SPELL_HEAL_SMALL_HPP
+#define ALAKAJAM14_SPELL_HEAL_SMALL_HPP
 
 #include "character_sheet_imgui.hpp"
 #include "spell_interface.hpp"
 
-class SpellHeal : public SpellInterface {
+class SpellHealSmall : public SpellInterface {
 public:
-    SpellHeal(CharacterSheetImgui& charSheet);
+    SpellHealSmall(CharacterSheetImgui& charSheet);
     void trigger() override;
     bool canTrigger() const override;
     void update(float elapsed) override;
@@ -20,4 +20,4 @@ private:
     CharacterSheetImgui& m_charSheet;
 };
 
-#endif // ALAKAJAM14_SPELL_HEAL_HPP
+#endif // ALAKAJAM14_SPELL_HEAL_SMALL_HPP

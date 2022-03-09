@@ -27,7 +27,7 @@ public:
 
     float getHitpoints() const;
     float getHitpointsMax() const;
-    void changeHitpoints(float delta) const;
+    void changeHitpoints(float damageValue) const;
     void changeHitpointsMax(float delta) const;
 
     int getExperiencePoints() const;
@@ -37,22 +37,33 @@ public:
     float getAttackSpeedFactor() const;
     float getAttackDamageValue() const;
     float getDashFactor() const;
+    float getArmorReductionValue() const;
+    int getExpBoostValue() const;
 
     void setMovementSpeedFactor(std::string const& identifier, float value);
     void setAttackSpeedFactor(std::string const& identifier, float value);
+    void setAttackDamageFactor(std::string const& identifier, float value);
     void setDashFactor(std::string const& identifier, float value);
+    void setArmorReductionValue(std::string const& identifier, float value);
+    void setExpBoostValue(std::string const&, int value);
 
 private:
     CharSheetObservers m_observers;
 
     std::map<std::string, float> m_movementSpeedFactorsAdditive;
     std::map<std::string, float> m_attackSpeedFactorsAdditive;
+    std::map<std::string, float> m_attackDamageValueAdditive;
     std::map<std::string, float> m_dashFactorsAdditive;
+    std::map<std::string, float> m_armorReductionValueAdditive;
+    std::map<std::string, int> m_ExperienceBoostAdditive;
 
     mutable float m_baseMovementSpeed { 1.0f };
     mutable float m_baseDashSpeed { 1.0f };
     mutable float m_baseAttackSpeed { 1.0f };
     mutable float m_baseAttackDamage { 50.0f };
+    mutable int m_baseExperienceBoost { 0 };
+
+    mutable float m_armorReductionValue { 0.0f };
 
     mutable float m_hitpoints { 100.0f };
     mutable float m_hitpointsMax { 100.0f };

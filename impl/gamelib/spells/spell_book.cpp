@@ -4,8 +4,10 @@
 #include "imgui.h"
 #include "spell_attack_broad.hpp"
 #include "spell_attack_snipe.hpp"
-#include "spell_heal.hpp"
+#include "spell_heal_large.hpp"
+#include "spell_heal_small.hpp"
 #include "spell_none.hpp"
+#include "spell_passive_armor.hpp"
 #include "spell_passive_attack_speed.hpp"
 #include "spell_passive_dash.hpp"
 #include "spell_passive_movement_speed.hpp"
@@ -33,9 +35,12 @@ SpellBook::SpellBook(StateGame& state)
     m_spells.push_back(
         std::make_shared<SpellPassiveAttackSpeed>(*state.getPlayer()->getCharSheet()));
     m_spells.push_back(std::make_shared<SpellPassiveDash>(*state.getPlayer()->getCharSheet()));
+    m_spells.push_back(std::make_shared<SpellPassiveArmor>(*state.getPlayer()->getCharSheet()));
+
     m_spells.push_back(std::make_shared<SpellAttackSnipe>(state));
     m_spells.push_back(std::make_shared<SpellAttackBroad>(state));
-    m_spells.push_back(std::make_shared<SpellHeal>(*state.getPlayer()->getCharSheet()));
+    m_spells.push_back(std::make_shared<SpellHealSmall>(*state.getPlayer()->getCharSheet()));
+    m_spells.push_back(std::make_shared<SpellHealLarge>(*state.getPlayer()->getCharSheet()));
 
     m_equippedSpells.push_back(getSpellByName("None"));
     m_equippedSpells.push_back(getSpellByName("None"));
@@ -86,6 +91,9 @@ std::vector<std::string> SpellBook::getAvailableSpellNames() const { return m_av
 
 void SpellBook::makeSpellAvailable(std::string const& name)
 {
+    if (std::count(m_availableSpells.begin(), m_availableSpells.end(), name) != 0) {
+        return;
+    }
     auto sp = getSpellByName(name);
     if (sp == nullptr) {
         return;

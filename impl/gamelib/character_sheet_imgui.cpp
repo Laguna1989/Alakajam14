@@ -115,6 +115,9 @@ void CharacterSheetImgui::doDraw() const
             }
         }
     }
+    ImGui::Separator();
+    ImGui::Text("Armor Damage reduction %s",
+        jt::MathHelper::floatToStringWithXDigits(getArmorReductionValue(), 2).c_str());
 
     ImGui::End();
 }
@@ -122,12 +125,17 @@ void CharacterSheetImgui::doDraw() const
 float CharacterSheetImgui::getHitpoints() const { return m_hitpoints; }
 float CharacterSheetImgui::getHitpointsMax() const { return m_hitpointsMax; }
 
-void CharacterSheetImgui::changeHitpoints(float delta) const
+void CharacterSheetImgui::changeHitpoints(float damageValue) const
 {
-    // TODO visual candy
-    m_hitpoints -= delta;
+    if (damageValue > 0) {
+        damageValue -= getArmorReductionValue();
+        if (damageValue < 0.0f) {
+            damageValue = 0.0f;
+        }
+    }
+    m_hitpoints -= damageValue;
     m_observers.healthObserver->notify(m_hitpoints);
-    if (delta <= 0) {
+    if (damageValue <= 0) {
         if (m_observers.healCallback) {
             m_observers.healCallback();
         }
@@ -144,7 +152,7 @@ void CharacterSheetImgui::changeHitpointsMax(float delta) const
 int CharacterSheetImgui::getExperiencePoints() const { return m_experiencePoints; }
 void CharacterSheetImgui::changeExperiencePoints(int delta) const
 {
-    m_experiencePoints += delta;
+    m_experiencePoints += delta + getExpBoostValue();
     m_observers.experienceObserver->notify(m_experiencePoints);
 }
 
@@ -181,17 +189,60 @@ float CharacterSheetImgui::getDashFactor() const
     return m_baseDashSpeed + v;
 }
 
-float CharacterSheetImgui::getAttackDamageValue() const { return m_baseAttackDamage; }
+float CharacterSheetImgui::getAttackDamageValue() const
+{
+    float v = 0.0f;
+
+    for (auto const& kvp : m_attackDamageValueAdditive) {
+        v += kvp.second;
+    }
+    return m_baseAttackDamage + v;
+}
 
 void CharacterSheetImgui::setMovementSpeedFactor(std::string const& identifier, float value)
 {
     m_movementSpeedFactorsAdditive[identifier] = value;
 }
+
 void CharacterSheetImgui::setAttackSpeedFactor(std::string const& identifier, float value)
 {
     m_attackSpeedFactorsAdditive[identifier] = value;
 }
+void CharacterSheetImgui::setAttackDamageFactor(std::string const& identifier, float value)
+{
+    m_attackDamageValueAdditive[identifier] = value;
+}
 void CharacterSheetImgui::setDashFactor(std::string const& identifier, float value)
 {
     m_dashFactorsAdditive[identifier] = value;
+}
+
+void CharacterSheetImgui::setArmorReductionValue(std::string const& identifier, float value)
+{
+    m_armorReductionValueAdditive[identifier] = value;
+}
+
+void CharacterSheetImgui::setExpBoostValue(std::string const& identifier, int value)
+{
+    m_ExperienceBoostAdditive[identifier] = value;
+}
+
+float CharacterSheetImgui::getArmorReductionValue() const
+{
+    float v = 0.0f;
+
+    for (auto const& kvp : m_armorReductionValueAdditive) {
+        v += kvp.second;
+    }
+    return m_armorReductionValue + v;
+}
+
+int CharacterSheetImgui::getExpBoostValue() const
+{
+    int v = 0.0f;
+
+    for (auto const& kvp : m_ExperienceBoostAdditive) {
+        v += kvp.second;
+    }
+    return m_baseExperienceBoost + v;
 }

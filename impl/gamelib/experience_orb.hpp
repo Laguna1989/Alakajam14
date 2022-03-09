@@ -7,7 +7,7 @@
 
 namespace jt {
 class Animation;
-class Sound;
+class SoundInterface;
 } // namespace jt
 
 class ExperienceOrb : public jt::Box2DObject {
@@ -21,7 +21,7 @@ public:
 
 private:
     std::shared_ptr<jt::Animation> m_animation;
-    std::shared_ptr<jt::Sound> m_soundBling;
+    std::shared_ptr<jt::SoundInterface> m_soundBling;
     std::shared_ptr<TargetInterface> m_target;
 
     void doCreate() override;
@@ -29,6 +29,7 @@ private:
     void doDraw() const override;
 
     void doKill() override;
+    void initSound();
 };
 
 #endif // ALAKAJAM14_EXPERIENCE_ORB_HPP

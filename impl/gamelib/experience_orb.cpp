@@ -43,9 +43,19 @@ void ExperienceOrb::doCreate()
 
     getB2Body()->CreateFixture(&fixtureDef);
 
-    m_soundBling = std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg");
-    m_soundBling->setVolume(0.7f);
-    getGame()->audio().addTemporarySound(m_soundBling);
+    initSound();
+}
+void ExperienceOrb::initSound()
+{
+    auto const randomNumber = jt::Random::getInt(0, 5);
+    auto const soundName = "bling" + std::to_string(randomNumber);
+
+    m_soundBling = getGame()->audio().getPermanentSound(soundName);
+    if (m_soundBling == nullptr) {
+        m_soundBling = std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg");
+        m_soundBling->setVolume(0.7f);
+        getGame()->audio().addPermanentSound(soundName, m_soundBling);
+    }
 }
 
 void ExperienceOrb::doUpdate(float const elapsed)
