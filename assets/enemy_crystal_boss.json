@@ -54,7 +54,7 @@
         }
     ],
     "closeCombatDamage": 110.0,
-    "colliderRadius": 24.0,
+    "colliderRadius": 18.0,
     "experience": 5,
     "hitpoints": 2500.0,
     "movementSpeed": 20.0,
