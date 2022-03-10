@@ -3,10 +3,14 @@
 #include "math_helper.hpp"
 #include "projectile_spawner_interface.hpp"
 
+#include <iostream>
+
 AiStateBossInjured::AiStateBossInjured() { }
 
 void AiStateBossInjured::update(float elapsed, Enemy* base)
 {
+
+    std::cout << "state injured\n";
     if (calculateDistanceToTarget() >= 73984) {
         return;
     }
@@ -34,3 +38,4 @@ void AiStateBossInjured::setProjectileSpawner(ProjectileSpawnerInterface* spawne
 {
     m_projectileSpawner = spawner;
 }
+void AiStateBossInjured::setNextState(std::string const& nextState) { m_nextState = nextState; }

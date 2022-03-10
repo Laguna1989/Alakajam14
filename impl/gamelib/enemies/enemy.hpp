@@ -45,6 +45,8 @@ public:
     bool isBoss();
     void makeSpellAvailable(std::string const& spellName) override;
 
+    float getHitpoints() const;
+
 private:
     float m_hitpoints { 1.0f };
     int m_experience { 0 };
@@ -52,6 +54,11 @@ private:
     float m_movementSpeed { 1.0f };
     float m_closeCombatDamage { 0.0f };
     EnemyInfo m_info;
+
+public:
+    EnemyInfo const& getInfo() const;
+
+private:
     std::shared_ptr<jt::Animation> m_animation;
 
     AiStateManager m_aiStateManager;

@@ -11,10 +11,12 @@ public:
     void update(float elapsed, Enemy* base) override;
     void setPathCalculator(WorldPathCalculatorInterface* mpathCalculator);
     void setProjectileSpawner(ProjectileSpawnerInterface* spawner);
+    void setNextState(std::string const& nextState);
 
 private:
     ProjectileSpawnerInterface* m_projectileSpawner { nullptr };
     float m_shootTimer { -1.0f };
+    std::string m_nextState = { "" };
 };
 
 #endif // ALAKAJAM14_AI_STATE_BOSS_INJURED_HPP

@@ -13,11 +13,6 @@
 #include "projectile_spawner_interface.hpp"
 #include "system_helper.hpp"
 
-Enemy::Enemy(std::shared_ptr<jt::Box2DWorldInterface> world, const b2BodyDef* def)
-    : Box2DObject { world, def }
-{
-}
-
 Enemy::Enemy(
     std::shared_ptr<jt::Box2DWorldInterface> world, b2BodyDef const* def, EnemyInfo const& info)
     : Box2DObject { world, def }
@@ -73,6 +68,7 @@ void Enemy::doCreate()
         } else if (aiInfo.type == aiInfo.BOSS) {
             auto bossState = std::make_shared<AiStateBoss>();
             bossState->setTarget(m_target);
+            bossState->setNextState(aiInfo.nextState);
             bossState->setPathCalculator(m_pathCalculator);
             bossState->setProjectileSpawner(m_projectileSpawner);
             getAiStateManager().registerState(aiInfo.name, bossState);
@@ -80,12 +76,14 @@ void Enemy::doCreate()
             auto bossState = std::make_shared<AiStateBossInjured>();
             bossState->setTarget(m_target);
             bossState->setPathCalculator(m_pathCalculator);
+            bossState->setNextState(aiInfo.nextState);
             bossState->setProjectileSpawner(m_projectileSpawner);
             getAiStateManager().registerState(aiInfo.name, bossState);
         } else if (aiInfo.type == aiInfo.BOSS_CRITICAL) {
             auto bossState = std::make_shared<AiStateBossCritical>();
             bossState->setTarget(m_target);
             bossState->setPathCalculator(m_pathCalculator);
+            bossState->setNextState(aiInfo.nextState);
             bossState->setProjectileSpawner(m_projectileSpawner);
             getAiStateManager().registerState(aiInfo.name, bossState);
         }
@@ -184,7 +182,6 @@ void Enemy::performAI(float elapsed)
 
     auto currentState = getAiStateManager().getCurrentState();
     currentState->setPosition(getPosition());
-
     currentState->update(elapsed, this);
 }
 
@@ -213,3 +210,6 @@ void Enemy::gainExperience(int value)
 }
 bool Enemy::isBoss() { return m_isBoss; }
 void Enemy::makeSpellAvailable(std::string const& spellName) { }
+float Enemy::getHitpoints() const { return m_hitpoints; }
+
+EnemyInfo const& Enemy::getInfo() const { return m_info; }

@@ -1,4 +1,5 @@
 #include "ai_state_boss.hpp"
+#include "enemies/enemy.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
 #include "projectile_spawner_interface.hpp"
@@ -11,6 +12,24 @@ void AiStateBoss::update(float elapsed, Enemy* base)
         return;
     }
 
+    handleShooting(elapsed);
+
+    checkForStateSwitch(base);
+}
+
+void AiStateBoss::checkForStateSwitch(Enemy* base)
+{
+    float const currentHitpoints = base->getHitpoints();
+    float const maxHitpoints = base->getInfo().hitpoints;
+
+    std::cout << "hp: " << currentHitpoints << " " << maxHitpoints << std::endl;
+    if (currentHitpoints <= maxHitpoints * 0.66f) {
+        base->getAiStateManager().switchToState(m_nextState);
+    }
+}
+
+void AiStateBoss::handleShooting(float elapsed)
+{
     m_shootTimer -= elapsed;
 
     if (m_shootTimer <= 0) {
@@ -34,3 +53,4 @@ void AiStateBoss::setProjectileSpawner(ProjectileSpawnerInterface* spawner)
 {
     m_projectileSpawner = spawner;
 }
+void AiStateBoss::setNextState(std::string const& nextState) { m_nextState = nextState; }

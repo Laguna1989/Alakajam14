@@ -34,3 +34,5 @@ void AiStateBossCritical::setProjectileSpawner(ProjectileSpawnerInterface* spawn
 {
     m_projectileSpawner = spawner;
 }
+
+void AiStateBossCritical::setNextState(std::string const& nextState) { m_nextState = nextState; }
