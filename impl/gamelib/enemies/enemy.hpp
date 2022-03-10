@@ -16,6 +16,7 @@ struct Damage;
 namespace jt {
 class Animation;
 class SoundInterface;
+class Bar;
 } // namespace jt
 
 // TODO compose class via mix ins?
@@ -47,6 +48,8 @@ public:
 
     float getHitpoints() const;
 
+    void drawHud() const;
+
 private:
     float m_hitpoints { 1.0f };
     int m_experience { 0 };
@@ -60,6 +63,7 @@ public:
 
 private:
     std::shared_ptr<jt::Animation> m_animation;
+    std::shared_ptr<jt::Bar> m_bar;
 
     AiStateManager m_aiStateManager;
     float m_staggeredTime { -1.0f };

@@ -1,6 +1,7 @@
 #include "enemy.hpp"
 #include "animation.hpp"
 #include "audio/sound.hpp"
+#include "bar.hpp"
 #include "damage.hpp"
 #include "enemies/enemy_ai/ai_state_boss.hpp"
 #include "enemies/enemy_ai/ai_state_boss_critical.hpp"
@@ -89,6 +90,15 @@ void Enemy::doCreate()
         }
     }
     getAiStateManager().switchToState(m_info.ais.begin()->name);
+
+    if (m_isBoss) {
+        m_bar = std::make_shared<jt::Bar>(200.0f, 16.0f, true, getGame()->gfx().textureManager());
+        m_bar->setIgnoreCamMovement(true);
+        m_bar->setPosition(jt::Vector2f {
+            GP::GetScreenSize().x - 200.0f - 8.0f, GP::GetScreenSize().y - 16.0f - 8.0f });
+        m_bar->setFrontColor(jt::Color { 163, 51, 255 });
+        m_bar->setBackColor(jt::Color { 20, 20, 20 });
+    }
 }
 
 void Enemy::doUpdate(const float elapsed)
@@ -116,9 +126,23 @@ void Enemy::doUpdate(const float elapsed)
                   m_animation->getLocalBounds().height }
                 * 0.5f);
     }
+    if (isBoss()) {
+        m_bar->setMaxValue(m_info.hitpoints);
+        m_bar->setCurrentValue(m_hitpoints);
+        m_bar->update(elapsed);
+    }
 }
 
 void Enemy::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
+
+void Enemy::drawHud() const
+{
+    if (m_isBoss) {
+        if (m_hitpoints != m_info.hitpoints) {
+            m_bar->draw(getGame()->gfx().target());
+        }
+    }
+}
 
 void Enemy::receiveDamage(const Damage& dmg)
 {

@@ -15,10 +15,11 @@ void AiStateBossCritical::update(float elapsed, Enemy* base)
     m_shootTimer -= elapsed;
 
     if (m_shootTimer <= 0) {
-        m_shootTimer = 0.3f;
+        m_shootTimer = 0.35f;
+
         jt::Vector2f const pos = m_position;
         m_currentAngle += 20.0f;
-        int numSpiralArms = 4;
+        int numSpiralArms = 3;
         for (int i = 0; i != numSpiralArms; ++i) {
             float angle = jt::MathHelper::deg2rad(m_currentAngle + (360.0f / numSpiralArms) * i);
             jt::Vector2f velocity { sin(angle), cos(angle) };

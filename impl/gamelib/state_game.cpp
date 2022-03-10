@@ -369,15 +369,6 @@ void StateGame::doInternalDraw() const
         }
         ob->draw();
     }
-
-    //    for (auto o : *m_guys) {
-    //        auto ob = o.lock();
-    //        if (ob == nullptr) {
-    //            continue;
-    //        }
-    //        ob->draw();
-    //    }
-    //    m_level->drawTileNodeOverlay();
     m_snipeProjectiles->draw();
     m_crystalProjectiles->draw();
     m_stairs->draw();
@@ -387,6 +378,12 @@ void StateGame::doInternalDraw() const
     m_vignette->draw(getGame()->gfx().target());
     m_timerText->draw(getGame()->gfx().target());
     m_hud->draw();
+    for (auto const e : *m_enemies) {
+        auto enemy = e.lock();
+        if (enemy) {
+            enemy->drawHud();
+        }
+    }
 }
 
 void StateGame::endGame()
