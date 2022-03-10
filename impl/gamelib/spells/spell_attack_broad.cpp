@@ -32,8 +32,9 @@ void SpellAttackBroad::doTrigger()
         auto const projectileVelocity = jt::MathHelper::rotateBy(playerVelocity, a - 45.0f);
         jt::Vector2f const projectilePosition { playerPosition.x + projectileVelocity.x * 23.0f,
             playerPosition.y + projectileVelocity.y * 23.0f };
-        m_state.spawnBroadProjectile(projectilePosition, projectileVelocity);
+        m_state.spawnSnipeProjectile(projectilePosition,
+            projectileVelocity * GP::SpellBroadProjectileSpeed(),
+            Damage { GP::SpellBroadProjectileDamage()
+                * m_state.getPlayer()->getCharSheet()->getMagicDamageFactor() });
     }
-
-    // TODO: Knockback.
 }

@@ -65,6 +65,9 @@ public:
     static float LevelUpMovementSpeedIncrease();
     static float LevelUpAttackDamageIncrease();
     static float TileSizeInPixel();
+    static float LevelUpMagicDamageIncrease();
+    static float SpellSnipeProjectileDamage();
+    static float SpellBroadProjectileDamage();
 };
 
 #endif

@@ -34,8 +34,10 @@ float GP::ExperienceOrbPickupDistance() { return 22.0f; }
 float GP::ExperienceOrbAttractDistance() { return 36.0f; }
 
 float GP::SpellSnipeProjectileSpeed() { return 250.0f; }
+float GP::SpellSnipeProjectileDamage() { return 200.0f; }
 int GP::SpellSnipeExpCosts() { return 10; }
 float GP::SpellBroadProjectileSpeed() { return 160.0f; }
+float GP::SpellBroadProjectileDamage() { return 80.0; }
 int GP::SpellBroadExpCosts() { return 20; }
 
 int GP::LootExperienceSmallAmount() { return 15; }
@@ -49,4 +51,6 @@ float GP::EnemyShotDamage() { return 10.0f; }
 float GP::LevelUpHealthIncrease() { return 7.0f; }
 float GP::LevelUpMovementSpeedIncrease() { return 0.035f; }
 float GP::LevelUpAttackDamageIncrease() { return 4.0f; }
+float GP::LevelUpMagicDamageIncrease() { return 4.0f; }
+
 float GP::TileSizeInPixel() { return 16.0f; }

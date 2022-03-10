@@ -39,6 +39,7 @@ public:
     float getDashFactor() const;
     float getArmorReductionValue() const;
     int getExpBoostValue() const;
+    float getMagicDamageFactor() const;
 
     void setMovementSpeedFactor(std::string const& identifier, float value);
     void setAttackSpeedFactor(std::string const& identifier, float value);
@@ -46,6 +47,7 @@ public:
     void setDashFactor(std::string const& identifier, float value);
     void setArmorReductionValue(std::string const& identifier, float value);
     void setExpBoostValue(std::string const&, int value);
+    void setMagicDamageFactor(std::string const&, float value);
 
 private:
     CharSheetObservers m_observers;
@@ -56,6 +58,7 @@ private:
     std::map<std::string, float> m_dashFactorsAdditive;
     std::map<std::string, float> m_armorReductionValueAdditive;
     std::map<std::string, int> m_ExperienceBoostAdditive;
+    std::map<std::string, float> m_magicDamageFactorsAdditive;
 
     mutable float m_baseMovementSpeed { 1.0f };
     mutable float m_baseDashSpeed { 1.0f };
@@ -64,6 +67,7 @@ private:
     mutable int m_baseExperienceBoost { 0 };
 
     mutable float m_armorReductionValue { 0.0f };
+    mutable float m_baseMagicDamageFactor { 1.0f };
 
     mutable float m_hitpoints { 100.0f };
     mutable float m_hitpointsMax { 100.0f };

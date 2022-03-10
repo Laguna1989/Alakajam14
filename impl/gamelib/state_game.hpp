@@ -51,8 +51,8 @@ public:
 
     std::shared_ptr<Hud> m_hud;
 
-    void spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
-    void spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity);
+    void spawnSnipeProjectile(
+        jt::Vector2f const& position, jt::Vector2f const& velocity, Damage const& damage);
 
     void spawnCrystalProjectile(
         jt::Vector2f const& position, jt::Vector2f const& velocity, bool isBoss) override;

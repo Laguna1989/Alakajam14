@@ -21,7 +21,7 @@ public:
 private:
     std::shared_ptr<jt::Animation> m_animation;
     float m_rotation { 0.0f };
-    Damage m_damage;
+    Damage m_damage { 1.0f };
 };
 
 #endif // ALAKAJAM14_SNIPE_PROJECTILE_HPP

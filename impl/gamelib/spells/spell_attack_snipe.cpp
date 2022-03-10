@@ -25,7 +25,10 @@ void SpellAttackSnipe::doTrigger()
     auto const projectileVelocity = playerVelocity;
 
     jt::Vector2f const projectilePosition { playerPosition.x, playerPosition.y };
-    m_state.spawnSnipeProjectile(projectilePosition, projectileVelocity);
+    m_state.spawnSnipeProjectile(projectilePosition,
+        projectileVelocity * GP::SpellSnipeProjectileSpeed(),
+        Damage { GP::SpellSnipeProjectileDamage()
+            * m_state.getPlayer()->getCharSheet()->getMagicDamageFactor() });
 
     // TODO: Knockback.
 }

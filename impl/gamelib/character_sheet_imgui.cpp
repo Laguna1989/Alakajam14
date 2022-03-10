@@ -115,6 +115,23 @@ void CharacterSheetImgui::doDraw() const
             }
         }
     }
+
+    ImGui::Text("Spell damage factor: %s",
+        jt::MathHelper::floatToStringWithXDigits(getMagicDamageFactor(), 2).c_str());
+    ImGui::SameLine();
+    {
+        std::string const increaseMagicDamageText = "+"
+            + jt::MathHelper::floatToStringWithXDigits(GP::LevelUpMagicDamageIncrease(), 2)
+            + "% (cost: " + std::to_string(getNextLevelUpCost()) + " XP)";
+        if (ImGui::Button(increaseMagicDamageText.c_str())) {
+            if (m_experiencePoints >= getNextLevelUpCost()) {
+                changeExperiencePoints(-getNextLevelUpCost());
+                m_baseMagicDamageFactor += GP::LevelUpMagicDamageIncrease() / 100.0f;
+                m_numberOfLevelUps++;
+            }
+        }
+    }
+
     ImGui::Separator();
     ImGui::Text("Armor Damage reduction %s",
         jt::MathHelper::floatToStringWithXDigits(getArmorReductionValue(), 2).c_str());
@@ -227,6 +244,11 @@ void CharacterSheetImgui::setExpBoostValue(std::string const& identifier, int va
     m_ExperienceBoostAdditive[identifier] = value;
 }
 
+void CharacterSheetImgui::setMagicDamageFactor(std::string const& identifier, float value)
+{
+    m_magicDamageFactorsAdditive[identifier] = value;
+}
+
 float CharacterSheetImgui::getArmorReductionValue() const
 {
     float v = 0.0f;
@@ -239,10 +261,19 @@ float CharacterSheetImgui::getArmorReductionValue() const
 
 int CharacterSheetImgui::getExpBoostValue() const
 {
-    int v = 0.0f;
+    int v = 0;
 
     for (auto const& kvp : m_ExperienceBoostAdditive) {
         v += kvp.second;
     }
     return m_baseExperienceBoost + v;
+}
+float CharacterSheetImgui::getMagicDamageFactor() const
+{
+    float v = 0.0f;
+
+    for (auto const& kvp : m_magicDamageFactorsAdditive) {
+        v += kvp.second;
+    }
+    return m_baseMagicDamageFactor + v;
 }

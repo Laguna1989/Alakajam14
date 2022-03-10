@@ -509,7 +509,8 @@ void StateGame::spawnOneExperienceOrb(jt::Vector2f const& pos, int value)
     m_experienceOrbs->push_back(e);
 }
 
-void StateGame::spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity)
+void StateGame::spawnSnipeProjectile(
+    jt::Vector2f const& position, jt::Vector2f const& velocity, Damage const& damage)
 {
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
@@ -518,8 +519,9 @@ void StateGame::spawnSnipeProjectile(jt::Vector2f const& position, jt::Vector2f 
     bodyDef.position.Set(position.x, position.y);
 
     auto projectile = std::make_shared<SnipeProjectile>(m_world, &bodyDef);
-    projectile->setVelocity(velocity * GP::SpellSnipeProjectileSpeed());
+    projectile->setVelocity(velocity);
     projectile->setRotation(atan2(-velocity.y, velocity.x) * 180 / 3.1415f);
+    projectile->setDamage(damage);
 
     m_snipeProjectiles->push_back(projectile);
     add(projectile);
@@ -555,21 +557,6 @@ std::shared_ptr<jt::ObjectGroup<SnipeProjectile>> StateGame::getSnipeProjectiles
 std::shared_ptr<jt::ObjectGroup<CrystalProjectile>> StateGame::getCrystalProjectiles() const
 {
     return m_crystalProjectiles;
-}
-
-void StateGame::spawnBroadProjectile(jt::Vector2f const& position, jt::Vector2f const& velocity)
-{
-    b2BodyDef bodyDef;
-    bodyDef.fixedRotation = true;
-    bodyDef.type = b2_dynamicBody;
-
-    bodyDef.position.Set(position.x, position.y);
-
-    auto projectile = std::make_shared<SnipeProjectile>(m_world, &bodyDef);
-    projectile->setVelocity(velocity * GP::SpellBroadProjectileSpeed());
-
-    m_snipeProjectiles->push_back(projectile);
-    add(projectile);
 }
 
 std::shared_ptr<Stairs> StateGame::getStairs() const { return m_stairs; }
