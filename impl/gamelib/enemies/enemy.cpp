@@ -43,7 +43,9 @@ void Enemy::doCreate()
     fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemies();
     fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
         | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
-
+    if (isBoss()) {
+        fixtureDef.density = 999999999.0f;
+    }
     getB2Body()->CreateFixture(&fixtureDef);
 
     for (auto const& aiInfo : m_info.ais) {
@@ -67,6 +69,7 @@ void Enemy::doCreate()
             followState->setPathCalculator(m_pathCalculator);
             getAiStateManager().registerState(aiInfo.name, followState);
         } else if (aiInfo.type == aiInfo.BOSS) {
+
             auto bossState = std::make_shared<AiStateBoss>();
             bossState->setTarget(m_target);
             bossState->setNextState(aiInfo.nextState);
