@@ -99,7 +99,7 @@ void Enemy::doCreate()
         m_bar->setIgnoreCamMovement(true);
         m_bar->setPosition(jt::Vector2f {
             GP::GetScreenSize().x - 200.0f - 8.0f, GP::GetScreenSize().y - 16.0f - 8.0f });
-        m_bar->setFrontColor(jt::Color { 163, 51, 255 });
+        m_bar->setFrontColor(jt::Color { 136, 14, 79 });
         m_bar->setBackColor(jt::Color { 20, 20, 20 });
     }
 }
