@@ -14,7 +14,7 @@ struct AnimationInfo {
 };
 
 struct AiInfo {
-    enum AiType { WAIT, FOLLOW, SHOOT, BOSS };
+    enum AiType { WAIT, FOLLOW, SHOOT, BOSS, BOSS_INJURED, BOSS_CRITICAL };
     std::string name { "" };
     std::string nextState { "" };
     AiType type;

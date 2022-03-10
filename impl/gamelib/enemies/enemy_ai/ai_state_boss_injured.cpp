@@ -1,11 +1,11 @@
-#include "ai_state_boss.hpp"
+#include "ai_state_boss_injured.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
 #include "projectile_spawner_interface.hpp"
 
-AiStateBoss::AiStateBoss() { }
+AiStateBossInjured::AiStateBossInjured() { }
 
-void AiStateBoss::update(float elapsed, Enemy* base)
+void AiStateBossInjured::update(float elapsed, Enemy* base)
 {
     if (calculateDistanceToTarget() >= 73984) {
         return;
@@ -26,11 +26,11 @@ void AiStateBoss::update(float elapsed, Enemy* base)
         }
     }
 }
-void AiStateBoss::setPathCalculator(WorldPathCalculatorInterface* pathCalculator)
+void AiStateBossInjured::setPathCalculator(WorldPathCalculatorInterface* pathCalculator)
 {
     //   m_follow.setPathCalculator(pathCalculator);
 }
-void AiStateBoss::setProjectileSpawner(ProjectileSpawnerInterface* spawner)
+void AiStateBossInjured::setProjectileSpawner(ProjectileSpawnerInterface* spawner)
 {
     m_projectileSpawner = spawner;
 }

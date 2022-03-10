@@ -3,6 +3,8 @@
 #include "audio/sound.hpp"
 #include "damage.hpp"
 #include "enemies/enemy_ai/ai_state_boss.hpp"
+#include "enemies/enemy_ai/ai_state_boss_critical.hpp"
+#include "enemies/enemy_ai/ai_state_boss_injured.hpp"
 #include "enemies/enemy_ai/ai_state_follow_target.hpp"
 #include "enemies/enemy_ai/ai_state_shooter.hpp"
 #include "enemies/enemy_ai/ai_state_wait_for_target.hpp"
@@ -70,6 +72,18 @@ void Enemy::doCreate()
             getAiStateManager().registerState(aiInfo.name, followState);
         } else if (aiInfo.type == aiInfo.BOSS) {
             auto bossState = std::make_shared<AiStateBoss>();
+            bossState->setTarget(m_target);
+            bossState->setPathCalculator(m_pathCalculator);
+            bossState->setProjectileSpawner(m_projectileSpawner);
+            getAiStateManager().registerState(aiInfo.name, bossState);
+        } else if (aiInfo.type == aiInfo.BOSS_INJURED) {
+            auto bossState = std::make_shared<AiStateBossInjured>();
+            bossState->setTarget(m_target);
+            bossState->setPathCalculator(m_pathCalculator);
+            bossState->setProjectileSpawner(m_projectileSpawner);
+            getAiStateManager().registerState(aiInfo.name, bossState);
+        } else if (aiInfo.type == aiInfo.BOSS_CRITICAL) {
+            auto bossState = std::make_shared<AiStateBossCritical>();
             bossState->setTarget(m_target);
             bossState->setPathCalculator(m_pathCalculator);
             bossState->setProjectileSpawner(m_projectileSpawner);

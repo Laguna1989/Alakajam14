@@ -1,62 +1,74 @@
 {
-    "ais": [
-        {
-            "name": "boss",
-            "nextState": "boss",
-            "range": 9999999.0,
-            "type": 3
-        }
-    ],
-    "animations": [
-        {
-            "animationName": "idle",
-            "fileName": "assets/pinky_idle.png",
-            "frameIndices": [
-                0,
-                1,
-                2,
-                3,
-                4,
-				5
-            ],
-            "frameTimeInSeconds": 0.1,
-            "imageSizeX": 128,
-            "imageSizeY": 128
-        },
-        {
-            "animationName": "shoot",
-            "fileName": "assets/pinky_shoot.png",
-            "frameIndices": [
-                0,
-                1,
-                2,
-                3
-            ],
-            "frameTimeInSeconds": 0.1,
-            "imageSizeX": 128,
-            "imageSizeY": 128
-        },
-        {
-            "animationName": "dead",
-            "fileName": "assets/pinky_dead.png",
-            "frameIndices": [
-                0,
-                1,
-                2,
-                3,
-				4,
-				5,
-				6
-            ],
-            "frameTimeInSeconds": 0.1,
-            "imageSizeX": 128,
-            "imageSizeY": 128
-        }
-    ],
-    "closeCombatDamage": 110.0,
-    "colliderRadius": 18.0,
-    "experience": 5,
-    "hitpoints": 2500.0,
-    "movementSpeed": 20.0,
-	"isBoss": true
+  "ais": [
+    {
+      "name": "boss",
+      "nextState": "boss_injured",
+      "range": 9999999.0,
+      "type": 3
+    },
+    {
+      "name": "boss_injured",
+      "nextState": "boss_critcal",
+      "range": 9999999.0,
+      "type": 4
+    },
+    {
+      "name": "boss_critcal",
+      "nextState": "boss_critcal",
+      "range": 9999999.0,
+      "type": 5
+    }
+  ],
+  "animations": [
+    {
+      "animationName": "idle",
+      "fileName": "assets/pinky_idle.png",
+      "frameIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "frameTimeInSeconds": 0.1,
+      "imageSizeX": 128,
+      "imageSizeY": 128
+    },
+    {
+      "animationName": "shoot",
+      "fileName": "assets/pinky_shoot.png",
+      "frameIndices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frameTimeInSeconds": 0.1,
+      "imageSizeX": 128,
+      "imageSizeY": 128
+    },
+    {
+      "animationName": "dead",
+      "fileName": "assets/pinky_dead.png",
+      "frameIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "frameTimeInSeconds": 0.1,
+      "imageSizeX": 128,
+      "imageSizeY": 128
+    }
+  ],
+  "closeCombatDamage": 110.0,
+  "colliderRadius": 18.0,
+  "experience": 5,
+  "hitpoints": 2500.0,
+  "movementSpeed": 20.0,
+  "isBoss": true
 }
