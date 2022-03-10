@@ -16,7 +16,9 @@ public:
 private:
     ProjectileSpawnerInterface* m_projectileSpawner { nullptr };
     float m_shootTimer { -1.0f };
+    bool m_oddShot { false };
     std::string m_nextState = { "" };
+    void checkForStateSwitch(Enemy* base);
 };
 
 #endif // ALAKAJAM14_AI_STATE_BOSS_INJURED_HPP

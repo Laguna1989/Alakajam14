@@ -22,7 +22,6 @@ void AiStateBoss::checkForStateSwitch(Enemy* base)
     float const currentHitpoints = base->getHitpoints();
     float const maxHitpoints = base->getInfo().hitpoints;
 
-    std::cout << "hp: " << currentHitpoints << " " << maxHitpoints << std::endl;
     if (currentHitpoints <= maxHitpoints * 0.66f) {
         base->getAiStateManager().switchToState(m_nextState);
     }
