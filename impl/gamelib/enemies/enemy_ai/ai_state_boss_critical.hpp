@@ -16,6 +16,7 @@ public:
 private:
     ProjectileSpawnerInterface* m_projectileSpawner { nullptr };
     float m_shootTimer { -1.0f };
+    float m_currentAngle { 0.0f };
     std::string m_nextState = { "" };
 };
 
