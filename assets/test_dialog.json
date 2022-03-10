@@ -24,7 +24,7 @@
             "options": [
 				{
                     "next": "end",
-                    "spell": "Heal",
+                    "spell": "small Heal",
                     "text": "Correct"
                 },
                 {

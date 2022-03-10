@@ -19,6 +19,7 @@ std::uint16_t GP::PhysicsCollisionCategoryEnemies() { return 0x0004; }
 std::uint16_t GP::PhysicsCollisionCategoryPlayerShots() { return 0x0008; }
 std::uint16_t GP::PhysicsCollisionCategoryEnemyShots() { return 0x0010; }
 std::uint16_t GP::PhysicsCollisionCategoryExperienceOrbs() { return 0x0020; }
+std::uint16_t GP::PhysicsCollisionCategoryHealingPotions() { return 0x0040; }
 
 jt::Vector2f GP::PlayerSize() { return jt::Vector2f { 16.0f, 16.0f }; }
 float GP::PlayerBaseMovementSpeed() { return 55.0f; }
@@ -54,3 +55,5 @@ float GP::LevelUpAttackDamageIncrease() { return 4.0f; }
 float GP::LevelUpMagicDamageIncrease() { return 4.0f; }
 
 float GP::TileSizeInPixel() { return 16.0f; }
+float GP::HealingPotionAmount() { return 15.0f; }
+const float GP::HealingPotionPickupDistance() { return GP::ExperienceOrbPickupDistance(); }
