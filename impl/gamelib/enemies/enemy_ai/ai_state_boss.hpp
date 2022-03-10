@@ -13,8 +13,7 @@ public:
     void setProjectileSpawner(ProjectileSpawnerInterface* spawner);
 
 private:
-    AiStateShooter m_shooter;
-    AiStateFollowTarget m_follow;
+    ProjectileSpawnerInterface* m_projectileSpawner { nullptr };
 };
 
 #endif // ALAKAJAM14_AI_STATE_BOSS_HPP
