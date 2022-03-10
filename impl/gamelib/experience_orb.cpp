@@ -18,11 +18,12 @@ ExperienceOrb::ExperienceOrb(std::shared_ptr<jt::Box2DWorldInterface> world, b2B
 
 void ExperienceOrb::doCreate()
 {
-    m_animation->add("assets/shards_red.png", "idle1", { 16, 16 }, { 0, 1, 2, 3 }, 0.2f,
+    float const frameTime = jt::Random::getFloat(0.18f, 0.22f);
+    m_animation->add("assets/shards_red.png", "idle1", { 16, 16 }, { 0, 1, 2, 3 }, frameTime,
         getGame()->gfx().textureManager());
-    m_animation->add("assets/shards_green.png", "idle2", { 16, 16 }, { 0, 1, 2, 3 }, 0.2f,
+    m_animation->add("assets/shards_green.png", "idle2", { 16, 16 }, { 0, 1, 2, 3 }, frameTime,
         getGame()->gfx().textureManager());
-    m_animation->add("assets/shards_blue.png", "idle3", { 16, 16 }, { 0, 1, 2, 3 }, 0.2f,
+    m_animation->add("assets/shards_blue.png", "idle3", { 16, 16 }, { 0, 1, 2, 3 }, frameTime,
         getGame()->gfx().textureManager());
 
     std::string animName = "idle" + std::to_string(jt::Random::getInt(2, 3));
