@@ -45,7 +45,7 @@ int GP::LootExperienceSmallAmount() { return 15; }
 int GP::LootExperienceMediumAmount() { return 35; }
 int GP::LootExperienceLargeAmount() { return 75; }
 
-float GP::EnemyShotSpeed() { return 175.0f; }
+float GP::EnemyShotSpeed() { return 125.0f; }
 float GP::EnemyShotTimer() { return 1.2f; }
 float GP::EnemyShotDamage() { return 10.0f; }
 

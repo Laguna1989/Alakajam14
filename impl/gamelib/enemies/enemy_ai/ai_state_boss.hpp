@@ -14,6 +14,7 @@ public:
 
 private:
     ProjectileSpawnerInterface* m_projectileSpawner { nullptr };
+    float m_shootTimer { -1.0f };
 };
 
 #endif // ALAKAJAM14_AI_STATE_BOSS_HPP
