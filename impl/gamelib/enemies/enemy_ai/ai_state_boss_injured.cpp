@@ -23,8 +23,10 @@ void AiStateBossInjured::update(float elapsed, Enemy* base)
         auto const angleIncrement = 360.0f / numberOfShots;
         auto const oddOffset = angleIncrement / 2.0f;
         for (auto i = 0U; i != numberOfShots; ++i) {
-            float angle
-                = jt::MathHelper::deg2rad(angleIncrement * i + m_oddShot ? oddOffset : 0.0f);
+            float currentAngle = angleIncrement * i;
+            float currentAngleOffset = m_oddShot ? oddOffset : 0.0f;
+
+            float angle = jt::MathHelper::deg2rad(currentAngle + currentAngleOffset);
             jt::Vector2f velocity { sin(angle), cos(angle) };
             m_projectileSpawner->spawnCrystalProjectile(pos, velocity * GP::EnemyShotSpeed(), true);
         }
