@@ -19,6 +19,7 @@ private:
     bool m_oddShot { false };
     std::string m_nextState = { "" };
     void checkForStateSwitch(Enemy* base);
+    void handleShooting(float elapsed);
 };
 
 #endif // ALAKAJAM14_AI_STATE_BOSS_INJURED_HPP

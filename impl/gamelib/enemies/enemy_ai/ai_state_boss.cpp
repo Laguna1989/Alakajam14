@@ -11,7 +11,7 @@ void AiStateBoss::update(float elapsed, Enemy* base)
     if (calculateDistanceToTarget() >= 73984) {
         return;
     }
-
+    base->setPosition(jt::Vector2f { 2238, 2208 });
     handleShooting(elapsed);
 
     checkForStateSwitch(base);

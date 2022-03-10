@@ -8,13 +8,13 @@
     },
     {
       "name": "boss_injured",
-      "nextState": "boss_critcal",
+      "nextState": "boss_critical",
       "range": 9999999.0,
       "type": 4
     },
     {
-      "name": "boss_critcal",
-      "nextState": "boss_critcal",
+      "name": "boss_critical",
+      "nextState": "boss_critical",
       "range": 9999999.0,
       "type": 5
     }
