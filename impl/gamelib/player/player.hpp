@@ -71,6 +71,9 @@ private:
     std::function<void(jt::Vector2f)> m_attackCallback;
 
     std::vector<std::shared_ptr<bool>> m_commands;
+
+    float m_hurtResetAnimationTimer { -1.0f };
+
     void doCreate() override;
     void doUpdate(float const /*elapsed*/) override;
     void doDraw() const override;

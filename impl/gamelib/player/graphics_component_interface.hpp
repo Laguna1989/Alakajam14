@@ -14,6 +14,8 @@ public:
     virtual bool setAnimationIfNotSet(std::string const& newAnimationName) = 0;
     virtual void setPlayerAnimationLooping(bool isLooping) = 0;
     virtual void setUnderlayAnimation(std::string const& animationName) = 0;
+
+    virtual std::string getCurrentAnimation() const = 0;
 };
 
 #endif // ALAKAJAM14_GRAPHICS_COMPONENT_INTERFACE_HPP

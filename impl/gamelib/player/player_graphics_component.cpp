@@ -33,7 +33,7 @@ void PlayerGraphicsComponent::createAnimation(jt::TextureManagerInterface& textu
         m_animation->add("assets/player.png", "hurt",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
                 static_cast<unsigned int>(GP::PlayerSize().y) },
-            { 37, 38, 39, 40 }, 0.15f, textureManager);
+            { 37, 38, 39, 40 }, 0.075f, textureManager);
 
         m_animation->add("assets/player.png", "die",
             jt::Vector2u { static_cast<unsigned int>(GP::PlayerSize().x),
@@ -174,4 +174,8 @@ void PlayerGraphicsComponent::setPlayerAnimationLooping(bool isLooping)
 void PlayerGraphicsComponent::setUnderlayAnimation(std::string const& animationName)
 {
     m_attackUnderlay->play(animationName, 0, true);
+}
+std::string PlayerGraphicsComponent::getCurrentAnimation() const
+{
+    return m_animation->getCurrentAnimationName();
 }

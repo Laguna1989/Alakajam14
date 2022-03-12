@@ -19,6 +19,8 @@ public:
     void setPlayerAnimationLooping(bool isLooping) override;
     void setUnderlayAnimation(std::string const& animationName) override;
 
+    std::string getCurrentAnimation() const override;
+
 private:
     void createAnimation(jt::TextureManagerInterface& textureManager);
     std::shared_ptr<jt::Animation> m_animation;
