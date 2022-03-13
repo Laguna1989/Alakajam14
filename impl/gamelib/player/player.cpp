@@ -78,6 +78,13 @@ void Player::doUpdate(float const elapsed)
             m_input->updateAttack(*this);
         }
         m_input->updateSpells(*this);
+
+        if (m_graphics->getCurrentAnimation() == "hurt") {
+            m_hurtResetAnimationTimer -= elapsed;
+            if (m_hurtResetAnimationTimer <= 0) {
+                m_graphics->setAnimationIfNotSet("down");
+            }
+        }
     } else {
         setVelocity(jt::Vector2f { 0.0f, 0.0f });
     }
@@ -220,6 +227,7 @@ void Player::receiveDamage(Damage const& dmg)
     m_charsheet->changeHitpoints(dmg.value);
     m_graphics->setAnimationIfNotSet("hurt");
     m_audio->play(SoundComponentInterface::SoundId::HURT);
+    m_hurtResetAnimationTimer = 0.525f;
 }
 
 void Player::healBy(int healedHp)

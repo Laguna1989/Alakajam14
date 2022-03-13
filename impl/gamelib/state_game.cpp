@@ -62,6 +62,11 @@ void camFollowObject(jt::CamInterface& cam, jt::Vector2f const& windowSize,
             cam.move(jt::Vector2f { 0.0f, moveSpeed } * elapsed);
         }
     }
+
+    auto ofs = cam.getCamOffset();
+    ofs.x = jt::MathHelper::clamp(ofs.x, 0.0f, 2464.0f - 400.0f);
+    ofs.y = jt::MathHelper::clamp(ofs.y, 0.0f, 2374.0f - 300.0f);
+    cam.setCamOffset(ofs);
 }
 } // namespace
 
