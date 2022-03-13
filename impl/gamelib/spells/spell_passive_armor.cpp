@@ -6,4 +6,4 @@ SpellPassiveArmor::SpellPassiveArmor(CharacterSheetImgui& sheet)
 
 void SpellPassiveArmor::onEquip() { m_charSheet.setArmorReductionValue("spell", 2.0f); }
 void SpellPassiveArmor::onUnEquip() { m_charSheet.setArmorReductionValue("spell", 0.0f); }
-std::string SpellPassiveArmor::getName() const { return "armor reduction"; }
+std::string SpellPassiveArmor::getName() const { return "Passive: Improved Armor"; }

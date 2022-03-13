@@ -12,7 +12,7 @@ SpellAttackBroad::SpellAttackBroad(StateGame& state)
 
 int SpellAttackBroad::getExperienceCost() const { return GP::SpellBroadExpCosts(); }
 
-std::string SpellAttackBroad::getName() const { return "Broad Stroke"; }
+std::string SpellAttackBroad::getName() const { return "Spore Spread"; }
 
 void SpellAttackBroad::doTrigger()
 {

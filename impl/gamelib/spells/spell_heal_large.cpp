@@ -24,4 +24,4 @@ void SpellHealLarge::update(float elapsed) { m_cooldown -= elapsed; }
 int SpellHealLarge::getExperienceCost() const { return 35; }
 void SpellHealLarge::onEquip() { }
 void SpellHealLarge::onUnEquip() { }
-std::string SpellHealLarge::getName() const { return "large Heal"; }
+std::string SpellHealLarge::getName() const { return "Rejuvenate"; }

@@ -24,4 +24,4 @@ void SpellHealSmall::update(float elapsed) { m_cooldown -= elapsed; }
 int SpellHealSmall::getExperienceCost() const { return 15; }
 void SpellHealSmall::onEquip() { }
 void SpellHealSmall::onUnEquip() { }
-std::string SpellHealSmall::getName() const { return "small Heal"; }
+std::string SpellHealSmall::getName() const { return "Mend Wounds"; }
