@@ -6,10 +6,13 @@
 #include <map>
 #include <vector>
 
+class AudioEventQueue;
+
 namespace jt {
 class AudioImpl : public AudioInterface {
 public:
-    ~AudioImpl();
+    AudioImpl();
+    ~AudioImpl() override;
 
     void update() override;
 
@@ -26,8 +29,12 @@ public:
 
     oalpp::SoundContextInterface& getContext() override;
 
+    void playSound(AudioPlayEvent const& event) override;
+
 private:
     oalpp::SoundContext m_context;
+
+    std::unique_ptr<AudioEventQueue> m_audioEventQueue { nullptr };
 
     std::vector<std::weak_ptr<SoundInterface>> m_temporarySounds {};
     std::map<std::string, std::shared_ptr<SoundInterface>> m_permanentSounds {};

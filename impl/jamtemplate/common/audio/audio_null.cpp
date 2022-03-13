@@ -21,5 +21,6 @@ std::shared_ptr<SoundInterface> AudioNull::getPermanentSound(std::string const& 
 }
 
 void AudioNull::removePermanentSound(std::string const& identifier) { }
+void AudioNull::playSound(AudioPlayEvent const& event) { }
 
 } // namespace jt

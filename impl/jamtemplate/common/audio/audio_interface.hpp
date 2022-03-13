@@ -1,6 +1,7 @@
 #ifndef GUARD_JAMTEMPLATE_AUDIO_INTERFACE_HPP
 #define GUARD_JAMTEMPLATE_AUDIO_INTERFACE_HPP
 
+#include "audio_play_event.hpp"
 #include "oalpp/sound_context/sound_context_interface.hpp"
 #include "sound.hpp"
 #include "sound_interface.hpp"
@@ -50,6 +51,8 @@ public:
     /// Get the SoundContext
     /// \return the SoundContextInterface
     virtual oalpp::SoundContextInterface& getContext() = 0;
+
+    virtual void playSound(AudioPlayEvent const& event) = 0;
 
     // TODO add group functionality
 protected:

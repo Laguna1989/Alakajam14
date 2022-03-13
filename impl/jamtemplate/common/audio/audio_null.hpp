@@ -27,6 +27,7 @@ public:
     std::shared_ptr<SoundInterface> getPermanentSound(std::string const& identifier) override;
 
     void removePermanentSound(std::string const& identifier) override;
+    void playSound(AudioPlayEvent const& event) override;
 
 private:
     null_objects::SoundContextNull m_context;

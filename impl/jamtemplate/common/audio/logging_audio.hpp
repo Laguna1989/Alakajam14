@@ -23,6 +23,8 @@ public:
 
     oalpp::SoundContextInterface& getContext() override;
 
+    void playSound(AudioPlayEvent const& event) override;
+
 private:
     AudioInterface& m_decoratee;
     LoggerInterface& m_logger;

@@ -1,9 +1,11 @@
 #include "audio_impl.hpp"
+#include "audio_event_queue.hpp"
 #include "random/random.hpp"
-#include "sound.hpp"
 #include <algorithm>
 
 namespace jt {
+
+AudioImpl::AudioImpl() { m_audioEventQueue = std::make_unique<AudioEventQueue>(); }
 
 AudioImpl::~AudioImpl() { m_temporarySounds.clear(); }
 
@@ -20,6 +22,8 @@ void AudioImpl::update()
     for (auto& snd : m_permanentSounds) {
         snd.second->update();
     }
+
+    m_audioEventQueue->update();
 }
 void AudioImpl::cleanUpUnusedSounds()
 {
@@ -69,5 +73,7 @@ std::shared_ptr<SoundInterface> AudioImpl::soundPool(std::string const& baseIden
     }
     return snd;
 }
+
+void AudioImpl::playSound(AudioPlayEvent const& event) { m_audioEventQueue->addEvent(event); }
 
 } // namespace jt

@@ -41,4 +41,6 @@ std::shared_ptr<SoundInterface> LoggingAudio::soundPool(std::string const& baseI
     return m_decoratee.soundPool(baseIdentifier, function, count);
 }
 
+void LoggingAudio::playSound(AudioPlayEvent const& event) { m_decoratee.playSound(event); }
+
 } // namespace jt

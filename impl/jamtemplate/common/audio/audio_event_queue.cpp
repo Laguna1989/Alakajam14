@@ -1,15 +1,16 @@
 #include "audio_event_queue.hpp"
 #include "sound.hpp"
-void AudioEventQueue::update(float elapsed)
+
+void AudioEventQueue::update()
 {
     checkForNewEvents();
-    updateSounds(elapsed);
+    updateSounds();
 }
 
-void AudioEventQueue::updateSounds(float elapsed)
+void AudioEventQueue::updateSounds()
 {
     for (auto& kvp : m_sounds) {
-        kvp.second->update(elapsed);
+        kvp.second->update();
     }
 }
 
@@ -27,3 +28,5 @@ void AudioEventQueue::checkForNewEvents()
         m_sounds[fileName]->play();
     }
 }
+
+void AudioEventQueue::addEvent(AudioPlayEvent const& event) { m_buffer.push_back(event); }
