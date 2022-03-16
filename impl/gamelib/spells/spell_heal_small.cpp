@@ -21,7 +21,7 @@ bool SpellHealSmall::canTrigger() const
     return m_cooldown <= 0.0f && hasLessThanFullHitpoints;
 }
 void SpellHealSmall::update(float elapsed) { m_cooldown -= elapsed; }
-int SpellHealSmall::getExperienceCost() const { return 15; }
+int SpellHealSmall::getExperienceCost() const { return 20; }
 void SpellHealSmall::onEquip() { }
 void SpellHealSmall::onUnEquip() { }
 std::string SpellHealSmall::getName() const { return "Mend Wounds"; }

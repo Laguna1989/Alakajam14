@@ -44,7 +44,7 @@ SpellBook::SpellBook(StateGame& state)
     m_spells.push_back(std::make_shared<SpellAttackBroad>(state));
     m_spells.push_back(std::make_shared<SpellHealSmall>(*state.getPlayer()->getCharSheet()));
     m_spells.push_back(std::make_shared<SpellHealLarge>(*state.getPlayer()->getCharSheet()));
-    
+
     m_spells.push_back(
         std::make_shared<SpellPassiveAttackDamage>(*state.getPlayer()->getCharSheet()));
     m_spells.push_back(std::make_shared<SpellPassiveExpBoost>(*state.getPlayer()->getCharSheet()));
