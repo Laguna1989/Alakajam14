@@ -44,6 +44,9 @@ void Key::doUpdate(const float elapsed)
 
         m_sprite->setColor(jt::colors::Transparent);
     }
+
+    m_soundPickup->update();
+    m_soundDoorUnlock->update();
 }
 
 void Key::doDraw() const { m_sprite->draw(getGame()->gfx().target()); }
