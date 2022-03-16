@@ -62,11 +62,11 @@ void StateMenu::createMenuText()
 void StateMenu::createTextCredits()
 {
     m_text_Credits = jt::dh::createText(getGame()->gfx().target(),
-        "Created by " + GP::AuthorName() + "for " + GP::JamName() + "\n" + GP::JamDate()
+        "Created by " + GP::AuthorName() + "for " + GP::JamName() + ", " + GP::JamDate()
             + "\n\nF9 for License Information",
         10U, GP::getPalette().getColor(4));
     m_text_Credits->setTextAlign(jt::Text::TextAlign::LEFT);
-    m_text_Credits->setPosition({ 10, GP::GetScreenSize().y - 80 });
+    m_text_Credits->setPosition({ 10, GP::GetScreenSize().y - 65 });
     m_text_Credits->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 1, 1 });
 }
 
@@ -75,7 +75,7 @@ void StateMenu::createTextExplanation()
     float half_width = GP::GetScreenSize().x / 2;
     m_text_Explanation = jt::dh::createText(getGame()->gfx().target(),
         "Press Space to start the game", 16U, GP::getPalette().getColor(7));
-    m_text_Explanation->setPosition({ half_width, 100 });
+    m_text_Explanation->setPosition({ half_width, 150 });
     m_text_Explanation->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 3, 3 });
 
     m_text_Time
@@ -91,8 +91,16 @@ void StateMenu::createTextTitle()
     m_title = std::make_shared<jt::Animation>();
     m_title->add("assets/menu.png", "idle", { 224u, 32u }, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
         0.2f, getGame()->gfx().textureManager());
-    m_title->setPosition({ half_width - 224.0f / 2.0f, 20 });
+    m_title->setPosition({ half_width - 224.0f / 2.0f, 50 });
     m_title->play("idle");
+
+    m_logo = std::make_shared<jt::Animation>();
+    m_logo->add("assets/funky_logo_header.png", "idle", { 101, 15 },
+        jt::MathHelper::numbersBetween(0U, 10U), 0.15f, getGame()->gfx().textureManager());
+    m_logo->setPosition({ half_width, 40 });
+    m_logo->play("idle");
+    m_logo->setOrigin({ 50, 7 });
+    m_logo->setScale({ 3.0f, 3.0f });
 }
 
 void StateMenu::createTweens()
@@ -176,6 +184,7 @@ void StateMenu::updateDrawables(const float& elapsed)
 {
     m_background->update(elapsed);
     m_title->update(elapsed);
+    m_logo->update(elapsed);
     m_text_Explanation->update(elapsed);
     m_text_Credits->update(elapsed);
     m_text_Time->update(elapsed);
@@ -208,6 +217,7 @@ void StateMenu::doInternalDraw() const
 {
     m_background->draw(getGame()->gfx().target());
 
+    m_logo->draw(getGame()->gfx().target());
     m_title->draw(getGame()->gfx().target());
     m_text_Explanation->draw(getGame()->gfx().target());
     m_text_Credits->draw(getGame()->gfx().target());

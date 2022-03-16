@@ -5,6 +5,7 @@
 #include "oalpp/sound.hpp"
 #include "oalpp/sound_data.hpp"
 #include "sound_interface.hpp"
+#include <string>
 
 namespace jt {
 
@@ -39,6 +40,7 @@ public:
 private:
     oalpp::SoundData m_buffer;
     oalpp::Sound m_sound;
+    std::string m_fileName;
 
     float m_blend = 1.0f;
     float m_volume = 1.0f;

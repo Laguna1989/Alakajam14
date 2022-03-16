@@ -6,6 +6,7 @@ namespace jt {
 Sound::Sound(std::string const& fileName)
     : m_buffer { fileName }
     , m_sound { m_buffer }
+    , m_fileName { fileName }
 {
 }
 

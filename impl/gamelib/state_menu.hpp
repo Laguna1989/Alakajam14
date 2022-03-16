@@ -23,6 +23,7 @@ private:
     std::shared_ptr<jt::Shape> m_background;
 
     std::shared_ptr<jt::Animation> m_title;
+    std::shared_ptr<jt::Animation> m_logo;
 
     std::shared_ptr<jt::Text> m_text_Explanation;
     std::shared_ptr<jt::Text> m_text_Credits;

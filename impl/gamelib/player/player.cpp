@@ -40,7 +40,7 @@ void Player::doCreate()
     m_spellBook->setGameInstance(getGame());
     m_spellBook->create();
 
-    m_audio = std::make_unique<PlayerSoundComponent>(getGame()->audio());
+    m_audio = std::make_unique<PlayerSoundComponent>(getGame()->audio(), getGame()->getLogger());
 
     m_commands.push_back(getGame()->getActionCommandManager().registerTemporaryCommand(
         "learnspell", [this](std::vector<std::string> args) {
