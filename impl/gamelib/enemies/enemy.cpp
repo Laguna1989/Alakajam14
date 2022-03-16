@@ -102,6 +102,11 @@ void Enemy::doCreate()
         m_bar->setFrontColor(jt::Color { 136, 14, 79 });
         m_bar->setBackColor(jt::Color { 20, 20, 20 });
     }
+
+    m_soundHit = getGame()->audio().soundPool(
+        "enemy_hit",
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-001.ogg"); }, 5);
+    m_soundHit->setVolume(0.5f);
 }
 
 void Enemy::doUpdate(const float elapsed)
@@ -134,6 +139,8 @@ void Enemy::doUpdate(const float elapsed)
         m_bar->setCurrentValue(m_hitpoints);
         m_bar->update(elapsed);
     }
+
+    m_soundHit->update();
 }
 
 void Enemy::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
@@ -147,10 +154,11 @@ void Enemy::drawHud() const
     }
 }
 
-void Enemy::receiveDamage(const Damage& dmg)
+void Enemy::receiveDamage(Damage const& dmg)
 {
     // TODO visual candy
     m_animation->flash(0.2f, jt::Color { 163, 51, 255 });
+    m_soundHit->play();
 
     m_hitpoints -= dmg.value;
 

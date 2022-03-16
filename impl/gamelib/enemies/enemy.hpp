@@ -8,6 +8,7 @@
 #include "experience_spawner_interface.hpp"
 #include "target_interface.hpp"
 #include "world_path_calculator_interface.hpp"
+#include <memory>
 
 class StateGame;
 class ProjectileSpawnerInterface;
@@ -64,6 +65,8 @@ public:
 private:
     std::shared_ptr<jt::Animation> m_animation;
     std::shared_ptr<jt::Bar> m_bar;
+
+    std::shared_ptr<jt::SoundInterface> m_soundHit;
 
     AiStateManager m_aiStateManager;
     float m_staggeredTime { -1.0f };
