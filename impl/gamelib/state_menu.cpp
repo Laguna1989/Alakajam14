@@ -31,7 +31,7 @@ void StateMenu::doInternalCreate()
             GP::GetScreenSize(), getGame()->gfx().textureManager()));
 
     m_startSound = std::make_shared<jt::Sound>("assets/sound/main_menu_press_space.ogg");
-    m_startSound->setVolume(0.4f);
+    m_startSound->setVolume(0.2f);
 
     m_menuMusic = std::make_shared<jt::Sound>("assets/sound/alaka2022_title_menu_v1_loop.ogg");
     m_menuMusic->setLoop(true);
