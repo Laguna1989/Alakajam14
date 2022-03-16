@@ -36,5 +36,6 @@ float Sound::getBlend() const { return 1.0f - m_blend; }
 
 void Sound::setPitch(float pitch) { m_sound.setPitch(pitch); }
 float Sound::getPitch() const { return m_sound.getPitch(); }
+int Sound::getSampleRate() const { return m_buffer.getSampleRate(); }
 
 } // namespace jt
