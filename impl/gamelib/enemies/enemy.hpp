@@ -67,6 +67,7 @@ private:
     std::shared_ptr<jt::Bar> m_bar;
 
     std::shared_ptr<jt::SoundInterface> m_soundHit;
+    std::shared_ptr<jt::SoundInterface> m_soundShattering;
 
     AiStateManager m_aiStateManager;
     float m_staggeredTime { -1.0f };

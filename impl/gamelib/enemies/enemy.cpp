@@ -107,6 +107,12 @@ void Enemy::doCreate()
         "enemy_hit",
         []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-001.ogg"); }, 5);
     m_soundHit->setVolume(0.5f);
+
+    m_soundShattering = getGame()->audio().soundPool(
+        "enemy_shattering",
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_shattering_medium_1.ogg"); },
+        5);
+    m_soundShattering->setVolume(0.5f);
 }
 
 void Enemy::doUpdate(const float elapsed)
@@ -141,6 +147,7 @@ void Enemy::doUpdate(const float elapsed)
     }
 
     m_soundHit->update();
+    m_soundShattering->update();
 }
 
 void Enemy::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
@@ -177,6 +184,7 @@ void Enemy::die()
     }
 
     m_isInDieAnimation = true;
+    m_soundShattering->play();
     m_animation->play("dead");
     m_deathPosition = getPosition();
     // move collider out of the way
