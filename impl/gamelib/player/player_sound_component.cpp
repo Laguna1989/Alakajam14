@@ -7,16 +7,17 @@ PlayerSoundComponent::PlayerSoundComponent(jt::AudioInterface& audio, jt::Logger
 {
     m_soundDash = std::make_shared<jt::LoggingSound>(
         std::make_shared<jt::Sound>("assets/sound/attack_dash_3.ogg"), logger);
-    m_soundDash->setVolume(0.4f);
+    m_soundDash->setVolume(0.35f);
     audio.addTemporarySound(m_soundDash);
 
     m_soundStomp = std::make_shared<jt::LoggingSound>(
         std::make_shared<jt::Sound>("assets/sound/attack_stomp.ogg"), logger);
-    m_soundStomp->setVolume(0.4f);
+    m_soundStomp->setVolume(0.35f);
     audio.addTemporarySound(m_soundStomp);
 
     m_soundDeath = std::make_shared<jt::LoggingSound>(
         std::make_shared<jt::Sound>("assets/sound/GAME_OVER.ogg"), logger);
+    m_soundDeath->setVolume(0.35f);
     audio.addTemporarySound(m_soundDeath);
 
     auto const soundHurt1 = std::make_shared<jt::LoggingSound>(
@@ -30,11 +31,11 @@ PlayerSoundComponent::PlayerSoundComponent(jt::AudioInterface& audio, jt::Logger
     auto const soundHurt5 = std::make_shared<jt::LoggingSound>(
         std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_05.ogg"), logger);
 
-    soundHurt1->setVolume(0.6f);
-    soundHurt2->setVolume(0.6f);
-    soundHurt3->setVolume(0.6f);
-    soundHurt4->setVolume(0.6f);
-    soundHurt5->setVolume(0.6f);
+    soundHurt1->setVolume(0.3f);
+    soundHurt2->setVolume(0.3f);
+    soundHurt3->setVolume(0.3f);
+    soundHurt4->setVolume(0.3f);
+    soundHurt5->setVolume(0.3f);
 
     m_soundGroupHurt = std::make_shared<jt::SoundGroup>();
     m_soundGroupHurt->add(soundHurt1);
