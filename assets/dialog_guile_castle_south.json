@@ -31,7 +31,7 @@
 		{
 			"identifier": "snipe",
 			"lines": [
-				"Guy L'Guy: Don't forget to move while you shoot! Else, you might just shoot south!"
+				"Guy L'Guy: Don't forget to move while you shoot!\nElse, you might just shoot south!"
 			],
 			"options": [
 				{
@@ -211,7 +211,7 @@
 		{
 			"identifier": "angered",
 			"lines": [
-				"Guy L'Guy: No more questions! I was very specific about this point!"
+				"Guy L'Guy: No more questions!\nI was very specific about this point!"
 			],
 			"options": [
 				{
