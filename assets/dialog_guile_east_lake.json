@@ -1,0 +1,117 @@
+{
+    "dialog": [
+        {
+            "identifier": "intro",
+            "lines": [
+                "Guh-Aisle-Guh-Eye: Hail, young adventurer!\nI am Guh-Aisle-Guh-Eye, a helpful golden chanterelle!",
+				"Fungus McShroom: Guile! We've met before! Can't you remember?",
+				"Guh-Aisle-Guh-Eye: No, actually.\nIsn't Guile one of the castle dwellers?",
+				"Fungus McShroom: What did you call yourself again?",
+				"Guh-Aisle-Guh-Eye: GUH-AISLE-GUH-EYE!",
+				"Fungus McShroom: I'm sorry but you all sound the same to me.",
+				"Guh-Aisle-Guh-Eye: Must be the text color.\nAnyway, can I teach you a spell?"
+            ],
+            "options": [
+                {
+                    "next": "pass-dash",
+					"spell": "Passive: Improved Dash",
+                    "text": "I'd like to dash faster."
+                },
+				{
+                    "next": "pass-ad",
+					"spell": "Passive: Improved Attack Damage",
+                    "text": "I'd like to attack more powerfully."
+                }
+            ]
+        },
+		{
+			"identifier": "pass-dash",
+			"lines": [
+				"Fungus McShroom: I'd like to dash faster.",
+				"Guh-Aisle-Guh-Eye: Great choice! A precise dash can save your life!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "pass-ad",
+			"lines": [
+				"Fungus McShroom: I'd like to attack more powerfully.",
+				"Guh-Aisle-Guh-Eye: Great choice! A decisive bash can save your life!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+            "identifier": "entry",
+            "lines": [
+                "Guh-Aisle-Guh-Eye: Fungus McShroom, the one and only!\nWhat can I do for you?"
+            ],
+            "options": [
+				{
+                    "next": "name",
+                    "text": "How do you know my name?"
+                },
+				{
+                    "next": "where",
+                    "text": "Where are we?"
+                },
+				{
+                    "next": "same-name",
+                    "text": "Why do you all have the same name?"
+                }
+			]
+		},
+		{
+			"identifier": "name",
+			"lines": [
+				"Fungus McShroom: How do you know my name?",
+				"Guh-Aisle-Guh-Eye: Fungus, you're a celebrity around here!",
+				"Fungus McShroom: Really?",
+				"Guh-Aisle-Guh-Eye: No, but it's something you can\nsay that sounds trustworthy in such situations."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "where",
+			"lines": [
+				"Fungus McShroom: Where are we?",
+				"Guh-Aisle-Guh-Eye: We're east of Strawberry Milk Lake.",
+				"Guh-Aisle-Guh-Eye: There's the Minty Mountains directly to the north,\nbut they are really dangerous.",
+				"Guh-Aisle-Guh-Eye: Some say there's an ancient storage room somewhere inside."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "same-name",
+			"lines": [
+				"Fungus McShroom: Why do you all have the same name?",
+				"Guh-Aisle-Guh-Eye: I don't understand. My name is unique."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		}
+    ]
+}
