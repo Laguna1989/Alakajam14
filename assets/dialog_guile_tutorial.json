@@ -6,7 +6,7 @@
                 "Guile Guy: Hail, young adventurer!\nI am Guile Guy, a helpful golden chanterelle!",
 				"Guile Guy: Go find the key to the island on the lake\nand defeat the evil crystal king, Pinky!",
 				"Fungus McShroom: Hold on a minute!\nThat sounds awfully one-sided and needlessly violent!",
-				"Guile Guy: What do you mean?\nOnce you walk up to those evil crystals using WASD or the arrow keys...",
+				"Guile Guy: What do you mean?\nOnce you walk up to those evil crystals\nusing WASD or the arrow keys...",
 				"Fungus McShroom: What are \"arrow keys\"?",
 				"Guile Guy: ...and not press Space to attack,\nyou will see how one-sided and needlessly\nviolent Pinky's henchstones are!",
 				"Fungus McShroom: \"Henchstones\"? Really?",
@@ -92,7 +92,7 @@
 			"identifier": "cast",
 			"lines": [
 				"Fungus McShroom: How do I attack and cast spells?",
-				"Guile Guy: Perform your default spore attack by pressing space or numpad 0.",
+				"Guile Guy: Perform your default spore attack\nby pressing space or numpad 0.",
 				"Guile Guy: Cast spells 1, 2 or 3 with Q, E, Tab or your number keys.\nThe numpad works, too.",
 				"Guile Guy: Note that active spells cost experience.\nYou can gain experience by defeating enemies and picking up loot."
 			],
@@ -108,7 +108,8 @@
 			"lines": [
 				"Fungus McShroom: What else can I do?",
 				"Guile Guy: Open your spellbook by pressing L.\nYou can activate up to three spells.",
-				"Guile Guy: Passive spells are only active when chosen in the spell menu.",
+				"Guile Guy: Passive spells are only active\nwhen chosen in the spell menu.",
+				"Guily Guy: You can assign a spell to multiple slots,\nbut slotting the same passive spell multiple times\nwill not make its effect stack.",
 				"Guile Guy: Press C to open your character sheet.\nYou can upgrade your stats with experience here."
 			],
 			"options": [
@@ -168,8 +169,8 @@
 			"identifier": "where",
 			"lines": [
 				"Fungus McShroom: Where are we?",
-				"Guile Guy: We are in Castle Cakeworld, last bastion of the mushroom kingdom.",
-				"Guile Guy: You may find treasures, allies and medicine if you go yeast.",
+				"Guile Guy: We are in Castle Cakeworld,\nlast bastion of the mushroom kingdom.",
+				"Guile Guy: You may find treasures, allies\nand medicine if you go yeast.",
 				"Guile Guy: I mean east.",
 				"Guile Guy: Strawberry Milk Lake lies to the west.\nAround it there are various locations...",
 				"Guile Guy: ...like the Chocolate Cave to the south\nand the Minty Mountains to the north.",
