@@ -36,30 +36,43 @@ void Dialog::drawOptions(DialogLine const& d) const
 
         for (auto const& opt : d.options) {
             if (ImGui::Button(opt.text.c_str())) {
-                resetCurrentLine();
-                m_currentLineId = opt.next;
-                if (m_giveSpellCallback && opt.spellToGive != "") {
-                    m_giveSpellCallback(opt.spellToGive);
-                }
+                chooseOption(opt);
             }
         }
         ImGui::End();
     }
 }
+void Dialog::chooseOption(DialogOption const& opt) const
+{
+    resetCurrentLine();
+    m_currentLineId = opt.next;
+    if (m_giveSpellCallback && opt.spellToGive != "") {
+        m_giveSpellCallback(opt.spellToGive);
+    }
+}
 
 void Dialog::drawSingleLine(DialogLine& d) const
 {
-
     if (m_currentIndex >= d.lines.size()) {
         return;
     }
-    ImGui::Begin("Dialog");
-    ImGui::Text("%s", d.lines.at(m_currentIndex).c_str());
-    if (ImGui::Button("Next")) {
-        nextMessageInLine();
-    }
+    if (m_currentIndex == d.lines.size() - 1 && d.options.size() == 1) {
+        ImGui::Begin("Dialogue");
+        ImGui::Text("%s", d.lines.at(m_currentIndex).c_str());
+        if (ImGui::Button(d.options.at(0).text.c_str())) {
+            chooseOption(d.options.at(0));
+        }
 
-    ImGui::End();
+        ImGui::End();
+    } else {
+        ImGui::Begin("Dialogue");
+        ImGui::Text("%s", d.lines.at(m_currentIndex).c_str());
+        if (ImGui::Button("Next")) {
+            nextMessageInLine();
+        }
+
+        ImGui::End();
+    }
 }
 
 DialogLine Dialog::getCurrentLine() const

@@ -25,6 +25,7 @@ private:
     void drawSingleLine(DialogLine& d) const;
     void drawOptions(DialogLine const& d) const;
     void resetCurrentLine() const;
+    void chooseOption(DialogOption const& opt) const;
 };
 
 #endif // ALAKAJAM14_DIALOG_HPP
