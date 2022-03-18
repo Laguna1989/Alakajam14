@@ -31,6 +31,7 @@
 		{
 			"identifier": "snipe",
 			"lines": [
+				"Fungus McShroom: Teach me the Mycelium Missile. I'm more of a long-distance fighter.",
 				"Guy L'Guy: Don't forget to move while you shoot!\nElse, you might just shoot south!"
 			],
 			"options": [
@@ -43,6 +44,7 @@
 		{
 			"identifier": "pass-mvmt",
 			"lines": [
+				"Fungus McShroom: I like to get up close and personal. Help me move fast!",
 				"Guy L'Guy: Are you planning on leaving so soon?"
 			],
 			"options": [

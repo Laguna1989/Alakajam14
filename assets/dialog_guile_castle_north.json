@@ -11,7 +11,7 @@
 				"Fungus McShroom: Fun guy, I get it.\nThat joke was old before I woke up in this funky world!",
 				"Gwaille Ghuy: Not what I was going to say.\nAnyway, can I teach you a spell?",
 				"Fungus McShroom: Who starts a conversation that way?",
-				"Gwaille Ghuy: What would you describe as your biggest weakness? Your body or your mind?"
+				"Gwaille Ghuy: What would you describe as your biggest weakness?\nYour body or your mind?"
             ],
             "options": [
                 {
@@ -29,7 +29,7 @@
 		{
 			"identifier": "large-heal",
 			"lines": [
-				"Fungus McShroom: Odd and intrusive question, but I tend to get hurt a lot.",
+				"Fungus McShroom: Odd and intrusive question,\nbut I tend to get hurt a lot.",
 				"Gwaille Ghuy: This Rejuvenation spell takes a long time to replenish,\nbut it is much more potent than Guile's version.",
 				"Fungus McShroom: Thanks!"
 			],
@@ -43,7 +43,7 @@
 		{
 			"identifier": "pass-xp",
 			"lines": [
-				"Fungus McShroom: Even though I can easily see through your little riddle,\nI'd prefer to become more experienced.",
+				"Fungus McShroom: Even though I can easily see through\nyour little riddle, I'd prefer to become more experienced.",
 				"Gwaille Ghuy: Just equip this bad boy and gain\nmore experience when killing crystals. Easy as pie!",
 				"Fungus McShroom: Thanks!"
 			],
