@@ -22,7 +22,7 @@ void Dialog::drawOptions(DialogLine const& d) const
 {
     if (m_currentIndex >= d.lines.size()) {
 
-        ImGui::Begin("Dialog");
+        ImGui::Begin("Dialogue");
         if (d.lines.empty()) {
             ImGui::Text("%s", ("!!!invalid entry or empty lines: " + m_currentLineId).c_str());
             ImGui::End();
