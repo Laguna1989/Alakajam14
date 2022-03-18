@@ -3856,7 +3856,7 @@
                         {
                          "name":"dialog",
                          "type":"string",
-                         "value":"assets\/test_dialog.json"
+                         "value":"assets\/dialog_guile_tutorial.json"
                         }],
                  "rotation":0,
                  "type":"guile",
