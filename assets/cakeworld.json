@@ -3986,7 +3986,7 @@
                         {
                          "name":"dialog",
                          "type":"string",
-                         "value":"assets\/test_dialog.json"
+                         "value":"assets\/dialog_guile_castle_south.json"
                         }],
                  "rotation":0,
                  "type":"guile",
