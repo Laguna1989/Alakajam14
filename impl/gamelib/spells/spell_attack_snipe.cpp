@@ -34,4 +34,4 @@ void SpellAttackSnipe::doTrigger()
 }
 
 int SpellAttackSnipe::getExperienceCost() const { return GP::SpellSnipeExpCosts(); }
-std::string SpellAttackSnipe::getName() const { return "Snipe"; }
+std::string SpellAttackSnipe::getName() const { return "Mycelium Missile"; }

@@ -5,6 +5,6 @@ SpellPassiveMagicDamage::SpellPassiveMagicDamage(CharacterSheetImgui& sheet)
 {
 }
 
-void SpellPassiveMagicDamage::onEquip() { m_charSheet.setMagicDamageFactor("spell", 15.0f); }
+void SpellPassiveMagicDamage::onEquip() { m_charSheet.setMagicDamageFactor("spell", 0.15f); }
 void SpellPassiveMagicDamage::onUnEquip() { m_charSheet.setMagicDamageFactor("spell", 0.0f); }
-std::string SpellPassiveMagicDamage::getName() const { return std::string(); }
+std::string SpellPassiveMagicDamage::getName() const { return "Passive: Improved Magic Damage"; }

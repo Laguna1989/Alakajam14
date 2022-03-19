@@ -1,0 +1,128 @@
+{
+    "dialog": [
+        {
+            "identifier": "intro",
+            "lines": [
+                "Gwaille Ghuy: Hail, young adventurer!\nI am Gwaille Ghuy, a helpful golden chanterelle!",
+				"Fungus McShroom: We've met before, Guile.",
+				"Gwaille Ghuy: I feel you're pronunciation is off.",
+				"Fungus McShroom: *your",
+				"Gwaille Ghuy: Man, you're such a-",
+				"Fungus McShroom: Fun guy, I get it.\nThat joke was old before I woke up in this funky world!",
+				"Gwaille Ghuy: Not what I was going to say.\nAnyway, can I teach you a spell?",
+				"Fungus McShroom: Who starts a conversation that way?",
+				"Gwaille Ghuy: What would you describe as your biggest weakness?\nYour body or your mind?"
+            ],
+            "options": [
+                {
+                    "next": "large-heal",
+					"spell": "Rejuvenate",
+                    "text": "I tend to get hurt a lot."
+                },
+				{
+                    "next": "pass-xp",
+					"spell": "Passive: Improved Experience Gain",
+                    "text": "I'd prefer to become more experienced."
+                }
+            ]
+        },
+		{
+			"identifier": "large-heal",
+			"lines": [
+				"Fungus McShroom: Odd and intrusive question,\nbut I tend to get hurt a lot.",
+				"Gwaille Ghuy: This Rejuvenation spell takes a long time to replenish,\nbut it is much more potent than Guile's version.",
+				"Fungus McShroom: Thanks!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "pass-xp",
+			"lines": [
+				"Fungus McShroom: Even though I can easily see through\nyour little riddle, I'd prefer to become more experienced.",
+				"Gwaille Ghuy: Just equip this bad boy and gain\nmore experience when killing crystals. Easy as pie!",
+				"Fungus McShroom: Thanks!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+            "identifier": "entry",
+            "lines": [
+                "Gwaille Ghuy: Hey, McShroom! What can I do for you?"
+            ],
+            "options": [
+				{
+                    "next": "name",
+                    "text": "How do you know my name?"
+                },
+				{
+                    "next": "where",
+                    "text": "Where are we?"
+                },
+				{
+                    "next": "pronounce-name",
+                    "text": "How do you pronounce your name?"
+                }
+			]
+		},
+		{
+			"identifier": "name",
+			"lines": [
+				"Fungus McShroom: How do you know my name?",
+				"Gwaille Ghuy: What do you mean?\nYou look silly but delicious, like a \"McShroom\".",
+				"Fungus McShroom: ...",
+				"Gwaille Ghuy: Wait, that's actually your name? That's hilarious!",
+				"Fungus McShroom: Let's pretend this exchange never happened.",
+				"Gwaille Ghuy: All right. Next time you ask,\nI'll pretend not to know and say the exact same things."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "where",
+			"lines": [
+				"Fungus McShroom: Where are we?",
+				"Gwaille Ghuy: We're in the north tower of Castle Cakeworld,\neast of the Minty Mountains!",
+				"Gwaille Ghuy: Did you know that, in ancient times,\nCastle Cakeworld was full of hidden tunnels?",
+				"Gwaille Ghuy: In times of war, mushrooms would flee through them!",
+				"Fungus McShroom: You mean there once were more\nmushrooms than just you guys?",
+				"Gwaille Ghuy: Let's just say I like to kill two birds with one stone.",
+				"Fungus McShroom: We... are talking about your brothers, right?",
+				"Gwaille Ghuy: Come again?",
+				"Fungus McShroom: Never mind."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "pronounce-name",
+			"lines": [
+				"Fungus McShroom: How do you pronounce your name?",
+				"Gwaille Ghuy: Gwaille Ghuy."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		}
+    ]
+}

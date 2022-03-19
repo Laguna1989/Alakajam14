@@ -10,4 +10,4 @@ void SpellPassiveAttackSpeed::onEquip() { m_charSheet.setAttackSpeedFactor("Spel
 
 void SpellPassiveAttackSpeed::onUnEquip() { m_charSheet.setAttackSpeedFactor("Spell", 0.0f); }
 
-std::string SpellPassiveAttackSpeed::getName() const { return "Increased Attack Speed"; }
+std::string SpellPassiveAttackSpeed::getName() const { return "Passive: Improved Attack Speed"; }

@@ -1,0 +1,181 @@
+{
+    "dialog": [
+        {
+            "identifier": "intro",
+            "lines": [
+                "Gael Gie: Hail, young adventurer!\nI am Gael Gie, a helpful golden chanterelle!",
+				"Fungus McShroom: Guile! We've met before! Can't you remember?",
+				"Gael Gie: Uh, sure!\nI'm sure we've met when I wasn't lost in a cave!",
+				"Gael Gie: Did I mention being lost in a cave?",
+				"Fungus McShroom: Haven't you tried escaping?",
+				"Gael Gie: Why would I?\nThere's a puddle of strawberry milk here!",
+				"Fungus McShroom: Strawberry milk... my favorite!",
+				"Gael Gie: Favorite? What are you, an animal?",
+				"Fungus McShroom: I'm not so sure myself.",
+				"Fungus McShroom: Anyway, you're free to go now!",
+				"Gael Gie: Why would I? I have spells to teach you!",
+				"Fungus McShroom: Why would you do that?",
+				"Fungus McShroom: ..."
+            ],
+			"options": [
+				{
+					"next": "spell-select",
+					"text": "Next"
+				}
+			]
+        },
+		{
+			"identifier": "spell-select",
+				"lines": [
+					"Fungus McShroom: Scratch that. Hit me up!"
+				],
+				"options": [
+					{
+						"next": "pass-md",
+						"text": "I want my ranged spells to cause more damage!"
+					},
+					{
+						"next": "pass-ac",
+						"spell": "Passive: Improved Armor",
+						"text": "I want better armor!"
+					}
+				]
+		},
+		{
+			"identifier": "pass-md",
+			"lines": [
+				"Fungus McShroom: I want my ranged spells to cause more damage!",
+				"Gael Gie: Good, but be sure you use that with either\nMycelium Missile or Spore Spread.",
+				"Gael Gie: It'd be a waste to take this\nif you didn't have at least one of these spells."
+			],
+			"options": [
+				{
+					"next": "spell-select",
+					"text": "Cancel"
+				},
+				{
+					"next": "confirm",
+					"spell": "Passive: Improved Magic Damage",
+					"text": "Confirm selection (Passive: Improved Magic Damage)"
+				}
+			]
+		},
+		{
+			"identifier": "confirm",
+			"lines": [
+				"Fungus McShroom: I understand the risks."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "pass-ac",
+			"lines": [
+				"Fungus McShroom: I want better armor!",
+				"Gael Gie: Excellent choice... if you get hit often.",
+				"Fungus McShroom: What's that supposed to mean?",
+				"Gael Gie: Oh, nothing.\nIt just seems like something that only\nsomeone who gets hit often would choose.",
+				"Fungus McShroom: You talk a lot of smack for an NPC\nthat cannot retaliate."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+            "identifier": "entry",
+            "lines": [
+                "Gael Gie: Anyway, what can I do for you, Fungus?"
+            ],
+            "options": [
+				{
+					"next": "lost",
+					"text": "How did you get lost here?"
+				},
+				{
+                    "next": "name",
+                    "text": "How do you know my name?"
+                },
+				{
+                    "next": "where",
+                    "text": "Where are we?"
+                },
+				{
+                    "next": "gael",
+                    "text": "Shouldn't that be \"Gaël\"?"
+                }
+			]
+		},
+		{
+			"identifier": "lost",
+			"lines": [
+				"Fungus McShroom: How did you get lost here?",
+				"Gael Gie: How did I get lost here?\nHOW DID I GET LOST HERE?",
+				"Gael Gie: ...",
+				"Gael Gie: I don't really know.\nI only remember a really funky trip\nthrough some tunnels and whoosh! Here I am.",
+				"Fungus McShroom: \"Funky\" trip?",
+				"Gael Gie: Good thing I didn't eat those mushrooms!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "name",
+			"lines": [
+				"Fungus McShroom: How do you know my name?",
+				"Gael Gie: What do you mean, \"name\"?\nYou are a fungus, aren't you?",
+				"Fungus McShroom: Do you mean I look like a fungus,\nor like a Fungus kind of guy?",
+				"Gael Gie: You look like a fun-",
+				"Fungus McShroom: DON'T."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "where",
+			"lines": [
+				"Fungus McShroom: Where are we?",
+				"Gael Gie: This is the chocolate cave,\nsouthwest of Lake Milkshake.",
+				"Fungus McShroom: Don't you mean Strawberry Milk Lake?",
+				"Gael Gie: Uh, yeah. I'm a little lost, you see.",
+				"Fungus McShroom: Yet you know where we are...?"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "gael",
+			"lines": [
+				"Fungus McShroom: Shouldn't that be \"Gaël\"?",
+				"Gael Gie: I don't hear any difference.",
+				"Fungus McShroom: I didn't hear any difference to \"Guile Guy\".",
+				"Gael Gie: What? Those are completely different names!",
+				"Gael Gie: Can't you read?\nWhat are you, some kind of plant?"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		}
+    ]
+}

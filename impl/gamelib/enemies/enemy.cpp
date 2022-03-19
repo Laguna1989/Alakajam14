@@ -42,7 +42,8 @@ void Enemy::doCreate()
     fixtureDef.shape = &circle;
     fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemies();
     fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
-        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
+        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots()
+        | GP::PhysicsCollisionCategoryEnemies();
     if (isBoss()) {
         fixtureDef.density = 999999999.0f;
     }

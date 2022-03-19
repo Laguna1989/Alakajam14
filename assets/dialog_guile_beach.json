@@ -1,0 +1,118 @@
+{
+    "dialog": [
+        {
+            "identifier": "intro",
+            "lines": [
+                "Gile Gai: Hail, young adventurer!\nI am Gile Gai, a helpful golden chanterelle!",
+				"Fungus McShroom: Guile! We've met before! Can't you remember?",
+				"Gile Gai: I'm sorry, no.\nI had some great time at the beach!",
+				"Fungus McShroom: Don't you mean \"a great time\"?",
+				"Gile Gai: I mean both! Now, how can I help you?"
+            ],
+			"options": [
+				{
+					"next": "broad",
+					"spell": "Spore Spread",
+					"text": "I need a spread-shot ranged spell."
+				},
+				{
+					"next": "pass-as",
+					"spell": "Passive: Improved Attack Speed",
+					"text": "I need to improve my attacking speed."
+				}
+			]
+        },
+		{
+			"identifier": "broad",
+			"lines": [
+				"Fungus McShroom: I need a spread-shot ranged spell.",
+				"Gile Gai: Excellent, dude!\nHit multiple crystals from afar or\nget up close and inflict epic damage!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "pass-as",
+			"lines": [
+				"Fungus McShroom: I need to improve my attacking speed.",
+				"Gile Gai: Hectic problems require hectic solutions, bro!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+            "identifier": "entry",
+            "lines": [
+                "Gile Gai: McShroom, dude! What can I do for you, bro?"
+            ],
+            "options": [
+				{
+                    "next": "name",
+                    "text": "How do you know my name?"
+                },
+				{
+                    "next": "where",
+                    "text": "Where are we?"
+                },
+				{
+                    "next": "waves",
+                    "text": "How are the waves, bro?"
+                }
+			]
+		},
+		{
+			"identifier": "name",
+			"lines": [
+				"Fungus McShroom: How do you know my name?",
+				"Gile Gai: It's wisdom of the waves, dude.",
+				"Fungus McShroom: I have trouble believing that.",
+				"Gile Gai: Okay, man.\nI read the title screen and it said\nsomething about \"The Adventures of Fungus McShroom\".",
+				"Fungus McShroom: Can't argue with that."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "where",
+			"lines": [
+				"Fungus McShroom: Where are we?",
+				"Gile Gai: Between the Chocolate Cave and\nStrawberry Milk Lake, dude.",
+				"Gile Gai: Castle's to the east, and the\nMinty Mountains are to the north, bro.",
+				"Fungus McShroom: Totally radical."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "waves",
+			"lines": [
+				"Fungus McShroom: How are the waves, bro?",
+				"Gile Gai: No waves to speak of, man.",
+				"Gile Gai: It's as if some higher power\ndidn't manage to create waves in time.",
+				"Fungus McShroom: Bogus!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		}
+    ]
+}
