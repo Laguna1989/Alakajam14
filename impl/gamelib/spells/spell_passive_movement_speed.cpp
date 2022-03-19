@@ -6,7 +6,7 @@ SpellPassiveMovementSpeed::SpellPassiveMovementSpeed(CharacterSheetImgui& sheet)
 {
 }
 
-void SpellPassiveMovementSpeed::onEquip() { m_charSheet.setMovementSpeedFactor("Spell", 0.1f); }
+void SpellPassiveMovementSpeed::onEquip() { m_charSheet.setMovementSpeedFactor("Spell", 0.125f); }
 void SpellPassiveMovementSpeed::onUnEquip() { m_charSheet.setMovementSpeedFactor("Spell", 0.0f); }
 std::string SpellPassiveMovementSpeed::getName() const
 {
