@@ -21,8 +21,7 @@ void Dialog::doDraw() const
 void Dialog::drawOptions(DialogLine const& d) const
 {
     if (m_currentIndex >= d.lines.size()) {
-
-        ImGui::Begin("Dialogue");
+        openDialogue();
         if (d.lines.empty()) {
             ImGui::Text("%s", ("!!!invalid entry or empty lines: " + m_currentLineId).c_str());
             ImGui::End();
@@ -42,6 +41,11 @@ void Dialog::drawOptions(DialogLine const& d) const
         ImGui::End();
     }
 }
+void Dialog::openDialogue() const
+{
+    ImGui::SetNextWindowSize(ImVec2 { 550, 300 });
+    ImGui::Begin("Dialogue");
+}
 void Dialog::chooseOption(DialogOption const& opt) const
 {
     resetCurrentLine();
@@ -57,7 +61,7 @@ void Dialog::drawSingleLine(DialogLine& d) const
         return;
     }
     if (m_currentIndex == d.lines.size() - 1 && d.options.size() == 1) {
-        ImGui::Begin("Dialogue");
+        openDialogue();
         ImGui::Text("%s", d.lines.at(m_currentIndex).c_str());
         if (ImGui::Button(d.options.at(0).text.c_str())) {
             chooseOption(d.options.at(0));
@@ -65,7 +69,7 @@ void Dialog::drawSingleLine(DialogLine& d) const
 
         ImGui::End();
     } else {
-        ImGui::Begin("Dialogue");
+        openDialogue();
         ImGui::Text("%s", d.lines.at(m_currentIndex).c_str());
         if (ImGui::Button("Next")) {
             nextMessageInLine();
