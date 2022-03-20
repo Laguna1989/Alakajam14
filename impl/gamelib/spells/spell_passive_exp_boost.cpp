@@ -8,4 +8,4 @@ SpellPassiveExpBoost::SpellPassiveExpBoost(CharacterSheetImgui& sheet)
 void SpellPassiveExpBoost::onEquip() { m_charSheet.setExpBoostValue("spell", 2); }
 void SpellPassiveExpBoost::onUnEquip() { m_charSheet.setExpBoostValue("spell", 0); }
 
-std::string SpellPassiveExpBoost::getName() const { return "Experience Boost"; }
+std::string SpellPassiveExpBoost::getName() const { return "Passive: Improved Experience Gain"; }

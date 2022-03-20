@@ -3,52 +3,77 @@
         {
             "identifier": "0",
             "lines": [
-                "Hallo"
+                "Welcome to the Funky Trip debug dialogue! Which spell do you want to have?"
             ],
             "options": [
                 {
-                    "next": "ziege",
-                    "text": "Ziege"
+                    "next": "0",
+					"spell": "Spore Spread",
+                    "text": "Spore Spread"
                 },
                 {
-                    "next": "tor",
-                    "text": "Tor"
+                    "next": "0",
+					"spell": "Mycelium Missile",
+                    "text": "Mycelium Missile"
+                },
+                {
+                    "next": "0",
+					"spell": "Rejuvenate",
+                    "text": "Rejuvenate"
+                },
+                {
+                    "next": "0",
+					"spell": "Mend Wounds",
+                    "text": "Mend Wounds"
+                },
+                {
+                    "next": "0",
+					"spell": "Passive: Improved Armor",
+					"text": "Improved Armor"
+                },
+                {
+                    "next": "0",
+					"spell": "Passive: Improved Attack Damage",
+					"text": "Improved Attack Damage"
+                },
+                {
+                    "next": "0",
+					"spell": "Passive: Improved Attack Speed",
+					"text": "Improved Attack Speed"
+                },
+                {
+                    "next": "0",
+					"spell": "Passive: Improved Dash",
+					"text": "Improved Dash"
+                },
+                {
+                    "next": "0",
+					"spell": "Passive: Improved Experience Gain",
+					"text": "Improved Experience Gain"
+                },
+                {
+                    "next": "0",
+					"spell": "Passive: Improved Magic Damage",
+					"text": "Improved Magic Damage"
+                },
+                {
+                    "next": "0",
+					"spell": "Passive: Improved Movement Speed",
+					"text": "Improved Movement Speed"
                 }
             ]
         },
-        {
-            "identifier": "ziege",
+		{
+            "identifier": "1",
             "lines": [
-                "Das Ziegenproblem ..."
+                "OK, great!"
             ],
             "options": [
-				{
-                    "next": "end",
-                    "spell": "small Heal",
-                    "text": "Correct"
-                },
                 {
                     "next": "0",
-                    "text": "Incorrect"
+                    "text": "Gimmie moar spellz"
                 }
 			]
-        },
-        {
-            "identifier": "tor",
-            "lines": [
-                "Das Torwächterproblem ..."
-            ],
-            "options": [
-				{
-                    "next": "end",
-                    "spell": "Snipe",
-                    "text": "Correct"
-                },
-                {
-                    "next": "0",
-                    "text": "Incorrect"
-                }
-			]
-        }
+		}
     ]
 }

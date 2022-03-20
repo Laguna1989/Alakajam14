@@ -1,0 +1,187 @@
+{
+    "dialog": [
+        {
+            "identifier": "intro",
+            "lines": [
+                "Guile Guy: Hail, young adventurer!\nI am Guile Guy, a helpful golden chanterelle!",
+				"Guile Guy: Go find the key to the island on the lake\nand defeat the evil crystal king, Pinky!",
+				"Fungus McShroom: Hold on a minute!\nThat sounds awfully one-sided and needlessly violent!",
+				"Guile Guy: What do you mean?\nOnce you walk up to those evil crystals\nusing WASD or the arrow keys...",
+				"Fungus McShroom: What are \"arrow keys\"?",
+				"Guile Guy: ...and not press Space to attack,\nyou will see how one-sided and needlessly\nviolent Pinky's henchstones are!",
+				"Fungus McShroom: \"Henchstones\"? Really?",
+				"Guile Guy: Be sure to find my brothers!\nThey will teach you magic spells you can cast!",
+				"Fungus McShroom: I am a fly agaric, not some funky kind of magician!",
+				"Guile Guy: Actually, let me teach you a spell right now!",
+				"Guile Guy: If you ever get hurt, be sure to mend\nyour wounds using experience!",
+				"Fungus McShroom: I actually become LESS experienced\nwhen casting magic spells?!",
+				"Guile Guy: Cast spells using Q, E and Tab\nor the 1, 2 and 3 keys, numpad or not.",
+				"Fungus McShroom: Do you even react to what I'm saying?"
+            ],
+            "options": [
+                {
+                    "next": "entry",
+					"spell": "Mend Wounds",
+                    "text": "Next"
+                }
+            ]
+        },
+		{
+            "identifier": "entry",
+            "lines": [
+                "Guile Guy: Alright, Mr. McShroom! What can I help you with?"
+            ],
+            "options": [
+                {
+                    "next": "name",
+                    "text": "How do you know my name?"
+                },
+				{
+                    "next": "move",
+                    "text": "How do I move and dash?"
+                },
+				{
+                    "next": "cast",
+                    "text": "How do I attack and cast spells?"
+                },
+				{
+                    "next": "sheets",
+                    "text": "What else can I do?"
+                },
+				{
+                    "next": "quest",
+                    "text": "What was I supposed to do again?"
+                },
+				{
+                    "next": "where",
+                    "text": "Where are we?"
+                }
+			]
+		},
+		{
+			"identifier": "name",
+			"lines": [
+				"Fungus McShroom: How do you know my name?",
+				"Guile Guy: What do you mean?\nIt's written right there in your dialogue box."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "move",
+			"lines": [
+				"Fungus McShroom: How do I move and dash?",
+				"Guile Guy: Move with the WASD or arrow keys.",
+				"Guile Guy: Dash by pressing the left or right shift key.",
+				"Guile Guy: Note that, if you let go of a movement key,\nyou will immediately look south.",
+				"Fungus McShroom: Wouldn't want to hide my pretty face.",
+				"Guile Guy: Face? What are you, some sort of animal?"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "cast",
+			"lines": [
+				"Fungus McShroom: How do I attack and cast spells?",
+				"Guile Guy: Perform your default spore attack\nby pressing space or numpad 0.",
+				"Guile Guy: Cast spells 1, 2 or 3 with Q, E, Tab or your number keys.\nThe numpad works, too.",
+				"Guile Guy: Note that active spells cost experience.\nYou can gain experience by defeating enemies and picking up loot."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "sheets",
+			"lines": [
+				"Fungus McShroom: What else can I do?",
+				"Guile Guy: Open your spellbook by pressing L.\nYou can activate up to three spells.",
+				"Guile Guy: Passive spells are only active\nwhen chosen in the spell menu.",
+				"Guily Guy: You can assign a spell to multiple slots,\nbut slotting the same passive spell multiple times\nwill not make its effect stack.",
+				"Guile Guy: Press C to open your character sheet.\nYou can upgrade your stats with experience here."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "quest",
+			"lines": [
+				"Fungus McShroom: What was I supposed to do again?",
+				"Guile Guy: Under the mystical island in the center of\nStrawberry Milk Lake lie the arcane ruins.",
+				"Guile Guy: From these underground ruins, the evil\nCrystal King Pinky terrorizes the land of Cakeworld!",
+				"Fungus McShroom: Sounds reasonable.",
+				"Guile Guy: Pinky's goons have hidden the key to these ruins!\nYou must find the key and slay Pinky!"
+			],
+			"options": [
+				{
+					"next": "quest1",
+					"text": "Why, though?"
+				},
+				{
+					"next": "quest2",
+					"text": "Got it!"
+				}
+			]
+		},
+		{
+			"identifier": "quest1",
+			"lines": [
+				"Fungus McShroom: Why, though?\nWe fungi don't really seem to fit in this world.\nAre you sure violence is the solution?",
+				"Guile Guy: You must be such a fun guy at parties."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "quest2",
+			"lines": [
+				"Fungus McShroom: Find key, open door, kill Pinky. Got it.",
+				"Guile Guy: You will kill the crystals, will you?"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "where",
+			"lines": [
+				"Fungus McShroom: Where are we?",
+				"Guile Guy: We are in Castle Cakeworld,\nlast bastion of the mushroom kingdom.",
+				"Guile Guy: You may find treasures, allies\nand medicine if you go yeast.",
+				"Guile Guy: I mean east.",
+				"Guile Guy: Strawberry Milk Lake lies to the west.\nAround it there are various locations...",
+				"Guile Guy: ...like the Chocolate Cave to the south\nand the Minty Mountains to the north.",
+				"Guile Guy: Rumor speaks of a treasury to the northeast,\nbut it is probably guarded by crystals."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		}
+    ]
+}

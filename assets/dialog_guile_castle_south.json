@@ -1,0 +1,267 @@
+{
+    "dialog": [
+        {
+            "identifier": "intro",
+            "lines": [
+                "Guy L'Guy: Hail, young adventurer!\nI am Guy L'Guy, a helpful golden chanterelle!",
+				"Fungus McShroom: We've met before, Guile.",
+				"Guy L'Guy: Guile's my brother. I'm Guy L'Guy.",
+				"Fungus McShroom: Guile Guy. As I said.",
+				"Guy L'Guy: Guile's my brother. I'm Guy L'Guy.",
+				"Fungus McShroom: Okay then. Who are you?",
+				"Guy L'Guy: I already told you. I'm Guy L'Guy.",
+				"Fungus McShroom: I have no idea why I asked a mushroom who,\nin the last three sentences, told me their name thrice.",
+				"Guy L'Guy: You seem confused.\nMaybe a magic spell will shed some light on the situation?",
+				"Fungus McShroom: That sounds great, what can you teach me?",
+				"Guy L'Guy: I can teach you how to shoot\na single magic mycelium missile or how to move faster."
+            ],
+            "options": [
+                {
+                    "next": "snipe",
+					"spell": "Mycelium Missile",
+                    "text": "Teach me the Mycelium Missile."
+                },
+				{
+                    "next": "pass-mvmt",
+					"spell": "Passive: Improved Movement Speed",
+                    "text": "Help me move fast!"
+                }
+            ]
+        },
+		{
+			"identifier": "snipe",
+			"lines": [
+				"Fungus McShroom: Teach me the Mycelium Missile.\nI'm more of a long-distance fighter.",
+				"Guy L'Guy: Don't forget to move while you shoot!\nElse, you might just shoot south!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "pass-mvmt",
+			"lines": [
+				"Fungus McShroom: I like to get up close and personal. Help me move fast!",
+				"Guy L'Guy: Are you planning on leaving so soon?"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+            "identifier": "entry",
+            "lines": [
+                "Guy L'Guy: Hello, Fungus! What can I do for you?"
+            ],
+            "options": [
+                {
+                    "next": "extra-spell",
+                    "text": "Can you teach me another spell?"
+                },
+				{
+                    "next": "where",
+                    "text": "Where are we?"
+                },
+				{
+                    "next": "name",
+                    "text": "How do you know my name?"
+                },
+				{
+                    "next": "spell-name",
+                    "text": "How do you spell your name?"
+                }
+			]
+		},
+		{
+			"identifier": "name",
+			"lines": [
+				"Fungus McShroom: How do you know my name?",
+				"Guy L'Guy: Guile told me.",
+				"Fungus McShroom: Guile had no chance seeing you before me!",
+				"Guy L'Guy: We communicate chemically through the ground.",
+				"Fungus McShroom: Chemical communication? What are you, a plant?"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "where",
+			"lines": [
+				"Fungus McShroom: Where are we?",
+				"Guy L'Guy: We're in the south of Castle Cakeworld,\ndirectly to the east of the Chocolate Cave."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "spell-name",
+			"lines": [
+				"Fungus McShroom: How do you spell your name?",
+				"Guy L'Guy: Guy L'Guy."
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "extra-spell",
+			"lines": [
+				"Fungus McShroom: Can you teach me another spell?",
+				"Guy L'Guy: No.",
+				"Fungus McShroom: Can't you or won't you?",
+				"Guy L'Guy: If I tell you, will you stop asking questions?"
+			],
+			"options": [
+				{
+					"next": "yes",
+					"text": "Yes."
+				},
+				{
+					"next": "no",
+					"text": "No."
+				}
+			]
+		},
+		{
+			"identifier": "no",
+			"lines": [
+				"Fungus McShroom: No.",
+				"Guy L'Guy: All right!"
+			],
+			"options": [
+				{
+					"next": "entry",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "yes",
+			"lines": [
+				"Fungus McShroom: Yes.",
+				"Guy L'Guy: I could teach you all kinds of spells,\nbut a higher power prevents me from doing so.",
+				"Guy L'Guy: There, I told you.\nNow hold your end of the promise: No more questions!"
+			],
+			"options": [
+				{
+					"next": "extra-spell-annoyed",
+					"text": "Can you teach me another spell?"
+				},
+				{
+					"next": "where-annoyed",
+					"text": "Where are we?"
+				},
+				{
+					"next": "name-annoyed",
+					"text": "How do you know my name?"
+				}
+			]
+		},
+		{
+			"identifier": "extra-spell-annoyed",
+			"lines": [
+				"Fungus McShroom: Can you teach me another spell?"
+			],
+			"options": [
+				{
+					"next": "angered",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "where-annoyed",
+			"lines": [
+				"Fungus McShroom: Where are we?"
+			],
+			"options": [
+				{
+					"next": "angered",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "name-annoyed",
+			"lines": [
+				"Fungus McShroom: How do you know my name?"
+			],
+			"options": [
+				{
+					"next": "angered",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "angered",
+			"lines": [
+				"Guy L'Guy: No more questions!\nI was very specific about this point!"
+			],
+			"options": [
+				{
+					"next": "where-angered",
+					"text": "Tell me where we are."
+				},
+				{
+					"next": "name-angered",
+					"text": "Tell me how you know my name."
+				}
+			]
+		},
+		{
+			"identifier": "where-angered",
+			"lines": [
+				"Fungus McShroom: Tell me where we are."
+			],
+			"options": [
+				{
+					"next": "return-angered",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "name-angered",
+			"lines": [
+				"Fungus McShroom: Tell me how you know my name."
+			],
+			"options": [
+				{
+					"next": "return-angered",
+					"text": "Next"
+				}
+			]
+		},
+		{
+			"identifier": "return-angered",
+			"lines": [
+				"Guy L'Guy: This is technically a question!",
+				"Fungus McShroom: Do you realize I'm going\nto bug you until you answer my questions?"
+			],
+			"options": [
+				{
+					"next": "angered",
+					"text": "Next"
+				}
+			]
+		}
+    ]
+}

@@ -42,7 +42,8 @@ void Enemy::doCreate()
     fixtureDef.shape = &circle;
     fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryEnemies();
     fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
-        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots();
+        | GP::PhysicsCollisionCategoryPlayer() | GP::PhysicsCollisionCategoryPlayerShots()
+        | GP::PhysicsCollisionCategoryEnemies();
     if (isBoss()) {
         fixtureDef.density = 999999999.0f;
     }
@@ -101,7 +102,24 @@ void Enemy::doCreate()
             GP::GetScreenSize().x - 200.0f - 8.0f, GP::GetScreenSize().y - 16.0f - 8.0f });
         m_bar->setFrontColor(jt::Color { 136, 14, 79 });
         m_bar->setBackColor(jt::Color { 20, 20, 20 });
+
+        m_soundShattering = std::make_shared<jt::Sound>("assets/sound/enemy_shattering_boss.ogg");
+        m_soundShattering->setVolume(0.25f);
+
+    } else {
+        m_soundShattering = getGame()->audio().soundPool(
+            "enemy_shattering",
+            []() {
+                return std::make_shared<jt::Sound>("assets/sound/enemy_shattering_medium_1.ogg");
+            },
+            5);
+        m_soundShattering->setVolume(0.3f);
     }
+
+    m_soundHit = getGame()->audio().soundPool(
+        "enemy_hit",
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-001.ogg"); }, 5);
+    m_soundHit->setVolume(0.5f);
 }
 
 void Enemy::doUpdate(const float elapsed)
@@ -134,6 +152,9 @@ void Enemy::doUpdate(const float elapsed)
         m_bar->setCurrentValue(m_hitpoints);
         m_bar->update(elapsed);
     }
+
+    m_soundHit->update();
+    m_soundShattering->update();
 }
 
 void Enemy::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
@@ -147,10 +168,11 @@ void Enemy::drawHud() const
     }
 }
 
-void Enemy::receiveDamage(const Damage& dmg)
+void Enemy::receiveDamage(Damage const& dmg)
 {
     // TODO visual candy
     m_animation->flash(0.2f, jt::Color { 163, 51, 255 });
+    m_soundHit->play();
 
     m_hitpoints -= dmg.value;
 
@@ -169,6 +191,7 @@ void Enemy::die()
     }
 
     m_isInDieAnimation = true;
+    m_soundShattering->play();
     m_animation->play("dead");
     m_deathPosition = getPosition();
     // move collider out of the way

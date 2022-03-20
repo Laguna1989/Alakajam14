@@ -343,16 +343,6 @@ void StateGame::doInternalUpdate(float const elapsed)
             if (m_isIntroMusicPlaying) {
                 m_isIntroMusicPlaying = false;
                 m_musicLoop->play();
-                m_musicLoopStartTime = std::chrono::steady_clock::now();
-            }
-
-            // Yay, ugly hack to make sure looping sound is being looped
-            auto const now = std::chrono::steady_clock::now();
-            if (std::chrono::duration_cast<std::chrono::seconds>(now - m_musicLoopStartTime).count()
-                >= 32) {
-                m_musicLoopStartTime = now;
-                m_musicLoop->stop();
-                m_musicLoop->play();
             }
             m_musicLoop->update();
         }
