@@ -31,7 +31,7 @@
 		{
 			"identifier": "snipe",
 			"lines": [
-				"Fungus McShroom: Teach me the Mycelium Missile. I'm more of a long-distance fighter.",
+				"Fungus McShroom: Teach me the Mycelium Missile.\nI'm more of a long-distance fighter.",
 				"Guy L'Guy: Don't forget to move while you shoot!\nElse, you might just shoot south!"
 			],
 			"options": [
