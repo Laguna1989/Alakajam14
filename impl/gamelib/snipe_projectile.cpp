@@ -25,8 +25,8 @@ void SnipeProjectile::doCreate()
     boxCollider.SetAsBox(3.0f, 3.0f);
     fixtureDef.shape = &boxCollider;
     fixtureDef.filter.categoryBits = GP::PhysicsCollisionCategoryPlayerShots();
-    fixtureDef.filter.maskBits = GP::PhysicsCollisionCategoryWalls()
-        | GP::PhysicsCollisionCategoryEnemies() | GP::PhysicsCollisionCategoryEnemyShots();
+    fixtureDef.filter.maskBits
+        = GP::PhysicsCollisionCategoryWalls() | GP::PhysicsCollisionCategoryEnemies();
 
     getB2Body()->CreateFixture(&fixtureDef);
 }
