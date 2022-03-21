@@ -72,9 +72,9 @@ void Sprite::cleanImage()
 
 void Sprite::doUpdate(float /*elapsed*/)
 {
-    auto const pos = m_position + getShakeOffset() + getOffset() + getCamOffset();
-    m_sprite.setPosition(toLib(pos));
-    m_flashSprite.setPosition(toLib(pos));
+    auto const pos = toLib(m_position + getShakeOffset() + getOffset() + getCamOffset());
+    m_sprite.setPosition(pos.x, pos.y);
+    m_flashSprite.setPosition(pos.x, pos.y);
     m_flashSprite.setColor(toLib(getFlashColor()));
 }
 

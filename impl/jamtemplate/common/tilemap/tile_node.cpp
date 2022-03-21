@@ -15,7 +15,7 @@ TileNode::TileNode(std::shared_ptr<jt::DrawableInterface> drawable,
     reset();
 }
 
-std::shared_ptr<jt::pathfinder::NodeInterface> TileNode::getNode() { return m_node; }
+std::shared_ptr<jt::pathfinder::NodeInterface>& TileNode::getNode() { return m_node; }
 
 void TileNode::setBlocked(bool blocked) { m_blocked = blocked; }
 
