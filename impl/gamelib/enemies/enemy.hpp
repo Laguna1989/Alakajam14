@@ -67,7 +67,11 @@ private:
     std::shared_ptr<jt::Animation> m_animation;
     std::shared_ptr<jt::Bar> m_bar;
 
-    std::shared_ptr<jt::SoundInterface> m_soundHit;
+    std::shared_ptr<jt::SoundInterface> m_soundHit1;
+    std::shared_ptr<jt::SoundInterface> m_soundHit2;
+    std::shared_ptr<jt::SoundInterface> m_soundHit3;
+    std::shared_ptr<jt::SoundInterface> m_soundHit4;
+    std::shared_ptr<jt::SoundGroup> m_soundHitGroup;
     std::shared_ptr<jt::SoundInterface> m_soundShattering1;
     std::shared_ptr<jt::SoundInterface> m_soundShattering2;
     std::shared_ptr<jt::SoundInterface> m_soundShattering3;

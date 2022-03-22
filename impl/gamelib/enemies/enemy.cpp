@@ -166,10 +166,31 @@ void Enemy::doCreate()
         m_soundShatteringGroup->add(m_soundShattering6);
     }
 
-    m_soundHit = getGame()->audio().getSoundFromSoundPool(
-        "enemy_hit",
+    m_soundHit1 = getGame()->audio().getSoundFromSoundPool(
+        "enemy_hit1",
         []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-001.ogg"); }, 5);
-    m_soundHit->setVolume(0.25f);
+    m_soundHit1->setVolume(0.25f);
+
+    m_soundHit2 = getGame()->audio().getSoundFromSoundPool(
+        "enemy_hit2",
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-002.ogg"); }, 5);
+    m_soundHit2->setVolume(0.25f);
+
+    m_soundHit3 = getGame()->audio().getSoundFromSoundPool(
+        "enemy_hit3",
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-003.ogg"); }, 5);
+    m_soundHit3->setVolume(0.25f);
+
+    m_soundHit4 = getGame()->audio().getSoundFromSoundPool(
+        "enemy_hit4",
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-004.ogg"); }, 5);
+    m_soundHit4->setVolume(0.25f);
+
+    m_soundHitGroup = std::make_shared<jt::SoundGroup>();
+    m_soundHitGroup->add(m_soundHit1);
+    m_soundHitGroup->add(m_soundHit2);
+    m_soundHitGroup->add(m_soundHit3);
+    m_soundHitGroup->add(m_soundHit4);
 }
 
 void Enemy::doUpdate(const float elapsed)
@@ -202,8 +223,6 @@ void Enemy::doUpdate(const float elapsed)
         m_bar->setCurrentValue(m_hitpoints);
         m_bar->update(elapsed);
     }
-
-    m_soundHit->update();
 }
 
 void Enemy::doDraw() const { m_animation->draw(getGame()->gfx().target()); }
@@ -221,7 +240,7 @@ void Enemy::receiveDamage(Damage const& dmg)
 {
     // TODO visual candy
     m_animation->flash(0.2f, jt::Color { 163, 51, 255 });
-    m_soundHit->play();
+    m_soundHitGroup->play();
 
     m_hitpoints -= dmg.value;
 
