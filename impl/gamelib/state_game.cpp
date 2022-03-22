@@ -332,7 +332,7 @@ void StateGame::doInternalUpdate(float const elapsed)
                     if (!getGame()->wasCheating()) {
                         stateMenu->setScore(m_timer);
                     }
-                    getGame()->getStateManager().switchState(stateMenu);
+                    getGame()->stateManager().switchState(stateMenu);
                 }
             }
         }
@@ -391,7 +391,7 @@ void StateGame::endGame()
     if (m_player->m_hasFinishedDying) {
         m_hasEnded = true;
         m_running = false;
-        getGame()->getStateManager().switchState(std::make_shared<StateMenu>());
+        getGame()->stateManager().switchState(std::make_shared<StateMenu>());
     }
 }
 
@@ -452,7 +452,7 @@ void StateGame::loadEnemies()
             m_boss = e;
         }
     }
-    getGame()->getLogger().debug("parsed N =" + std::to_string(m_enemies->size()) + " enemies");
+    getGame()->logger().debug("parsed N =" + std::to_string(m_enemies->size()) + " enemies");
 }
 
 void StateGame::loadSingleLoot(jt::tilemap::InfoRect const& o)

@@ -41,7 +41,7 @@ void GameBase::runOneFrame()
 
             numberOfUpdateOperations++;
             if (numberOfUpdateOperations >= m_maxNumberOfUpdateIterations) {
-                getLogger().warning("number of update operations exceeds maximum of "
+                logger().warning("number of update operations exceeds maximum of "
                         + std::to_string(m_maxNumberOfUpdateIterations),
                     { "jt", "gameloop" });
                 m_lag = 0.0f;
@@ -68,11 +68,11 @@ InputManagerInterface& GameBase::input() { return m_inputManager; }
 
 AudioInterface& GameBase::audio() { return m_audio; }
 
-StateManagerInterface& GameBase::getStateManager() { return m_stateManager; }
+StateManagerInterface& GameBase::stateManager() { return m_stateManager; }
 
-LoggerInterface& GameBase::getLogger() { return m_logger; }
+LoggerInterface& GameBase::logger() { return m_logger; }
 
-ActionCommandManagerInterface& GameBase::getActionCommandManager()
+ActionCommandManagerInterface& GameBase::actionCommandManager()
 {
     return m_actionCommandManager;
 }

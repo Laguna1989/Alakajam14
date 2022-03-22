@@ -42,7 +42,7 @@ void Level::doCreate()
     auto const levelColliderCountInitial = m_tileCollisions.getRects().size();
     m_tileCollisions.refineColliders(16.0f);
     auto const levelColliderCountOptimized = m_tileCollisions.getRects().size();
-    getGame()->getLogger().debug(
+    getGame()->logger().debug(
         "Level colliders initial: " + std::to_string(levelColliderCountInitial)
             + " and optimized: " + std::to_string(levelColliderCountOptimized),
         { "level" });

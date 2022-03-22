@@ -26,7 +26,7 @@ void StateMenu::doInternalCreate()
 
     add(std::make_shared<jt::LicenseInfo>());
 
-    getGame()->getStateManager().setTransition(
+    getGame()->stateManager().setTransition(
         std::make_shared<jt::StateManagerTransitionFadeToBlack>(
             GP::GetScreenSize(), getGame()->gfx().textureManager()));
 
@@ -209,7 +209,7 @@ void StateMenu::startTransitionToStateGame()
 
         m_startSound->play();
 
-        getGame()->getStateManager().switchState(std::make_shared<StateGame>());
+        getGame()->stateManager().switchState(std::make_shared<StateGame>());
     }
 }
 

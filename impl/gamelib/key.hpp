@@ -26,7 +26,6 @@ private:
     std::shared_ptr<jt::Sprite> m_sprite;
 
     std::shared_ptr<jt::Sound> m_soundPickup;
-    std::shared_ptr<jt::Sound> m_soundDoorUnlock;
 
     jt::Vector2f m_pos;
     StateGame& m_state;

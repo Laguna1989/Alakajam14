@@ -18,7 +18,7 @@ void Key::doCreate()
     m_sprite = std::make_shared<jt::Sprite>("assets/key.png", getGame()->gfx().textureManager());
 
     m_soundPickup = std::make_shared<jt::Sound>("assets/sound/pickup_key.ogg");
-    m_soundDoorUnlock = std::make_shared<jt::Sound>("assets/sound/door.ogg");
+    getGame()->audio().addTemporarySound(m_soundPickup);
 }
 
 void Key::doUpdate(const float elapsed)
@@ -40,13 +40,9 @@ void Key::doUpdate(const float elapsed)
         m_locked = false;
 
         m_soundPickup->play();
-        m_soundDoorUnlock->play();
 
         m_sprite->setColor(jt::colors::Transparent);
     }
-
-    m_soundPickup->update();
-    m_soundDoorUnlock->update();
 }
 
 void Key::doDraw() const { m_sprite->draw(getGame()->gfx().target()); }

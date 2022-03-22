@@ -1,8 +1,8 @@
 #include "stairs.hpp"
+#include "audio/logging_sound.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
-#include "player/player.hpp"
 
 void Stairs::unlock() { m_locked = false; }
 Stairs::Stairs(StateGame& state)
@@ -15,6 +15,9 @@ Stairs::Stairs(StateGame& state)
 void Stairs::doCreate()
 {
     m_sprite = std::make_shared<jt::Sprite>("assets/door.png", getGame()->gfx().textureManager());
+    m_soundUnlock
+        = std::make_shared<jt::LoggingSound>("assets/sound/door.ogg", getGame()->logger());
+    getGame()->audio().addTemporarySound(m_soundUnlock);
 }
 
 void Stairs::doUpdate(const float elapsed)
@@ -28,7 +31,7 @@ void Stairs::doUpdate(const float elapsed)
     if (!m_locked && !m_touched && d < 40.0f * 40.0f) {
         m_touched = true;
         m_sprite->setColor(jt::colors::Transparent);
-        // TODO: play sound
+        m_soundUnlock->play();
     }
     if (!m_locked && m_touched && d < 20.0f * 20.0f) {
         // TODO: teleport fanciness
