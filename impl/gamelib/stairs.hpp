@@ -22,6 +22,7 @@ private:
     StateGame& m_state;
 
     std::shared_ptr<jt::SoundInterface> m_soundUnlock;
+    std::shared_ptr<jt::SoundInterface> m_soundEnter;
 };
 
 #endif // ALAKAJAM14_STAIRS_H
