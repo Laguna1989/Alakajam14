@@ -46,9 +46,10 @@ void ExperienceOrb::doCreate()
 
     initSound();
 }
+
 void ExperienceOrb::initSound()
 {
-    m_soundBling = getGame()->audio().soundPool(
+    m_soundBling = getGame()->audio().getSoundFromSoundPool(
         "bling", []() { return std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg"); }, 5);
     m_soundBling->setVolume(0.7f);
 }

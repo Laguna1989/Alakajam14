@@ -1,6 +1,7 @@
 #ifndef GUARD_JAMTEMPLATE_ENEMY_GUARD_HPP
 #define GUARD_JAMTEMPLATE_ENEMY_GUARD_HPP
 
+#include "audio/sound_group.hpp"
 #include "box2dwrapper/box2d_object.hpp"
 #include "deferred_action_interface.hpp"
 #include "enemy_ai/ai_state_manager.hpp"
@@ -67,7 +68,13 @@ private:
     std::shared_ptr<jt::Bar> m_bar;
 
     std::shared_ptr<jt::SoundInterface> m_soundHit;
-    std::shared_ptr<jt::SoundInterface> m_soundShattering;
+    std::shared_ptr<jt::SoundInterface> m_soundShattering1;
+    std::shared_ptr<jt::SoundInterface> m_soundShattering2;
+    std::shared_ptr<jt::SoundInterface> m_soundShattering3;
+    std::shared_ptr<jt::SoundInterface> m_soundShattering4;
+    std::shared_ptr<jt::SoundInterface> m_soundShattering5;
+    std::shared_ptr<jt::SoundInterface> m_soundShattering6;
+    std::shared_ptr<jt::SoundGroup> m_soundShatteringGroup;
 
     AiStateManager m_aiStateManager;
     float m_staggeredTime { -1.0f };
