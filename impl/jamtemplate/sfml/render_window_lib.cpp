@@ -45,8 +45,8 @@ void RenderWindow::draw(std::unique_ptr<jt::Sprite>& spr)
     if (!spr) {
         throw std::invalid_argument { "Cannot draw nullptr sprite" };
     }
-    sf::Shader shader;
-    m_window->draw(spr->getSFSprite(), &shader);
+
+    m_window->draw(spr->getSFSprite());
 }
 
 void RenderWindow::display()

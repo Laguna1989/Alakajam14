@@ -34,8 +34,8 @@ jt::Rectf Sprite::getLocalBounds() const { return fromLib(m_sprite.getLocalBound
 
 void Sprite::setScale(jt::Vector2f const& scale)
 {
-    m_sprite.setScale(toLib(scale));
-    m_flashSprite.setScale(toLib(scale));
+    m_sprite.setScale(scale.x, scale.y);
+    m_flashSprite.setScale(scale.x, scale.y);
 }
 
 jt::Vector2f Sprite::getScale() const { return fromLib(m_sprite.getScale()); }
@@ -72,7 +72,7 @@ void Sprite::cleanImage()
 
 void Sprite::doUpdate(float /*elapsed*/)
 {
-    auto const pos = toLib(m_position + getShakeOffset() + getOffset() + getCamOffset());
+    auto const pos = m_position + getShakeOffset() + getOffset() + getCamOffset();
     m_sprite.setPosition(pos.x, pos.y);
     m_flashSprite.setPosition(pos.x, pos.y);
     m_flashSprite.setColor(toLib(getFlashColor()));
