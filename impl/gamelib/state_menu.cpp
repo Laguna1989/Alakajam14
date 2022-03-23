@@ -26,9 +26,8 @@ void StateMenu::doInternalCreate()
 
     add(std::make_shared<jt::LicenseInfo>());
 
-    getGame()->stateManager().setTransition(
-        std::make_shared<jt::StateManagerTransitionFadeToBlack>(
-            GP::GetScreenSize(), getGame()->gfx().textureManager()));
+    getGame()->stateManager().setTransition(std::make_shared<jt::StateManagerTransitionFadeToBlack>(
+        GP::GetScreenSize(), getGame()->gfx().textureManager()));
 
     m_startSound = std::make_shared<jt::Sound>("assets/sound/main_menu_press_space.ogg");
     m_startSound->setVolume(0.2f);
@@ -36,6 +35,15 @@ void StateMenu::doInternalCreate()
     m_menuMusic = std::make_shared<jt::Sound>("assets/sound/alaka2022_title_menu_v1_loop.ogg");
     m_menuMusic->setLoop(true);
     m_menuMusic->play();
+
+    auto musicLoop = getGame()->audio().getPermanentSound("musicLoop");
+    if (musicLoop) {
+        musicLoop->stop();
+    }
+    auto musicLoopBoss = getGame()->audio().getPermanentSound("bossThemeLoop");
+    if (musicLoopBoss) {
+        musicLoopBoss->stop();
+    }
 }
 
 void StateMenu::createVignette()
