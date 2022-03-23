@@ -23,11 +23,11 @@ public:
 
     AudioInterface& audio() override;
 
-    StateManagerInterface& getStateManager() override;
+    StateManagerInterface& stateManager() override;
 
-    LoggerInterface& getLogger() override;
+    LoggerInterface& logger() override;
 
-    ActionCommandManagerInterface& getActionCommandManager() override;
+    ActionCommandManagerInterface& actionCommandManager() override;
 
     void reset() override;
 

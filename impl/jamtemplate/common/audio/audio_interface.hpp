@@ -34,7 +34,7 @@ public:
         std::string const& identifier, std::shared_ptr<SoundInterface> snd)
         = 0;
 
-    virtual std::shared_ptr<SoundInterface> soundPool(std::string const& baseIdentifier,
+    virtual std::shared_ptr<SoundInterface> getSoundFromSoundPool(std::string const& baseIdentifier,
         std::function<std::shared_ptr<SoundInterface>()> function, std::size_t count)
         = 0;
 

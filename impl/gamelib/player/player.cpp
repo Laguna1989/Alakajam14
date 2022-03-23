@@ -40,9 +40,9 @@ void Player::doCreate()
     m_spellBook->setGameInstance(getGame());
     m_spellBook->create();
 
-    m_audio = std::make_unique<PlayerSoundComponent>(getGame()->audio(), getGame()->getLogger());
+    m_audio = std::make_unique<PlayerSoundComponent>(getGame()->audio(), getGame()->logger());
 
-    m_commands.push_back(getGame()->getActionCommandManager().registerTemporaryCommand(
+    m_commands.push_back(getGame()->actionCommandManager().registerTemporaryCommand(
         "learnspell", [this](std::vector<std::string> args) {
             getGame()->cheat();
             if (args.size() != 1) {
@@ -51,7 +51,7 @@ void Player::doCreate()
             m_spellBook->makeSpellAvailable(args.at(0));
         }));
 
-    m_commands.push_back(getGame()->getActionCommandManager().registerTemporaryCommand(
+    m_commands.push_back(getGame()->actionCommandManager().registerTemporaryCommand(
         "getxp", [this](std::vector<std::string> args) {
             getGame()->cheat();
             if (args.size() != 1) {
@@ -138,7 +138,7 @@ void Player::castSpell(std::size_t spellIndex)
     auto spellCanBeCast = spell->canTrigger() && hasEnoughMana;
 
     if (spellCanBeCast) {
-        getGame()->getLogger().debug("Spell triggered: " + spell->getName());
+        getGame()->logger().debug("Spell triggered: " + spell->getName());
         m_charsheet->changeExperiencePoints(-cost);
         spell->trigger();
     } else {

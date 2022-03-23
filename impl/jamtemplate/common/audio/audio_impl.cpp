@@ -21,6 +21,7 @@ void AudioImpl::update()
         snd.second->update();
     }
 }
+
 void AudioImpl::cleanUpUnusedSounds()
 {
     m_temporarySounds.erase(std::remove_if(m_temporarySounds.begin(), m_temporarySounds.end(),
@@ -56,7 +57,7 @@ void AudioImpl::removePermanentSound(std::string const& identifier)
     }
 }
 
-std::shared_ptr<SoundInterface> AudioImpl::soundPool(std::string const& baseIdentifier,
+std::shared_ptr<SoundInterface> AudioImpl::getSoundFromSoundPool(std::string const& baseIdentifier,
     std::function<std::shared_ptr<SoundInterface>()> function, std::size_t count)
 {
     auto const randomNumber = jt::Random::getInt(0, count);

@@ -30,7 +30,7 @@ void Guile::doCreate()
     m_dialog->create();
     m_dialog->setGiveSpellCallback([this](std::string const& spell) {
         m_target.lock()->makeSpellAvailable(spell);
-        getGame()->getLogger().debug("give spell: " + spell);
+        getGame()->logger().debug("give spell: " + spell);
     });
 }
 

@@ -39,11 +39,11 @@ void GameState::doDraw() const { internalDraw(); };
 
 void GameState::internalCreate()
 {
-    getGame()->getLogger().debug("create GameState: " + getName(), { "jt" });
+    getGame()->logger().debug("create GameState: " + getName(), { "jt" });
     m_tweens.clear();
     m_tweensToAdd.clear();
     doInternalCreate();
-    add(std::make_shared<jt::Console>(getGame()->getLogger()));
+    add(std::make_shared<jt::Console>(getGame()->logger()));
     add(std::make_shared<jt::InfoScreen>());
     start();
 }
