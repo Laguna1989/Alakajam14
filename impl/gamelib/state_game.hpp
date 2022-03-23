@@ -96,6 +96,8 @@ private:
     std::shared_ptr<jt::Sprite> m_vignette;
     std::shared_ptr<jt::Sound> m_musicIntro;
     std::shared_ptr<jt::Sound> m_musicLoop;
+    std::shared_ptr<jt::Sound> m_bossThemeIntro;
+    std::shared_ptr<jt::Sound> m_bossThemeLoop;
     std::shared_ptr<Stairs> m_stairs;
     std::shared_ptr<Enemy> m_boss;
     std::shared_ptr<Key> m_key;
