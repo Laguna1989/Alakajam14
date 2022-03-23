@@ -102,10 +102,10 @@ void StateGame::doInternalCreate()
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
 
-    m_musicIntro = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_intro.ogg");
+    m_musicIntro = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v2_intro.ogg");
     m_musicIntro->play();
 
-    m_musicLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_loop.ogg");
+    m_musicLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v2_loop.ogg");
     m_musicLoop->setLoop(true);
     getGame()->audio().addPermanentSound("musicLoop", m_musicLoop);
 
