@@ -15,9 +15,11 @@ Stairs::Stairs(StateGame& state)
 void Stairs::doCreate()
 {
     m_sprite = std::make_shared<jt::Sprite>("assets/door.png", getGame()->gfx().textureManager());
+
     m_soundUnlock
         = std::make_shared<jt::LoggingSound>("assets/sound/door.ogg", getGame()->logger());
     getGame()->audio().addTemporarySound(m_soundUnlock);
+
     m_soundEnter = std::make_shared<jt::LoggingSound>(
         "assets/sound/squeaky_stairs.ogg", getGame()->logger());
     getGame()->audio().addTemporarySound(m_soundEnter);
@@ -38,6 +40,8 @@ void Stairs::doUpdate(const float elapsed)
     }
     if (!m_locked && m_touched && d < 20.0f * 20.0f) {
         // TODO: teleport fanciness
+        getGame()->audio().getPermanentSound("bossThemeLoop")->setVolume(1.0f);
+        getGame()->audio().getPermanentSound("musicLoop")->setVolume(0.0f);
         m_soundEnter->play();
         auto dest = m_state.getStairsDest();
         jt::CamInterface& cam = getGame()->gfx().camera();

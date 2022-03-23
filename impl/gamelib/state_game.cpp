@@ -107,6 +107,13 @@ void StateGame::doInternalCreate()
 
     m_musicLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_main_theme_v1_loop.ogg");
     m_musicLoop->setLoop(true);
+    getGame()->audio().addPermanentSound("musicLoop", m_musicLoop);
+
+    m_bossThemeLoop = std::make_shared<jt::Sound>("assets/sound/alaka2022_boss_theme_loop.ogg");
+    m_bossThemeLoop->setLoop(true);
+    m_bossThemeLoop->setVolume(0.0f);
+    m_bossThemeLoop->play();
+    getGame()->audio().addPermanentSound("bossThemeLoop", m_bossThemeLoop);
 
     m_timerText = jt::dh::createText(getGame()->gfx().target(), "0.00", 8);
     m_timerText->setPosition(jt::Vector2f { 360.0f, 30.0f });
@@ -344,7 +351,6 @@ void StateGame::doInternalUpdate(float const elapsed)
                 m_isIntroMusicPlaying = false;
                 m_musicLoop->play();
             }
-            m_musicLoop->update();
         }
     }
 
