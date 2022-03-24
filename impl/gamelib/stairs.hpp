@@ -23,6 +23,9 @@ private:
 
     std::shared_ptr<jt::SoundInterface> m_soundUnlock;
     std::shared_ptr<jt::SoundInterface> m_soundEnter;
+    std::shared_ptr<jt::Sound> m_musicIntro;
+    bool m_isIntroMusicPlayingAfterEnter = true;
+    bool m_entered = false;
 };
 
 #endif // ALAKAJAM14_STAIRS_H
