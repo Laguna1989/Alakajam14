@@ -74,7 +74,7 @@ void StateMenu::createTextCredits()
             + "\n\nF9 for License Information",
         10U, GP::getPalette().getColor(4));
     m_text_Credits->setTextAlign(jt::Text::TextAlign::LEFT);
-    m_text_Credits->setPosition({ 10, GP::GetScreenSize().y - 65 });
+    m_text_Credits->setPosition({ 10, GP::GetScreenSize().y - 75 });
     m_text_Credits->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 1, 1 });
 }
 
@@ -105,9 +105,9 @@ void StateMenu::createTextTitle()
     m_logo = std::make_shared<jt::Animation>();
     m_logo->add("assets/funky_logo_header.png", "idle", { 101, 15 },
         jt::MathHelper::numbersBetween(0U, 10U), 0.15f, getGame()->gfx().textureManager());
-    m_logo->setPosition({ half_width, 40 });
+    m_logo->setPosition({ 55, 20 });
     m_logo->play("idle");
-    m_logo->setOrigin({ 50, 7 });
+
     m_logo->setScale({ 3.0f, 3.0f });
 }
 

@@ -67,7 +67,7 @@ public:
     static float LevelUpAttackDamageIncrease();
     static float TileSizeInPixel();
     static float HealingPotionAmount();
-    static const float HealingPotionPickupDistance();
+    static float HealingPotionPickupDistance();
     static float LevelUpMagicDamageIncrease();
     static float SpellSnipeProjectileDamage();
     static float SpellBroadProjectileDamage();

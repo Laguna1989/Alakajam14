@@ -6,8 +6,8 @@ namespace jt {
 namespace {
 void addCommandHelp(std::shared_ptr<GameBase>& game)
 {
-    game->storeActionCommand(game->actionCommandManager().registerTemporaryCommand("help",
-        [&mgr = game->actionCommandManager(), &logger = game->logger()](auto /*args*/) {
+    game->storeActionCommand(game->actionCommandManager().registerTemporaryCommand(
+        "help", [&mgr = game->actionCommandManager(), &logger = game->logger()](auto /*args*/) {
             logger.action("Available commands:");
             for (auto& c : mgr.getAllCommands()) {
                 logger.action(" - " + c);
@@ -83,15 +83,15 @@ void addCommandsCam(std::shared_ptr<GameBase>& game)
 
 void addCommandTextureManager(std::shared_ptr<GameBase>& game)
 {
-    game->storeActionCommand(game->actionCommandManager().registerTemporaryCommand("textureManagerInfo",
-            [&logger = game->logger(), &textureManager = game->gfx().textureManager()](
-                auto /*args*/) {
-                logger.action(
-                    "stored textures: " + std::to_string(textureManager.getNumberOfTextures()));
-            }));
+    game->storeActionCommand(game->actionCommandManager().registerTemporaryCommand(
+        "textureManagerInfo",
+        [&logger = game->logger(), &textureManager = game->gfx().textureManager()](auto /*args*/) {
+            logger.action(
+                "stored textures: " + std::to_string(textureManager.getNumberOfTextures()));
+        }));
 }
 
-void addCommandsMusicPlayer(std::shared_ptr<GameBase>& game)
+void addCommandsMusicPlayer(std::shared_ptr<GameBase>& /*game*/)
 {
     // TODO
 }

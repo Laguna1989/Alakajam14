@@ -38,26 +38,24 @@ void Guile::doUpdate(float const elapsed)
 {
     m_animation->setPosition(getPosition() - jt::Vector2f { 8.0f, 8.0f });
     m_animation->update(elapsed);
-    auto player = m_target.lock();
-    if (!player) {
-        return;
-    }
-    auto const playerPos = player->getTargetPosition();
-    auto const guilePos = getPosition();
-
-    float const distance = jt::MathHelper::lengthSquared(playerPos - guilePos);
 }
 
 void Guile::doDraw() const
 {
     m_animation->draw(getGame()->gfx().target());
 
+    drawDialog();
+}
+
+void Guile::drawDialog() const
+{
+    auto player = m_target.lock();
+    if (!player) {
+        return;
+    }
     auto const playerPos = m_target.lock()->getTargetPosition();
-
     auto const guilePos = getPosition();
-
     float const distance = jt::MathHelper::lengthSquared(playerPos - guilePos);
-
     if (distance < 32 * 32) {
         if (m_dialog) {
             m_dialog->draw();

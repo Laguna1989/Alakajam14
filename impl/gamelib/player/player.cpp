@@ -112,7 +112,7 @@ void Player::updateSpells(const float elapsed)
     auto const& equippedSpells = m_spellBook->getEquippedSpells();
     auto const& equippedSpellsText = m_spellBook->getEquippedSpellTexts();
 
-    for (auto i = 0; i != equippedSpells.size(); ++i) {
+    for (auto i = 0u; i != equippedSpells.size(); ++i) {
         std::shared_ptr<SpellInterface> spell = equippedSpells.at(i);
         std::shared_ptr<jt::Text> text = equippedSpellsText.at(i);
         spell->update(elapsed);
@@ -275,13 +275,10 @@ void Player::dash()
     m_audio->play(SoundComponentInterface::SoundId::DASH);
 
     m_graphics->flash(0.3f, jt::colors::White);
-    auto p = getPosition();
 
     jt::MathHelper::normalizeMe(currentPlayerVelocity);
     m_dashVelocity
         = currentPlayerVelocity * GP::PlayerBaseDashVelocity() * m_charsheet->getDashFactor();
-
-    // TODO trigger eye candy (e.g. particles)
 }
 
 void Player::attack()

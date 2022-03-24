@@ -69,6 +69,6 @@ void HealingPotion::doKill() { }
 void HealingPotion::pickUp()
 {
     m_soundBling->play();
-    m_target->healBy(GP::HealingPotionAmount());
+    m_target->healBy(static_cast<int>(GP::HealingPotionAmount()));
     m_pickedUp = true;
 }

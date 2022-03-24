@@ -27,6 +27,7 @@ public:
 
 private:
     std::shared_ptr<Dialog> m_dialog { nullptr };
+    void drawDialog() const;
 };
 
 #endif // ALAKAJAM14_GUILE_HPP
