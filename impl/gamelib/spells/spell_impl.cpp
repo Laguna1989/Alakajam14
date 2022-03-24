@@ -26,4 +26,4 @@ SpellPassiveImpl::SpellPassiveImpl(CharacterSheetImgui& charSheet)
 void SpellPassiveImpl::trigger() { }
 bool SpellPassiveImpl::canTrigger() const { return false; }
 int SpellPassiveImpl::getExperienceCost() const { return 0; }
-void SpellPassiveImpl::update(float elapsed) { }
+void SpellPassiveImpl::update(float /*elapsed*/) { }

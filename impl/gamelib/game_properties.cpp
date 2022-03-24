@@ -56,4 +56,4 @@ float GP::LevelUpMagicDamageIncrease() { return 4.0f; }
 
 float GP::TileSizeInPixel() { return 16.0f; }
 float GP::HealingPotionAmount() { return 15.0f; }
-const float GP::HealingPotionPickupDistance() { return GP::ExperienceOrbPickupDistance(); }
+float GP::HealingPotionPickupDistance() { return GP::ExperienceOrbPickupDistance(); }
