@@ -2,6 +2,7 @@
 #define GAME_STATE_MENU_HPP_INCLUDEGUARD
 
 #include "audio/sound.hpp"
+#include "audio/sound_null.hpp"
 #include "game_state.hpp"
 
 namespace jt {
@@ -32,8 +33,8 @@ private:
     std::shared_ptr<jt::Shape> m_overlay;
     std::shared_ptr<jt::Sprite> m_vignette;
 
-    std::shared_ptr<jt::Sound> m_startSound;
-    std::shared_ptr<jt::Sound> m_menuMusic;
+    std::shared_ptr<jt::SoundInterface> m_startSound;
+    std::shared_ptr<jt::SoundInterface> m_menuMusic;
 
     bool m_started { false };
 

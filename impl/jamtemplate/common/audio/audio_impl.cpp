@@ -25,8 +25,8 @@ void AudioImpl::update()
 void AudioImpl::cleanUpUnusedSounds()
 {
     m_temporarySounds.erase(std::remove_if(m_temporarySounds.begin(), m_temporarySounds.end(),
-                                [](auto wptr) { return wptr.expired(); }),
-        m_temporarySounds.end());
+                                [](auto const& wptr) { return wptr.expired(); }),
+        m_temporarySounds.cend());
 }
 
 void AudioImpl::addTemporarySound(std::weak_ptr<SoundInterface> snd)
@@ -58,9 +58,9 @@ void AudioImpl::removePermanentSound(std::string const& identifier)
 }
 
 std::shared_ptr<SoundInterface> AudioImpl::getSoundFromSoundPool(std::string const& baseIdentifier,
-    std::function<std::shared_ptr<SoundInterface>()> function, std::size_t count)
+    std::function<std::shared_ptr<SoundInterface>()> const& function, std::size_t count)
 {
-    auto const randomNumber = jt::Random::getInt(0, count);
+    auto const randomNumber = jt::Random::getInt(0, count - 1);
     auto const soundName = baseIdentifier + "####" + std::to_string(randomNumber);
 
     auto snd = getPermanentSound(soundName);

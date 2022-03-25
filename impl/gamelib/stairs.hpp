@@ -23,7 +23,7 @@ private:
 
     std::shared_ptr<jt::SoundInterface> m_soundUnlock;
     std::shared_ptr<jt::SoundInterface> m_soundEnter;
-    std::shared_ptr<jt::Sound> m_musicIntro;
+    std::shared_ptr<jt::SoundInterface> m_musicIntro;
     bool m_isIntroMusicPlayingAfterEnter = true;
     bool m_entered = false;
 };

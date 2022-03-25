@@ -1,5 +1,6 @@
 #include "sound_null.hpp"
 
+jt::SoundNull::SoundNull(std::string const& str) { }
 void jt::SoundNull::update() { }
 bool jt::SoundNull::isPlaying() const { return false; }
 void jt::SoundNull::play() { }

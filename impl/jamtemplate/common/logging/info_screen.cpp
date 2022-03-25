@@ -67,8 +67,8 @@ void InfoScreen::doDraw() const
         ImGui::PlotLines("AliveGameObjects [#] = %s", m_GameObjectAliveCountVector.data(),
             static_cast<int>(m_GameObjectAliveCountVector.size()), 0, nullptr, 0, FLT_MAX,
             ImVec2 { 0, 100 });
-
-        ImGui::Separator();
+    }
+    if (!ImGui::CollapsingHeader("Sound")) {
         std::string const createdSoundsText
             = "# Sounds (created): " + std::to_string(jt::Sound::createdObjects());
         std::string const aliveSoundsText

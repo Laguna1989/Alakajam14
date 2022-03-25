@@ -36,8 +36,8 @@ void LoggingAudio::removePermanentSound(std::string const& identifier) { }
 
 oalpp::SoundContextInterface& LoggingAudio::getContext() { return m_decoratee.getContext(); }
 std::shared_ptr<SoundInterface> LoggingAudio::getSoundFromSoundPool(
-    std::string const& baseIdentifier, std::function<std::shared_ptr<SoundInterface>()> function,
-    std::size_t count)
+    std::string const& baseIdentifier,
+    std::function<std::shared_ptr<SoundInterface>()> const& function, std::size_t count)
 {
     m_logger.verbose("sound pool: " + baseIdentifier, { "jt", "audio" });
     return m_decoratee.getSoundFromSoundPool(baseIdentifier, function, count);

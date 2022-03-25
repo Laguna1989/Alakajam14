@@ -18,7 +18,8 @@ public:
         std::string const& identifier, std::shared_ptr<SoundInterface> snd) override;
 
     std::shared_ptr<SoundInterface> getSoundFromSoundPool(std::string const& baseIdentifier,
-        std::function<std::shared_ptr<SoundInterface>()> function, std::size_t count) override;
+        std::function<std::shared_ptr<SoundInterface>()> const& function,
+        std::size_t count) override;
 
     std::shared_ptr<SoundInterface> getPermanentSound(std::string const& identifier) override;
 

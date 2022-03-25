@@ -2,6 +2,7 @@
 #define ALAKAJAM14_SPELL_BOOK_HPP
 
 #include "audio/sound.hpp"
+#include "audio/sound_null.hpp"
 #include "game_object.hpp"
 #include "spell_interface.hpp"
 #include "text.hpp"
@@ -35,7 +36,7 @@ private:
     std::vector<std::shared_ptr<SpellInterface>> m_spells {};
     std::vector<std::string> m_availableSpells {};
     mutable std::vector<std::shared_ptr<SpellInterface>> m_equippedSpells {};
-    std::shared_ptr<jt::Sound> m_selectSound { nullptr };
+    std::shared_ptr<jt::SoundNull> m_selectSound { nullptr };
     mutable bool m_newSpell { false };
     std::shared_ptr<jt::Text> m_newSpellText { nullptr };
     std::vector<std::shared_ptr<jt::Text>> m_spellTexts {};

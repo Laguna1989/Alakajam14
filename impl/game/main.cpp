@@ -2,6 +2,7 @@
 #include "action_commands/action_command_manager.hpp"
 #include "action_commands/basic_action_commands.hpp"
 #include "audio/audio_impl.hpp"
+#include "audio/audio_null.hpp"
 #include "audio/logging_audio.hpp"
 #include "camera.hpp"
 #include "game.hpp"
@@ -14,6 +15,7 @@
 #include "input/mouse_input.hpp"
 #include "logging/default_logging.hpp"
 #include "logging/logger.hpp"
+#include "logging/logger_null.hpp"
 #include "logging_camera.hpp"
 #include "random/random.hpp"
 #include "state_manager/logging_state_manager.hpp"
@@ -36,7 +38,7 @@ int main()
 
     jt::Random::useTimeAsRandomSeed();
 
-    jt::Logger logger;
+    jt::null_objects::LoggerNull logger;
     jt::createDefaultLogTargets(logger);
 
     jt::RenderWindow window { static_cast<unsigned int>(GP::GetWindowSize().x),

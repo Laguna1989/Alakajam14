@@ -72,15 +72,13 @@ StateManagerInterface& GameBase::stateManager() { return m_stateManager; }
 
 LoggerInterface& GameBase::logger() { return m_logger; }
 
-ActionCommandManagerInterface& GameBase::actionCommandManager()
-{
-    return m_actionCommandManager;
-}
+ActionCommandManagerInterface& GameBase::actionCommandManager() { return m_actionCommandManager; }
 
 void GameBase::doUpdate(float const elapsed)
 {
     m_logger.verbose("update game, elapsed=" + std::to_string(elapsed), { "jt" });
     m_stateManager.update(getPtr(), elapsed);
+
     m_audio.update();
     gfx().update(elapsed);
 

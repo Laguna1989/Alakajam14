@@ -35,7 +35,7 @@ public:
         = 0;
 
     virtual std::shared_ptr<SoundInterface> getSoundFromSoundPool(std::string const& baseIdentifier,
-        std::function<std::shared_ptr<SoundInterface>()> function, std::size_t count)
+        std::function<std::shared_ptr<SoundInterface>()> const& function, std::size_t count)
         = 0;
 
     /// Get a permanent sound

@@ -2,11 +2,14 @@
 #define GUARD_JAMTEMPLATE_SOUND_NULL_HPP
 
 #include "sound_interface.hpp"
+#include <string>
 
 namespace jt {
 
 class SoundNull : public SoundInterface {
 public:
+    SoundNull() = default;
+    explicit SoundNull(std::string const& str);
     void update() override;
     bool isPlaying() const override;
     void play() override;

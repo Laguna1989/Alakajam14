@@ -1,6 +1,7 @@
 #include "experience_orb.hpp"
 #include "animation.hpp"
 #include "audio/sound.hpp"
+#include "audio/sound_null.hpp"
 #include "game_interface.hpp"
 #include "game_properties.hpp"
 #include "math_helper.hpp"
@@ -50,7 +51,8 @@ void ExperienceOrb::doCreate()
 void ExperienceOrb::initSound()
 {
     m_soundBling = getGame()->audio().getSoundFromSoundPool(
-        "bling", []() { return std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg"); }, 5);
+        "bling", []() { return std::make_shared<jt::SoundNull>("assets/sound/powerUp_bling.ogg"); },
+        5);
     m_soundBling->setVolume(0.7f);
 }
 

@@ -1,6 +1,7 @@
 #ifndef ALAKAJAM14_KEY_HPP
 #define ALAKAJAM14_KEY_HPP
 
+#include "audio/sound_null.hpp"
 #include "game_object.hpp"
 #include "vector.hpp"
 
@@ -25,7 +26,7 @@ private:
 
     std::shared_ptr<jt::Sprite> m_sprite;
 
-    std::shared_ptr<jt::Sound> m_soundPickup;
+    std::shared_ptr<jt::SoundNull> m_soundPickup;
 
     jt::Vector2f m_pos;
     StateGame& m_state;

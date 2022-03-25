@@ -1,18 +1,19 @@
 ﻿#include "sound_group.hpp"
 #include "random/random.hpp"
 #include "sound.hpp"
+#include "sound_null.hpp"
 #include <algorithm>
 
 jt::SoundGroup::SoundGroup(std::vector<std::string> const& sounds)
 {
     for (auto const& f : sounds) {
-        m_sounds.emplace_back(std::make_shared<jt::Sound>(f));
+        m_sounds.emplace_back(std::make_shared<jt::SoundNull>(f));
     }
 }
 
 void jt::SoundGroup::addSound(std::string const& fileName)
 {
-    m_sounds.emplace_back(std::make_shared<jt::Sound>(fileName));
+    m_sounds.emplace_back(std::make_shared<jt::SoundNull>(fileName));
 }
 
 bool jt::SoundGroup::isPlaying() const
