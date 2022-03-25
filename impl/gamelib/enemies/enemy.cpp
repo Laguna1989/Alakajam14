@@ -178,29 +178,26 @@ void Enemy::doCreate()
         []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-001.ogg"); }, 1);
     m_soundHit1->setVolume(0.25f);
 
-    //    m_soundHit2 = getGame()->audio().getSoundFromSoundPool(
-    //        "enemy_hit2",
-    //        []() { return std::make_shared<jt::SoundNull>("assets/sound/enemy_was_hit-002.ogg");
-    //        }, 1);
-    //    m_soundHit2->setVolume(0.25f);
-    //
-    //    m_soundHit3 = getGame()->audio().getSoundFromSoundPool(
-    //        "enemy_hit3",
-    //        []() { return std::make_shared<jt::SoundNull>("assets/sound/enemy_was_hit-003.ogg");
-    //        }, 1);
-    //    m_soundHit3->setVolume(0.25f);
-    //
-    //    m_soundHit4 = getGame()->audio().getSoundFromSoundPool(
-    //        "enemy_hit4",
-    //        []() { return std::make_shared<jt::SoundNull>("assets/sound/enemy_was_hit-004.ogg");
-    //        }, 1);
-    //    m_soundHit4->setVolume(0.25f);
+    m_soundHit2 = getGame()->audio().getSoundFromSoundPool(
+        "enemy_hit2",
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-002.ogg"); }, 1);
+    m_soundHit2->setVolume(0.25f);
+
+    m_soundHit3 = getGame()->audio().getSoundFromSoundPool(
+        "enemy_hit3",
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-003.ogg"); }, 1);
+    m_soundHit3->setVolume(0.25f);
+
+    m_soundHit4 = getGame()->audio().getSoundFromSoundPool(
+        "enemy_hit4",
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-004.ogg"); }, 1);
+    m_soundHit4->setVolume(0.25f);
 
     m_soundHitGroup = std::make_shared<jt::SoundGroup>();
     m_soundHitGroup->add(m_soundHit1);
-    //    m_soundHitGroup->add(m_soundHit2);
-    //    m_soundHitGroup->add(m_soundHit3);
-    //    m_soundHitGroup->add(m_soundHit4);
+    m_soundHitGroup->add(m_soundHit2);
+    m_soundHitGroup->add(m_soundHit3);
+    m_soundHitGroup->add(m_soundHit4);
 }
 
 void Enemy::doUpdate(const float elapsed)
