@@ -104,8 +104,7 @@ void Enemy::doCreate()
         m_bar->setFrontColor(jt::Color { 136, 14, 79 });
         m_bar->setBackColor(jt::Color { 20, 20, 20 });
 
-        m_soundShattering1
-            = std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_boss.ogg");
+        m_soundShattering1 = std::make_shared<jt::Sound>("assets/sound/enemy_shattering_boss.ogg");
         m_soundShattering1->setVolume(0.25f);
         getGame()->audio().addTemporarySound(m_soundShattering1);
         m_soundShatteringGroup = std::make_shared<jt::SoundGroup>();
@@ -123,8 +122,7 @@ void Enemy::doCreate()
         m_soundShattering2 = getGame()->audio().getSoundFromSoundPool(
             "enemy_shattering2",
             []() {
-                return std::make_shared<jt::SoundNull>(
-                    "assets/sound/enemy_shattering_medium_2.ogg");
+                return std::make_shared<jt::Sound>("assets/sound/enemy_shattering_medium_2.ogg");
             },
             5);
         m_soundShattering2->setVolume(0.5f);
@@ -132,8 +130,7 @@ void Enemy::doCreate()
         m_soundShattering3 = getGame()->audio().getSoundFromSoundPool(
             "enemy_shattering3",
             []() {
-                return std::make_shared<jt::SoundNull>(
-                    "assets/sound/enemy_shattering_medium_3.ogg");
+                return std::make_shared<jt::Sound>("assets/sound/enemy_shattering_medium_3.ogg");
             },
             5);
         m_soundShattering3->setVolume(0.5f);
@@ -141,7 +138,7 @@ void Enemy::doCreate()
         m_soundShattering4 = getGame()->audio().getSoundFromSoundPool(
             "enemy_shattering4",
             []() {
-                return std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_small_1.ogg");
+                return std::make_shared<jt::Sound>("assets/sound/enemy_shattering_small_1.ogg");
             },
             5);
         m_soundShattering4->setVolume(0.5f);
@@ -149,7 +146,7 @@ void Enemy::doCreate()
         m_soundShattering5 = getGame()->audio().getSoundFromSoundPool(
             "enemy_shattering5",
             []() {
-                return std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_small_2.ogg");
+                return std::make_shared<jt::Sound>("assets/sound/enemy_shattering_small_2.ogg");
             },
             5);
         m_soundShattering5->setVolume(0.5f);
@@ -157,7 +154,7 @@ void Enemy::doCreate()
         m_soundShattering6 = getGame()->audio().getSoundFromSoundPool(
             "enemy_shattering6",
             []() {
-                return std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_small_3.ogg");
+                return std::make_shared<jt::Sound>("assets/sound/enemy_shattering_small_3.ogg");
             },
             5);
         m_soundShattering6->setVolume(0.5f);

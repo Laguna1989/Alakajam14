@@ -36,8 +36,7 @@ void HealingPotion::doCreate()
 void HealingPotion::initSound()
 {
     m_soundBling = getGame()->audio().getSoundFromSoundPool(
-        "bling", []() { return std::make_shared<jt::SoundNull>("assets/sound/powerUp_bling.ogg"); },
-        5);
+        "bling", []() { return std::make_shared<jt::Sound>("assets/sound/powerUp_bling.ogg"); }, 5);
     m_soundBling->setVolume(0.7f);
 }
 

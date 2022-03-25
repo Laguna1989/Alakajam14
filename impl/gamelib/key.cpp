@@ -17,7 +17,7 @@ void Key::doCreate()
 {
     m_sprite = std::make_shared<jt::Sprite>("assets/key.png", getGame()->gfx().textureManager());
 
-    m_soundPickup = std::make_shared<jt::SoundNull>("assets/sound/pickup_key.ogg");
+    m_soundPickup = std::make_shared<jt::Sound>("assets/sound/pickup_key.ogg");
     getGame()->audio().addTemporarySound(m_soundPickup);
 }
 

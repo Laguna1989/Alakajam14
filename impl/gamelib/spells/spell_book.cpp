@@ -58,7 +58,7 @@ SpellBook::SpellBook(StateGame& state)
 
 void SpellBook::doCreate()
 {
-    m_selectSound = std::make_shared<jt::SoundNull>("assets/sound/spellbook_click.ogg");
+    m_selectSound = std::make_shared<jt::Sound>("assets/sound/spellbook_click.ogg");
     m_selectSound->setVolume(0.5f);
     getGame()->audio().addTemporarySound(m_selectSound);
 

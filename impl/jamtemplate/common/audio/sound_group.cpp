@@ -7,13 +7,13 @@
 jt::SoundGroup::SoundGroup(std::vector<std::string> const& sounds)
 {
     for (auto const& f : sounds) {
-        m_sounds.emplace_back(std::make_shared<jt::SoundNull>(f));
+        m_sounds.emplace_back(std::make_shared<jt::Sound>(f));
     }
 }
 
 void jt::SoundGroup::addSound(std::string const& fileName)
 {
-    m_sounds.emplace_back(std::make_shared<jt::SoundNull>(fileName));
+    m_sounds.emplace_back(std::make_shared<jt::Sound>(fileName));
 }
 
 bool jt::SoundGroup::isPlaying() const

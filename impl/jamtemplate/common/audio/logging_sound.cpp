@@ -12,7 +12,7 @@ LoggingSound::LoggingSound(std::shared_ptr<SoundInterface> decoratee, LoggerInte
 }
 
 LoggingSound::LoggingSound(std::string fileName, LoggerInterface& logger)
-    : m_decoratee { std::make_shared<jt::SoundNull>(fileName) }
+    : m_decoratee { std::make_shared<jt::Sound>(fileName) }
     , m_logger { logger }
 {
     checkAndLogInvalidSampleRate();

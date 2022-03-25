@@ -19,15 +19,15 @@ PlayerSoundComponent::PlayerSoundComponent(jt::AudioInterface& audio, jt::Logger
     audio.addTemporarySound(m_soundDeath);
 
     auto const soundHurt1 = std::make_shared<jt::LoggingSound>(
-        std::make_shared<jt::SoundNull>("assets/sound/hit_squishy_sound_01.ogg"), logger);
+        std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_01.ogg"), logger);
     auto const soundHurt2 = std::make_shared<jt::LoggingSound>(
-        std::make_shared<jt::SoundNull>("assets/sound/hit_squishy_sound_02.ogg"), logger);
+        std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_02.ogg"), logger);
     auto const soundHurt3 = std::make_shared<jt::LoggingSound>(
-        std::make_shared<jt::SoundNull>("assets/sound/hit_squishy_sound_03.ogg"), logger);
+        std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_03.ogg"), logger);
     auto const soundHurt4 = std::make_shared<jt::LoggingSound>(
-        std::make_shared<jt::SoundNull>("assets/sound/hit_squishy_sound_04.ogg"), logger);
+        std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_04.ogg"), logger);
     auto const soundHurt5 = std::make_shared<jt::LoggingSound>(
-        std::make_shared<jt::SoundNull>("assets/sound/hit_squishy_sound_05.ogg"), logger);
+        std::make_shared<jt::Sound>("assets/sound/hit_squishy_sound_05.ogg"), logger);
 
     soundHurt1->setVolume(0.3f);
     soundHurt2->setVolume(0.3f);
