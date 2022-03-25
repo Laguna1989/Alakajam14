@@ -48,10 +48,8 @@ void PlayerSoundComponent::play(SoundComponentInterface::SoundId sound)
 {
     // TODO figure out why we need to stop certain sounds before playing
     if (sound == SoundId::DASH) {
-        m_soundDash->stop();
         m_soundDash->play();
     } else if (sound == SoundId::STOMP) {
-        m_soundStomp->stop();
         m_soundStomp->play();
     } else if (sound == SoundId::HURT) {
         m_soundGroupHurt->play();

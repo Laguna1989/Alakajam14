@@ -161,7 +161,6 @@ void SpellBook::drawEquippedSpells() const
 
         std::string displayName = m_equippedSpells.at(i)->getName() + "##" + slotName;
         if (ImGui::Button(displayName.c_str())) {
-            m_selectSound->stop();
             m_selectSound->play();
 
             ImGui::OpenPopup(slotName.c_str());

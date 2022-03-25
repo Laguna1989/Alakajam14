@@ -117,80 +117,77 @@ void Enemy::doCreate()
             []() {
                 return std::make_shared<jt::Sound>("assets/sound/enemy_shattering_medium_1.ogg");
             },
-            1);
+            5);
         m_soundShattering1->setVolume(0.5f);
-        //
-        //        m_soundShattering2 = getGame()->audio().getSoundFromSoundPool(
-        //            "enemy_shattering2",
-        //            []() {
-        //                return std::make_shared<jt::SoundNull>(
-        //                    "assets/sound/enemy_shattering_medium_2.ogg");
-        //            },
-        //            1);
-        //        m_soundShattering2->setVolume(0.5f);
-        //
-        //        m_soundShattering3 = getGame()->audio().getSoundFromSoundPool(
-        //            "enemy_shattering3",
-        //            []() {
-        //                return std::make_shared<jt::SoundNull>(
-        //                    "assets/sound/enemy_shattering_medium_3.ogg");
-        //            },
-        //            1);
-        //        m_soundShattering3->setVolume(0.5f);
-        //
-        //        m_soundShattering4 = getGame()->audio().getSoundFromSoundPool(
-        //            "enemy_shattering4",
-        //            []() {
-        //                return
-        //                std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_small_1.ogg");
-        //            },
-        //            1);
-        //        m_soundShattering4->setVolume(0.5f);
-        //
-        //        m_soundShattering5 = getGame()->audio().getSoundFromSoundPool(
-        //            "enemy_shattering5",
-        //            []() {
-        //                return
-        //                std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_small_2.ogg");
-        //            },
-        //            1);
-        //        m_soundShattering5->setVolume(0.5f);
-        //
-        //        m_soundShattering6 = getGame()->audio().getSoundFromSoundPool(
-        //            "enemy_shattering6",
-        //            []() {
-        //                return
-        //                std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_small_3.ogg");
-        //            },
-        //            1);
-        //        m_soundShattering6->setVolume(0.5f);
+
+        m_soundShattering2 = getGame()->audio().getSoundFromSoundPool(
+            "enemy_shattering2",
+            []() {
+                return std::make_shared<jt::SoundNull>(
+                    "assets/sound/enemy_shattering_medium_2.ogg");
+            },
+            5);
+        m_soundShattering2->setVolume(0.5f);
+
+        m_soundShattering3 = getGame()->audio().getSoundFromSoundPool(
+            "enemy_shattering3",
+            []() {
+                return std::make_shared<jt::SoundNull>(
+                    "assets/sound/enemy_shattering_medium_3.ogg");
+            },
+            5);
+        m_soundShattering3->setVolume(0.5f);
+
+        m_soundShattering4 = getGame()->audio().getSoundFromSoundPool(
+            "enemy_shattering4",
+            []() {
+                return std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_small_1.ogg");
+            },
+            5);
+        m_soundShattering4->setVolume(0.5f);
+
+        m_soundShattering5 = getGame()->audio().getSoundFromSoundPool(
+            "enemy_shattering5",
+            []() {
+                return std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_small_2.ogg");
+            },
+            5);
+        m_soundShattering5->setVolume(0.5f);
+
+        m_soundShattering6 = getGame()->audio().getSoundFromSoundPool(
+            "enemy_shattering6",
+            []() {
+                return std::make_shared<jt::SoundNull>("assets/sound/enemy_shattering_small_3.ogg");
+            },
+            5);
+        m_soundShattering6->setVolume(0.5f);
         m_soundShatteringGroup = std::make_shared<jt::SoundGroup>();
         m_soundShatteringGroup->add(m_soundShattering1);
-        //        m_soundShatteringGroup->add(m_soundShattering2);
-        //        m_soundShatteringGroup->add(m_soundShattering3);
-        //        m_soundShatteringGroup->add(m_soundShattering4);
-        //        m_soundShatteringGroup->add(m_soundShattering5);
-        //        m_soundShatteringGroup->add(m_soundShattering6);
+        m_soundShatteringGroup->add(m_soundShattering2);
+        m_soundShatteringGroup->add(m_soundShattering3);
+        m_soundShatteringGroup->add(m_soundShattering4);
+        m_soundShatteringGroup->add(m_soundShattering5);
+        m_soundShatteringGroup->add(m_soundShattering6);
     }
 
     m_soundHit1 = getGame()->audio().getSoundFromSoundPool(
         "enemy_hit1",
-        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-001.ogg"); }, 1);
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-001.ogg"); }, 5);
     m_soundHit1->setVolume(0.25f);
 
     m_soundHit2 = getGame()->audio().getSoundFromSoundPool(
         "enemy_hit2",
-        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-002.ogg"); }, 1);
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-002.ogg"); }, 5);
     m_soundHit2->setVolume(0.25f);
 
     m_soundHit3 = getGame()->audio().getSoundFromSoundPool(
         "enemy_hit3",
-        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-003.ogg"); }, 1);
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-003.ogg"); }, 5);
     m_soundHit3->setVolume(0.25f);
 
     m_soundHit4 = getGame()->audio().getSoundFromSoundPool(
         "enemy_hit4",
-        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-004.ogg"); }, 1);
+        []() { return std::make_shared<jt::Sound>("assets/sound/enemy_was_hit-004.ogg"); }, 5);
     m_soundHit4->setVolume(0.25f);
 
     m_soundHitGroup = std::make_shared<jt::SoundGroup>();
